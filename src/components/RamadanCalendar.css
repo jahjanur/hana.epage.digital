@@ -1,0 +1,150 @@
+.ramadan-calendar {
+  padding: 20px;
+  margin: 20px;
+  background: rgb(0 0 0 / 88%);
+  display: none;
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.calendar-icon {
+  font-size: 22px;
+  color: white;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.schedule-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.schedule-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.schedule-item.completed {
+  background: rgba(60, 208, 151, 0.05);
+  border: 1px solid rgba(60, 208, 151, 0.1);
+}
+
+.schedule-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.date-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.date {
+  font-size: 15px;
+  font-weight: 500;
+  color: white;
+}
+
+.day {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.times-section {
+  display: flex;
+  gap: 20px;
+}
+
+.time-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.time-icon {
+  font-size: 16px;
+  color: white;
+}
+
+.time-value {
+  font-size: 15px;
+  color: white;
+}
+
+.completion-marker {
+  margin-left: 15px;
+}
+
+.check-icon {
+  font-size: 20px;
+  color: rgba(60, 208, 151, 0.9);
+}
+
+@media (max-width: 768px) {
+  .ramadan-calendar {
+    margin: 15px;
+    padding: 15px;
+  }
+
+  .schedule-item {
+    padding: 10px 12px;
+  }
+
+  .date {
+    font-size: 14px;
+  }
+
+  .day {
+    font-size: 12px;
+  }
+
+  .time-value {
+    font-size: 14px;
+  }
+
+  .time-icon {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 380px) {
+  .times-section {
+    gap: 12px;
+  }
+
+  .time-item {
+    gap: 4px;
+  }
+
+  .time-value {
+    font-size: 13px;
+  }
+} 

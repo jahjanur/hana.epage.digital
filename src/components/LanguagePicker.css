@@ -1,0 +1,152 @@
+.language-picker {
+  position: absolute;
+  top: 20px;
+  margin-top: 17px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.language-button {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 8px 15px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.language-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.language-icon {
+  font-size: 18px;
+}
+
+.selected-language {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.chevron {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+.language-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  width: 150px;
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
+
+.language-option {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.language-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.language-option.active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.flag {
+  font-size: 16px;
+}
+
+.language-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Update responsive styles */
+@media (max-width: 768px) {
+  .language-picker {
+    top: 15px;
+    right: 15px;
+  }
+
+  .language-button {
+    padding: 6px 10px; /* Increased padding */
+    gap: 4px;
+    font-size: 13px; /* Increased font size */
+    min-width: auto;
+  }
+
+  .language-icon {
+    font-size: 14px; /* Increased icon size */
+  }
+
+  .selected-language {
+    font-size: 13px; /* Increased font size */
+  }
+
+  .chevron {
+    font-size: 12px; /* Increased chevron size */
+  }
+
+  .language-dropdown {
+    width: 120px; /* Wider dropdown */
+    right: 0;
+  }
+
+  .language-option {
+    padding: 8px 10px; /* Increased padding */
+    font-size: 13px; /* Increased font size */
+  }
+}
+
+/* Remove the bottom positioning for mobile */
+@media (max-width: 480px) {
+  .language-picker {
+    top: 12px; /* Keep at top */
+    right: 12px;
+    bottom: auto; /* Remove bottom positioning */
+  }
+
+  .language-dropdown {
+    top: calc(100% + 6px); /* Keep dropdown below */
+    bottom: auto;
+  }
+} 
