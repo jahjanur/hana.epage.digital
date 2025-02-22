@@ -21,7 +21,7 @@ const RamadanDaysList: React.FC = () => {
       return {
         dayNumber: index + 1,
         date: day.date,
-        weekday: day.weekday,
+        weekday: day.weekday.replace('E ', ''),
         syfyr: cityTimes?.fajr || day.fajr,
         iftar: cityTimes?.maghrib || day.maghrib
       };
