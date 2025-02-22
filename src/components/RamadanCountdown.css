@@ -239,10 +239,6 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-.time-block:hover::after {
-  opacity: 1;
-}
-
 .time-block.active {
   background: rgba(60, 208, 151, 0.15);
   border-color: rgba(60, 208, 151, 0.3);
@@ -275,7 +271,7 @@
 }
 
 .time-value {
-  font-size: 32px;
+  font-size: 1.2rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.95);
   position: relative;
@@ -660,7 +656,7 @@
   }
 
   .time-value {
-    font-size: 28px;
+    font-size: 1rem;
   }
 
   .notification-icon {
@@ -797,4 +793,111 @@
   .achievements-wrapper {
     padding: 0 15px;
   }
-} 
+}
+
+.pickers-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+}
+
+.language-button,
+.city-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.language-button:hover,
+.city-button:hover {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.language-icon,
+.city-icon {
+  font-size: 1.2rem;
+}
+
+.language-code,
+.city-name {
+  font-weight: 500;
+}
+
+.city-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+  backdrop-filter: blur(10px);
+  animation: slideIn 0.2s ease;
+}
+
+.city-option {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 8px 16px;
+  text-align: left;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.city-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.city-option.active {
+  background: rgba(59, 130, 246, 0.2);
+  color: white;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .pickers-container {
+    right: 16px;
+  }
+
+  .language-button,
+  .city-button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  .language-icon,
+  .city-icon {
+    font-size: 1.1rem;
+  }
+}
