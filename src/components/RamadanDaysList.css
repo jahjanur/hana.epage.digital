@@ -319,31 +319,40 @@
   scroll-behavior: smooth;
   mask-image: linear-gradient(
     to bottom,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
   );
   scrollbar-width: none;
   -ms-overflow-style: none;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
-/* Add padding for first and last items */
+/* Remove the before/after content since we're using padding */
 .schedule-list::before,
 .schedule-list::after {
-  content: '';
-  min-height: 140px;
+  display: none;
 }
 
 .schedule-list::-webkit-scrollbar {
   display: none;
+}
+
+.schedule-item:first-child {
+  margin-top: 10px; /* Reduced from 20px */
+}
+
+.schedule-item:last-child {
+  margin-bottom: 10px; /* Reduced from 20px */
 }
 
 .schedule-item {
