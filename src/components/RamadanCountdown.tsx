@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './RamadanCountdown.css';
-import { IoCloudyNight, IoMoonOutline, IoSunnyOutline, IoNotificationsOutline, IoNotificationsOffOutline } from "react-icons/io5";
-import { FaPrayingHands } from "react-icons/fa";
+import { 
+  IoCloudyNight, 
+  IoMoonOutline, 
+  IoSunnyOutline, 
+  IoNotificationsOutline, 
+  IoNotificationsOffOutline 
+} from "react-icons/io5";
 import { IoLocationOutline } from "react-icons/io5";
 import BottomNavigation from './BottomNavigation';
 import { ReactComponent as HanaLogo } from '../assets/hanaMainLogoWhite.svg';
@@ -10,32 +15,31 @@ import LanguagePicker from './LanguagePicker';
 import DuaDisplay from './DuaDisplay';
 import RamadanCalendar from './RamadanCalendar';
 import Achievements from './Achievements';
-import DailyScheduleTracker from './DailyScheduleTracker';
+import RamadanDaysList from './RamadanDaysList';
 
-const FAJR_TIME = { hours: 4, minutes: 0 }; // 4:45 AM
-const IFTAR_TIME = { hours: 23, minutes: 0 }; // 6:30 PM
+
+// Define fasting times: Syfyru (Fajr) at 04:30 and Iftar at 18:00
+const FAJR_TIME = { hours: 5, minutes: 30 };
+const IFTAR_TIME = { hours: 20, minutes: 42 };
 
 const RamadanCountdown: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
   const [remainingTime, setRemainingTime] = useState<string>('');
+  // For the fasting period:
+  // - "redProgress" represents the elapsed fasting time (time already fasted)
+  // - "greenProgress" represents the remaining fasting time (time left to fast)
+  const [greenProgress, setGreenProgress] = useState<number>(0);
+  const [redProgress, setRedProgress] = useState<number>(0);
+  // "progress" is used in eating mode (yellow) to show the remaining eating time until Syfyru.
   const [progress, setProgress] = useState<number>(0);
-  const [location, setLocation] = useState<{
-    latitude: number;
-    longitude: number;
-    city?: string;
-  } | null>(null);
+  const [location, setLocation] = useState<{ latitude: number; longitude: number; city?: string } | null>(null);
   const [currentLanguage, setCurrentLanguage] = useState('sq');
-  const [notifications, setNotifications] = useState({
-    syfyr: false,
-    iftar: false
-  });
-  const [currentPeriod, setCurrentPeriod] = useState<'fasting' | 'eating' | 'free'>('free');
-  const [isIftarDone, setIsIftarDone] = useState(false);
-  const [fajrTime, setFajrTime] = useState<{ hours: number; minutes: number }>({ hours: 5, minutes: 0 });
-  const [iftarTime, setIftarTime] = useState<{ hours: number; minutes: number }>({ hours: 18, minutes: 0 });
+  const [notifications, setNotifications] = useState({ syfyr: false, iftar: false });
+  const [currentPeriod, setCurrentPeriod] = useState<'fasting' | 'eating'>('eating');
+  const [fajrTime] = useState<{ hours: number; minutes: number }>(FAJR_TIME);
+  const [iftarTime] = useState<{ hours: number; minutes: number }>(IFTAR_TIME);
   const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
-  const [completedProgress, setCompletedProgress] = useState<number>(0);
-  const [remainingProgress, setRemainingProgress] = useState<number>(0);
+  const [selectedCity, setSelectedCity] = useState('gostivar');
 
   const calculateProgress = (now: Date): number => {
     const fajr = new Date(now);
@@ -43,6 +47,19 @@ const RamadanCountdown: React.FC = () => {
     
     const iftar = new Date(now);
     iftar.setHours(iftarTime.hours, iftarTime.minutes, 0);
+
+    // Check if it's exactly Iftar time (including seconds)
+    const isIftarTime = now.getHours() === iftarTime.hours && 
+                       now.getMinutes() === iftarTime.minutes;
+
+    // If it's Iftar time, show full green circle
+    if (isIftarTime) {
+      setCurrentPeriod('fasting');
+      setGreenProgress(100);
+      setRedProgress(0);
+      setRemainingTime('Koha e Iftarit!');
+      return 100;
+    }
 
     // Handle next day's fajr time for non-fasting period
     const nextFajr = new Date(fajr);
@@ -60,8 +77,8 @@ const RamadanCountdown: React.FC = () => {
       const completedPercent = (elapsedTime / totalFastingDuration) * 100;
       const remainingPercent = (remainingTime / totalFastingDuration) * 100;
 
-      setCompletedProgress(completedPercent);
-      setRemainingProgress(remainingPercent);
+      setGreenProgress(completedPercent);
+      setRedProgress(remainingPercent);
       return completedPercent; // Return completed progress for main progress indicator
     } else {
       // Non-fasting period (current time to next Suhoor)
@@ -71,8 +88,8 @@ const RamadanCountdown: React.FC = () => {
       // Calculate yellow progress starting from current time
       const nonFastingProgress = (timeUntilNextFajr / totalNightDuration) * 100;
       
-      setCompletedProgress(0);
-      setRemainingProgress(0);
+      setGreenProgress(0);
+      setRedProgress(0);
       return nonFastingProgress;
     }
   };
@@ -153,28 +170,25 @@ const RamadanCountdown: React.FC = () => {
 
       // Determine current period
       if (now < syfyr) {
-        setCurrentPeriod('free'); // Before Syfyr
-      } else if (now >= syfyr && now < iftar) {
         setCurrentPeriod('fasting'); // Fasting period
       } else {
         setCurrentPeriod('eating'); // Eating period after Iftar
-        setIsIftarDone(true); // Iftar is done
       }
 
       // Calculate remaining time until next Syfyr
-      if (isIftarDone) {
+      if (currentPeriod === 'eating') {
         const nextSyfyr = new Date(syfyr);
         if (now > syfyr) {
-          nextSyfyr.setDate(nextSyfyr.getDate() + 1); // Move to next day
+          nextSyfyr.setDate(nextSyfyr.getDate() + 1);
         }
         const diff = nextSyfyr.getTime() - now.getTime();
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
         if (hours > 0 || minutes > 0) {
-          setRemainingTime(`${hours}h ${minutes}m until Syfyr`);
+          setRemainingTime(`${hours}h ${minutes}m`);
         } else {
-          setRemainingTime(`It's time for Syfyr!`);
+          setRemainingTime(`Koha e Syfyrit!`);
         }
       } else {
         // Calculate remaining time until Iftar
@@ -183,9 +197,9 @@ const RamadanCountdown: React.FC = () => {
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
         if (hours > 0) {
-          setRemainingTime(`${hours}h ${minutes}m until Iftar`);
+          setRemainingTime(`${hours}h ${minutes}m`);
         } else {
-          setRemainingTime(`${minutes}m until Iftar`);
+          setRemainingTime(`${minutes}m`);
         }
       }
 
@@ -209,7 +223,7 @@ const RamadanCountdown: React.FC = () => {
     const timer = setInterval(updateTimes, 60000);
 
     return () => clearInterval(timer);
-  }, [isIftarDone, progress]);
+  }, [currentPeriod, progress]);
 
   // Get current fajr and iftar times for comparison
   const { fajr, iftar } = getCurrentFajrAndIftar(currentDateTime);
@@ -220,16 +234,38 @@ const RamadanCountdown: React.FC = () => {
   const circumference = 2 * Math.PI * radius;
   const progressOffset = circumference - (progress / 100) * circumference;
 
+  const formatTimeDisplay = (hours: number, minutes: number) => {
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  };
+
   const isTimeForSyfyr = () => {
     const now = new Date();
     const hours = now.getHours();
-    return hours >= 3 && hours < 5; // Example time range for Syfyr
+    const minutes = now.getMinutes();
+    
+    // Check if current time is within 30 minutes of Syfyr time
+    if (hours === fajrTime.hours) {
+      return minutes <= fajrTime.minutes + 30;
+    }
+    if (hours === fajrTime.hours - 1) {
+      return minutes >= 30;
+    }
+    return false;
   };
 
   const isTimeForIftar = () => {
     const now = new Date();
     const hours = now.getHours();
-    return hours >= 17 && hours < 19; // Example time range for Iftar
+    const minutes = now.getMinutes();
+    
+    // Check if current time is within 30 minutes of Iftar time
+    if (hours === iftarTime.hours) {
+      return minutes <= iftarTime.minutes + 30;
+    }
+    if (hours === iftarTime.hours - 1) {
+      return minutes >= 30;
+    }
+    return false;
   };
 
   const toggleNotification = async (type: 'syfyr' | 'iftar') => {
@@ -254,77 +290,120 @@ const RamadanCountdown: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchPrayerTimes = async () => {
-      try {
-        const response = await fetch('YOUR_API_ENDPOINT');
-        const data = await response.json();
-        // Assuming the API returns times in a specific format
-        setFajrTime({ hours: data.fajr.hours, minutes: data.fajr.minutes });
-        setIftarTime({ hours: data.iftar.hours, minutes: data.iftar.minutes });
-      } catch (error) {
-        console.error('Error fetching prayer times:', error);
-      }
-    };
-
-    fetchPrayerTimes();
-  }, []);
-
   return (
-    <div className="countdown-container">
-      <DuaDisplay currentLanguage={currentLanguage} />
-      <LanguagePicker 
-        onLanguageChange={(lang) => setCurrentLanguage(lang.code)} 
-      />
-      {/* Background Particles */}
-      <div className="background-particles">
-        <BackgroundParticles className="particle" />
-      </div>
-
-      {/* Floating circles */}
-      <div className="floating-circle"></div>
-      <div className="floating-circle"></div>
-      <div className="floating-circle"></div>
-
-      {/* Header */}
-      <div className="header fade-in">
-        <div className="status-icons">
-          <div className="signal"></div>
-          <div className="wifi"></div>
-          <div className="battery"></div>
+    <div className="ramadan-countdown">
+      <div className="countdown-container">
+        <DuaDisplay currentLanguage={currentLanguage} />
+        <LanguagePicker 
+          onLanguageChange={(lang) => setCurrentLanguage(lang.code)} 
+        />
+        
+        {/* Background Particles */}
+        <div className="background-particles">
+          <BackgroundParticles className="particle" />
         </div>
-      </div>
 
-      {/* Navigation */}
-      <div className="nav-bar fade-in">
-        <HanaLogo className="hana-logo" />
-        {location?.city && (
-          <div className="location">
-            <IoLocationOutline className="location-icon" />
-            {location.city}
-          </div>
-        )}
-      </div>
+        {/* Floating circles */}
+        <div className="floating-circle"></div>
+        <div className="floating-circle"></div>
+        <div className="floating-circle"></div>
 
-      {/* Clock Display */}
-      <div className="clock-container scale-in">
-        <div className="clock-ring">
-          <div className="time-markers">
-            <span className="marker twelve">12</span>
-            <span className="marker three">3</span>
-            <span className="marker six">6</span>
-            <span className="marker nine">9</span>
+        {/* Header */}
+        <div className="header fade-in">
+          <div className="status-icons">
+            <div className="signal"></div>
+            <div className="wifi"></div>
+            <div className="battery"></div>
           </div>
-          <div className="inner-circle">
-            {/* Progress Ring SVG */}
-            <svg className="progress-ring" width="200" height="200">
-              {currentDateTime >= fajr && currentDateTime <= iftar ? (
-                // Fasting period - show both completed and remaining progress
-                <>
-                  {/* Completed progress (Green) */}
+        </div>
+
+        {/* Navigation */}
+        <div className="nav-bar fade-in">
+          <HanaLogo className="hana-logo" />
+          {location?.city && (
+            <div className="location">
+              <IoLocationOutline className="location-icon" />
+              {location.city}
+            </div>
+          )}
+        </div>
+
+        {/* Clock Display */}
+        <div className="clock-container scale-in">
+          <div className="clock-ring">
+           
+            <div className="inner-circle">
+              {/* Progress Ring SVG */}
+              <svg className="progress-ring" width="200" height="200">
+                {currentDateTime >= fajr && currentDateTime <= iftar ? (
+                  <>
+                    {greenProgress === 100 || 
+                     (currentDateTime.getHours() === iftarTime.hours && 
+                      currentDateTime.getMinutes() === iftarTime.minutes) ? (
+                      // Full green circle for Iftar time
+                      <circle
+                        className="progress-ring__circle"
+                        stroke="#3cd097"
+                        strokeWidth={strokeWidth}
+                        strokeLinecap="round"
+                        fill="transparent"
+                        r={radius}
+                        cx="100"
+                        cy="100"
+                        style={{
+                          strokeDasharray: circumference,
+                          strokeDashoffset: 0,
+                          transform: 'rotate(-90deg)',
+                          transformOrigin: '50% 50%',
+                          filter: 'drop-shadow(0 0 6px #3cd097)'
+                        }}
+                      />
+                    ) : (
+                      <>
+                        {/* Completed progress (Green) */}
+                        <circle
+                          className="progress-ring__circle"
+                          stroke="#3cd097"
+                          strokeWidth={strokeWidth}
+                          strokeLinecap="round"
+                          fill="transparent"
+                          r={radius}
+                          cx="100"
+                          cy="100"
+                          style={{
+                            strokeDasharray: circumference,
+                            strokeDashoffset: circumference - (greenProgress / 100) * circumference,
+                            transform: 'rotate(-90deg)',
+                            transformOrigin: '50% 50%',
+                            filter: 'drop-shadow(0 0 6px #3cd097)'
+                          }}
+                        />
+                        {/* Remaining progress (Red) */}
+                        <circle
+                          className="progress-ring__circle"
+                          stroke="#ff4d4d"
+                          strokeWidth={strokeWidth}
+                          strokeLinecap="round"
+                          fill="transparent"
+                          r={radius}
+                          cx="100"
+                          cy="100"
+                          style={{
+                            strokeDasharray: circumference,
+                            strokeDashoffset: circumference - (redProgress / 100) * circumference,
+                            transform: `rotate(${(greenProgress * 3.6) - 90}deg)`,
+                            transformOrigin: '50% 50%',
+                            filter: 'drop-shadow(0 0 6px #ff4d4d)'
+                          }}
+                        />
+                      </>
+                    )}
+                  </>
+                ) : (
+                  // Non-fasting period - single yellow progress circle
                   <circle
                     className="progress-ring__circle"
-                    stroke="#3cd097"
+                    stroke="#ffd700"
                     strokeWidth={strokeWidth}
                     strokeLinecap="round"
                     fill="transparent"
@@ -333,120 +412,90 @@ const RamadanCountdown: React.FC = () => {
                     cy="100"
                     style={{
                       strokeDasharray: circumference,
-                      strokeDashoffset: circumference - (completedProgress / 100) * circumference,
+                      strokeDashoffset: circumference - (progress / 100) * circumference,
                       transform: 'rotate(-90deg)',
                       transformOrigin: '50% 50%',
-                      filter: 'drop-shadow(0 0 6px #3cd097)'
+                      filter: 'drop-shadow(0 0 6px #ffd700)'
                     }}
                   />
-                  {/* Remaining progress (Red) */}
-                  <circle
-                    className="progress-ring__circle"
-                    stroke="#ff4d4d"
-                    strokeWidth={strokeWidth}
-                    strokeLinecap="round"
-                    fill="transparent"
-                    r={radius}
-                    cx="100"
-                    cy="100"
-                    style={{
-                      strokeDasharray: circumference,
-                      strokeDashoffset: circumference - (remainingProgress / 100) * circumference,
-                      transform: `rotate(${(completedProgress * 3.6) - 90}deg)`,
-                      transformOrigin: '50% 50%',
-                      filter: 'drop-shadow(0 0 6px #ff4d4d)'
-                    }}
-                  />
-                </>
-              ) : (
-                // Non-fasting period - single yellow progress circle
-                <circle
-                  className="progress-ring__circle"
-                  stroke="#ffd700"
-                  strokeWidth={strokeWidth}
-                  strokeLinecap="round"
-                  fill="transparent"
-                  r={radius}
-                  cx="100"
-                  cy="100"
-                  style={{
-                    strokeDasharray: circumference,
-                    strokeDashoffset: circumference - (progress / 100) * circumference,
-                    transform: 'rotate(-90deg)',
-                    transformOrigin: '50% 50%',
-                    filter: 'drop-shadow(0 0 6px #ffd700)'
-                  }}
-                />
-              )}
-            </svg>
-            <div className="inner-content">
-              <IoCloudyNight className="weather-icon" />
-              <div className="time">{currentTime}</div>
-              <div className="label">
-                {remainingTime}<br />
-                Deri në Iftar
+                )}
+              </svg>
+              <div className="inner-content">
+                <IoCloudyNight className="weather-icon" />
+                <div className="time">{currentTime}</div>
+                <div className="label">
+                  {remainingTime}<br />
+                  {currentPeriod === 'fasting' ? 'Deri në Iftar' : 'Deri në Syfyr'}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <RamadanCalendar />
+        <RamadanCalendar />
 
-      {/* Updated Reminder Section */}
-      <div className="reminder-section slide-up">
-        <div className="times-container">
-          <div className={`time-block ${isTimeForSyfyr() ? 'active' : ''}`}>
-            <div className="time-header">
-              <IoMoonOutline className="time-icon" />
-              <span>Syfyru</span>
-              <button 
-                className={`notification-toggle ${notifications.syfyr ? 'enabled' : ''}`}
-                onClick={() => toggleNotification('syfyr')}
-                title={notifications.syfyr ? 'Çaktivizo njoftimet' : 'Aktivizo njoftimet'}
-              >
-                {notifications.syfyr ? 
-                  <IoNotificationsOutline className="notification-icon" /> : 
-                  <IoNotificationsOffOutline className="notification-icon" />
-                }
-              </button>
+        {/* Add the new RamadanDaysList component here */}
+        <RamadanDaysList cityId={selectedCity} />
+
+        {/* Updated Reminder Section */}
+        <div className="reminder-section slide-up">
+          <div className="times-container">
+            <div className={`time-block ${isTimeForSyfyr() ? 'active' : ''}`}>
+              <div className="time-header">
+                <IoMoonOutline className="time-icon" />
+                <span>Syfyru</span>
+                <button 
+                  className={`notification-toggle ${notifications.syfyr ? 'enabled' : ''}`}
+                  onClick={() => toggleNotification('syfyr')}
+                  title={notifications.syfyr ? 'Çaktivizo njoftimet' : 'Aktivizo njoftimet'}
+                >
+                  {notifications.syfyr ? 
+                    <IoNotificationsOutline className="notification-icon" /> : 
+                    <IoNotificationsOffOutline className="notification-icon" />
+                  }
+                </button>
+              </div>
+              <div className="time-value">
+                {formatTimeDisplay(fajrTime.hours, fajrTime.minutes)}
+              </div>
             </div>
-            <div className="time-value">04:30</div>
-          </div>
-          
-          <div className={`time-block ${isTimeForIftar() ? 'active' : ''}`}>
-            <div className="time-header">
-              <IoSunnyOutline className="time-icon" />
-              <span>Iftari</span>
-              <button 
-                className={`notification-toggle ${notifications.iftar ? 'enabled' : ''}`}
-                onClick={() => toggleNotification('iftar')}
-                title={notifications.iftar ? 'Çaktivizo njoftimet' : 'Aktivizo njoftimet'}
-              >
-                {notifications.iftar ? 
-                  <IoNotificationsOutline className="notification-icon" /> : 
-                  <IoNotificationsOffOutline className="notification-icon" />
-                }
-              </button>
+            
+            <div className={`time-block ${isTimeForIftar() ? 'active' : ''}`}>
+              <div className="time-header">
+                <IoSunnyOutline className="time-icon" />
+                <span>Iftari</span>
+                <button 
+                  className={`notification-toggle ${notifications.iftar ? 'enabled' : ''}`}
+                  onClick={() => toggleNotification('iftar')}
+                  title={notifications.iftar ? 'Çaktivizo njoftimet' : 'Aktivizo njoftimet'}
+                >
+                  {notifications.iftar ? 
+                    <IoNotificationsOutline className="notification-icon" /> : 
+                    <IoNotificationsOffOutline className="notification-icon" />
+                  }
+                </button>
+              </div>
+              <div className="time-value">
+                {formatTimeDisplay(iftarTime.hours, iftarTime.minutes)}
+              </div>
             </div>
-            <div className="time-value">18:00</div>
           </div>
         </div>
+
+        <div className="main-content">
+          {/* Existing Suhoor and Iftar section */}
+          
+
+       
+
+
+          {/* Rest of the components */}
+          <RamadanCalendar />
+          <Achievements />
+        </div>
+
+        <BottomNavigation />
       </div>
-
-      <div className="main-content">
-        {/* Existing Suhoor and Iftar section */}
-        
-
-        {/* Daily Schedule Tracker */}
-        <DailyScheduleTracker />
-
-        {/* Rest of the components */}
-        <RamadanCalendar />
-        <Achievements />
-      </div>
-
-      <BottomNavigation />
     </div>
   );
 };
