@@ -9,6 +9,8 @@ import { ReactComponent as BackgroundParticles } from '../assets/BackgroundParti
 import LanguagePicker from './LanguagePicker';
 import DuaDisplay from './DuaDisplay';
 import RamadanCalendar from './RamadanCalendar';
+import Achievements from './Achievements';
+import DailyScheduleTracker from './DailyScheduleTracker';
 
 const FAJR_TIME = { hours: 4, minutes: 0 }; // 4:45 AM
 const IFTAR_TIME = { hours: 23, minutes: 0 }; // 6:30 PM
@@ -397,7 +399,7 @@ const RamadanCountdown: React.FC = () => {
           <div className={`time-block ${isTimeForSyfyr() ? 'active' : ''}`}>
             <div className="time-header">
               <IoMoonOutline className="time-icon" />
-              <span>Syfyri</span>
+              <span>Syfyru</span>
               <button 
                 className={`notification-toggle ${notifications.syfyr ? 'enabled' : ''}`}
                 onClick={() => toggleNotification('syfyr')}
@@ -430,6 +432,18 @@ const RamadanCountdown: React.FC = () => {
             <div className="time-value">18:00</div>
           </div>
         </div>
+      </div>
+
+      <div className="main-content">
+        {/* Existing Suhoor and Iftar section */}
+        
+
+        {/* Daily Schedule Tracker */}
+        <DailyScheduleTracker />
+
+        {/* Rest of the components */}
+        <RamadanCalendar />
+        <Achievements />
       </div>
 
       <BottomNavigation />

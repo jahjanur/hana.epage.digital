@@ -1,0 +1,127 @@
+.prayer-activity-container {
+  padding: 24px;
+  margin: 20px auto;
+  background: rgba(63, 63, 244, 0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.prayer-activity-title {
+  font-size: 24px;
+  color: white;
+  margin-bottom: 24px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.prayer-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.prayer-headers {
+  display: grid;
+  grid-template-columns: 0.8fr repeat(5, 1fr);
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+
+.date-header, .prayer-name {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  padding: 8px 4px;
+}
+
+.prayer-row {
+  display: grid;
+  grid-template-columns: 0.8fr repeat(5, 1fr);
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.date-cell {
+  color: white;
+  font-size: 13px;
+  text-align: center;
+  padding: 8px 4px;
+}
+
+.prayer-cell {
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.05);
+  width: 100%;
+  padding: 0;
+}
+
+.prayer-cell.completed {
+  background: rgba(60, 208, 151, 0.2);
+  color: rgb(60, 208, 151);
+}
+
+.prayer-cell.missed {
+  background: rgba(255, 69, 58, 0.2);
+  color: rgb(255, 69, 58);
+}
+
+.prayer-cell:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .prayer-activity-container {
+    margin: 15px 0;
+    padding: 16px;
+  }
+
+  .prayer-activity-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .date-header, 
+  .prayer-name,
+  .date-cell {
+    font-size: 11px;
+    padding: 4px 2px;
+  }
+
+  .prayer-cell {
+    font-size: 12px;
+    border-radius: 8px;
+  }
+
+  .prayer-headers,
+  .prayer-row {
+    gap: 4px;
+  }
+}
+
+@media (max-width: 360px) {
+  .prayer-activity-container {
+    padding: 12px;
+  }
+
+  .date-header, 
+  .prayer-name,
+  .date-cell {
+    font-size: 10px;
+  }
+} 

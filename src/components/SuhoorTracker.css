@@ -1,0 +1,134 @@
+.suhoor-tracker {
+  padding: 24px;
+  margin: 20px auto;
+  background: rgba(63, 63, 244, 0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 100%;
+  box-sizing: border-box;
+  animation: fadeIn 0.5s ease;
+}
+
+.suhoor-tracker-title {
+  font-size: 20px;
+  color: white;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.suhoor-days {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.suhoor-day {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.suhoor-day::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.suhoor-day:hover::before {
+  transform: translateX(100%);
+}
+
+.suhoor-day.completed {
+  background: rgba(60, 208, 151, 0.1);
+  border-color: rgba(60, 208, 151, 0.2);
+}
+
+.date {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.check-icon {
+  color: rgb(60, 208, 151);
+  font-size: 24px;
+  animation: scaleIn 0.3s ease;
+}
+
+.empty-circle {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.suhoor-day:hover .empty-circle {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .suhoor-tracker {
+    padding: 16px;
+    margin: 15px 0;
+  }
+
+  .suhoor-days {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+  }
+
+  .suhoor-day {
+    padding: 12px;
+  }
+
+  .date {
+    font-size: 12px;
+  }
+} 
