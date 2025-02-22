@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './RamadanDaysList.css';
 import { ramadanTimes, getCityPrayerTimes } from '../data/prayerTimes';
+import { IoMoonOutline } from "react-icons/io5";
+import { BsSunset } from "react-icons/bs";
 
 interface RamadanDay {
   dayNumber: number;
@@ -41,7 +43,7 @@ const RamadanDaysList: React.FC = () => {
   }, []);
 
   const getDayStatus = (dayNumber: number) => {
-    const currentDay = 9; // Since we're on day 9
+    const currentDay = 18; // Changed from 9 to 26
     
     // Check if the day is before the current day
     if (dayNumber < currentDay) {
@@ -60,18 +62,32 @@ const RamadanDaysList: React.FC = () => {
           <div 
             key={day.dayNumber} 
             ref={day.date === "2024-03-06" ? currentDayRef : null}
-            className={`schedule-item ${selectedDay === day.dayNumber ? 'selected' : ''} ${getDayStatus(day.dayNumber)}`}
+            className={`schedule-item 
+              ${selectedDay === day.dayNumber ? 'selected' : ''} 
+              ${getDayStatus(day.dayNumber)}
+              ${day.date === "2024-03-26" ? 'laylatul-qadr' : ''}`}
             onClick={() => setSelectedDay(day.dayNumber)}
           >
             <div className="item-left">
               <div className="day-number">{day.dayNumber}</div>
-              <div className="day-text">{day.weekday}</div>
+              <div className="day-text">
+                {day.weekday}
+                {day.date === "2024-03-26" && (
+                  <span className="special-night">Nata e Kadrit</span>
+                )}
+              </div>
             </div>
             <div className="item-right">
               <div className="time">
+                <span className="time-label">
+                  <IoMoonOutline className="time-icon" />
+                </span>
                 <span className="time-value">{day.syfyr}</span>
               </div>
               <div className="time">
+                <span className="time-label">
+                  <BsSunset className="time-icon" />
+                </span>
                 <span className="time-value">{day.iftar}</span>
               </div>
             </div>
