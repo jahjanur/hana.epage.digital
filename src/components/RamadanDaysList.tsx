@@ -17,8 +17,11 @@ const RamadanDaysList: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const currentDayRef = useRef<HTMLDivElement>(null);
   
+  // Current day for highlighting
+  const currentDay: number = 1;
+  
   useEffect(() => {
-    const days = ramadanTimes.map((day, index) => {
+    const allDays = ramadanTimes.map((day, index) => {
       const cityTimes = getCityPrayerTimes('gostivar', day.date);
       return {
         dayNumber: index + 1,
@@ -28,8 +31,8 @@ const RamadanDaysList: React.FC = () => {
         iftar: cityTimes?.maghrib || day.maghrib
       };
     });
-    
-    setVisibleDays(days);
+
+    setVisibleDays(allDays);
 
     // Scroll to current day after render
     setTimeout(() => {
@@ -43,30 +46,27 @@ const RamadanDaysList: React.FC = () => {
   }, []);
 
   const getDayStatus = (dayNumber: number) => {
-    const currentDay = 18; // Changed from 9 to 26
-    
-    // Check if the day is before the current day
     if (dayNumber < currentDay) {
-      return 'past-day completed'; // Class for past days
+      return 'past-day completed';
     } else if (dayNumber === currentDay) {
-      return 'current-day'; // Class for the current day
+      return 'current-day';
     }
-    
-    return ''; // Default class for future days
+    return '';
   };
 
   return (
     <div className="schedule">
       <div className="schedule-list">
-        {visibleDays.map((day) => (
+        {visibleDays.map((day, index) => (
           <div 
             key={day.dayNumber} 
-            ref={day.date === "2024-03-06" ? currentDayRef : null}
+            ref={day.dayNumber === currentDay ? currentDayRef : null}
             className={`schedule-item 
               ${selectedDay === day.dayNumber ? 'selected' : ''} 
               ${getDayStatus(day.dayNumber)}
               ${day.date === "2024-03-26" ? 'laylatul-qadr' : ''}`}
             onClick={() => setSelectedDay(day.dayNumber)}
+            style={{ '--index': index } as React.CSSProperties}
           >
             <div className="item-left">
               <div className="day-number">{day.dayNumber}</div>

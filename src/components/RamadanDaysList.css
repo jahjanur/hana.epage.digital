@@ -299,58 +299,155 @@
   }
 }
 
-.schedule {
-  position: relative;
-  padding: 20px;
-  background: none;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
 
+.schedule {
+  width: 100%;
   max-width: 500px;
   margin: 0 auto;
+  padding: 20px;
+  background-color: none;
+  backdrop-filter: blur(20px);
 }
 
 .schedule-list {
-  height: 400px; /* Increased height */
+  height: 280px;
   overflow-y: auto;
-  position: relative;
-  padding: 20px 10px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-behavior: smooth;
   mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
+    transparent,
     black 10%,
     black 90%,
-    transparent 100%
+    transparent
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
+    transparent,
     black 10%,
     black 90%,
-    transparent 100%
+    transparent
   );
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-/* Hide scrollbar but keep functionality */
-.schedule-list {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+/* Add padding for first and last items */
+.schedule-list::before,
+.schedule-list::after {
+  content: '';
+  min-height: 140px;
 }
 
 .schedule-list::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
 }
 
-/* Improve item appearance */
 .schedule-item {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.05);
+  align-items: center;
+  padding: 16px;
+  background: rgba(59, 130, 246, 0.08);
   border-radius: 16px;
-  margin-bottom: 6px;
   transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  min-height: 75px;
+  position: relative;
+  overflow: hidden;
+}
+
+.schedule-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.schedule-item:hover {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.2);
+  transform: translateX(8px);
+}
+
+.schedule-item:hover::after {
+  opacity: 1;
+}
+
+/* Current day styling */
+.schedule-item.current-day {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 
+    0 4px 12px -2px rgba(59, 130, 246, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Update text colors for current day */
+.schedule-item.current-day .day-number {
+  background: rgba(59, 130, 246, 0.1);
+  color: #1e293b;
+}
+
+.schedule-item.current-day .day-text {
+  color: #1e293b;
+}
+
+.schedule-item.current-day .time {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.schedule-item.current-day .time-value {
+  color: #1e293b;
+}
+
+.schedule-item.current-day .time-icon {
+  color: #1e293b;
+}
+
+.schedule-item.current-day .time-label {
+  color: #1e293b;
+  opacity: 0.8;
+}
+
+/* Keep hover effect for current day */
+.schedule-item.current-day:hover {
+  background: rgba(255, 255, 255, 0.98);
+  transform: translateX(8px);
+}
+
+/* Remove the previous blur containers */
+.schedule::before,
+.schedule::after {
+  display: none;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .schedule {
+    padding: 24px;
+  }
+
+  .schedule-list {
+    height: 300px;
+    gap: 12px;
+  }
+
+  .schedule-item {
+    padding: 20px;
+  }
 }
 
 .item-left {
@@ -446,64 +543,10 @@
 }
 
 /* Current day styling */
-.schedule-item.current-day {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
 .schedule-item.current-day .day-number,
 .schedule-item.current-day .day-text,
 .schedule-item.current-day .time-value {
   color: #1e293b;
-}
-
-/* Add subtle animation for items entering viewport */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.schedule-item {
-  animation: fadeInUp 0.3s ease forwards;
-}
-
-/* Improve day number appearance */
-.day-number {
-  font-size: 2.6rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 2px 2px 20px rgba(99, 102, 241, 0.5);
-  min-width: 50px;
-  text-align: center;
-}
-
-/* Current day styling */
-.schedule-item.current-day {
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid rgba(59, 130, 246, 0.5);
-  box-shadow: 
-    0 4px 20px -4px rgba(59, 130, 246, 0.3),
-    inset 0 0 0 1px rgba(59, 130, 246, 0.2);
-  position: relative;
-  transform: scale(1.02);
-  z-index: 1;
-}
-
-/* Dark text for current day */
-.schedule-item.current-day .day-info,
-.schedule-item.current-day .day-number,
-.schedule-item.current-day .day-weekday,
-.schedule-item.current-day .day-date {
-  color: #1e293b !important;
 }
 
 /* Style time containers for current day */
@@ -563,7 +606,7 @@
 .schedule-item.past-day .day-date,
 .schedule-item.past-day .time-label,
 .schedule-item.past-day .time-value {
-  color: #22c55e !important;
+  color: #00ff5e !important;
 }
 
 /* Style the time containers for past days */
@@ -754,20 +797,6 @@
   display: none;
 }
 
-/* Update schedule-item to be simpler */
-.schedule-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  margin-bottom: 6px;
-  transition: all 0.3s ease;
-}
-
-/* Keep the rest of your existing styles */
-
 /* Special styling for Laylatul Qadr */
 .schedule-item.laylatul-qadr {
   background: linear-gradient(
@@ -913,4 +942,13 @@
 
 .schedule-item.laylatul-qadr.current-day .time-icon {
   color: #1e293b;
-} 
+}
+
+/* Ensure items don't get cut off at edges */
+.schedule-item:first-child {
+  margin-top: 20px;
+}
+
+.schedule-item:last-child {
+  margin-bottom: 20px;
+}
