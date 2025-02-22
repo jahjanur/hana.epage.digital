@@ -173,7 +173,7 @@ const RamadanCountdown: React.FC = () => {
 
         const hoursLeft = Math.floor(timeLeftEating / (1000 * 60 * 60));
         const minutesLeft = Math.floor((timeLeftEating % (1000 * 60 * 60)) / (1000 * 60));
-        setRemainingTime(`${hoursLeft}h ${minutesLeft}m until Syfyru`);
+        setRemainingTime(`${hoursLeft}h ${minutesLeft}m`);
       }
     };
 
@@ -380,7 +380,6 @@ const RamadanCountdown: React.FC = () => {
               </svg>
               <div className="inner-content">
                 <IoCloudyNight className="weather-icon" />
-                <div className="time">{currentTime}</div>
                 <div className="label">
                   {remainingTime}<br />
                   {currentPeriod === 'fasting' ? 'until Iftar' : 'until Syfyru'}
