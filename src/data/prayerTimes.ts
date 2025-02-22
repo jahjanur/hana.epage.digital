@@ -104,7 +104,7 @@ export const ramadanTimes: RamadanDay[] = [
   },
   {
     date: "2024-03-09",
-    weekday: "E Diel",
+    weekday: "E Diell",
     fajr: "04:20",
     dhuhr: "11:54",
     asr: "15:05",
@@ -176,7 +176,7 @@ export const ramadanTimes: RamadanDay[] = [
   },
   {
     date: "2024-03-17",
-    weekday: "E Shtunë",
+    weekday: "E Diell",
     fajr: "04:06",
     dhuhr: "11:52",
     asr: "15:11",

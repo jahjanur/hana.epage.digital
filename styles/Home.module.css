@@ -1,0 +1,35 @@
+.schedule {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.schedule .day {
+  padding: 15px;
+  text-align: center;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.schedule .completed {
+  background-color: #4CAF50 !important; /* Green background for completed days */
+  color: white;
+  position: relative;
+}
+
+.schedule .completed::after {
+  content: '✓'; /* Checkmark icon for completed days */
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  font-size: 0.8em;
+}
+
+.schedule .active {
+  background-color: #2196F3; /* Blue background for active day */
+  color: white;
+} 
