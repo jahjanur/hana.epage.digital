@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9e4706e3.css",
+    "main.js": "/static/js/main.ca00c780.js",
+    "static/media/BackgroundParticles.svg": "/static/media/BackgroundParticles.203033021f526a7641d14f332e0e2cfe.svg",
+    "static/media/hanaMainLogoWhite.svg": "/static/media/hanaMainLogoWhite.907d8d4fa5c1d4552ccc9aed8b2ff108.svg",
+    "static/media/epage.svg": "/static/media/epage.c9ababbb870f6b691c73b9899822dc1c.svg",
+    "index.html": "/index.html",
+    "main.9e4706e3.css.map": "/static/css/main.9e4706e3.css.map",
+    "main.ca00c780.js.map": "/static/js/main.ca00c780.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9e4706e3.css",
+    "static/js/main.ca00c780.js"
+  ]
+}

@@ -137,11 +137,12 @@
 }
 
 .inner-circle .label {
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
   opacity: 0.8;
   color: rgba(255, 255, 255, 0.8);
   transition: color 0.3s ease;
+  font-weight: bold;
 }
 
 .inner-circle .label.urgent {
@@ -797,4 +798,13 @@
   .achievements-wrapper {
     padding: 0 15px;
   }
+  
+  .time-markers * {
+    display: none;
+  }
+  
+
+
+  
+
 } 
