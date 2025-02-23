@@ -5,12 +5,13 @@ import { FaPrayingHands } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 import BottomNavigation from './BottomNavigation';
 import { ReactComponent as HanaLogo } from '../assets/hanaMainLogoWhite.svg';
-import { ReactComponent as BackgroundParticles } from '../assets/BackgroundParticles.svg';
 import LanguagePicker from './LanguagePicker';
 import DuaDisplay from './DuaDisplay';
 import RamadanCalendar from './RamadanCalendar';
 import Achievements from './Achievements';
 import RamadanDaysList from './RamadanDaysList';
+import AnimatedBackground from './AnimatedBackground';
+import Background from './Background';
 
 const FAJR_TIME = { hours: 4, minutes: 34 }; // Updated Imsak time for the first day
 const IFTAR_TIME = { hours: 21, minutes: 23 }; // Updated Akşam time for the first day
@@ -265,190 +266,192 @@ const RamadanCountdown: React.FC = () => {
   return (
     <div className="ramadan-countdown">
       <div className="countdown-container">
-        <DuaDisplay currentLanguage={currentLanguage} />
-        <LanguagePicker 
-          onLanguageChange={(lang) => setCurrentLanguage(lang.code)} 
-        />
-        {/* Background Particles */}
-        <div className="background-particles">
-          <BackgroundParticles className="particle" />
-        </div>
-        {/* Floating circles */}
-        <div className="floating-circle"></div>
-        <div className="floating-circle"></div>
-        <div className="floating-circle"></div>
-        {/* Header */}
-        <div className="header fade-in">
-          <div className="status-icons">
-            <div className="signal"></div>
-            <div className="wifi"></div>
-            <div className="battery"></div>
+        <Background />
+        <div className="content-wrapper" style={{ position: 'relative', zIndex: 3 }}>
+          <DuaDisplay currentLanguage={currentLanguage} />
+          <LanguagePicker 
+            onLanguageChange={(lang) => setCurrentLanguage(lang.code)} 
+          />
+          <AnimatedBackground />
+          
+          {/* Floating circles */}
+          <div className="floating-circle"></div>
+          <div className="floating-circle"></div>
+          <div className="floating-circle"></div>
+          
+          {/* Header */}
+          <div className="header fade-in">
+            <div className="status-icons">
+              <div className="signal"></div>
+              <div className="wifi"></div>
+              <div className="battery"></div>
+            </div>
           </div>
-        </div>
-        {/* Navigation */}
-        <div className="nav-bar fade-in">
-          <HanaLogo className="hana-logo" />
-          {location?.city && (
-            <div className="location">
-              <IoLocationOutline className="location-icon" />
-              {location.city}
-            </div>
-          )}
-        </div>
-        {/* Clock Display */}
-        <div className="clock-container scale-in">
-          <div className="clock-ring">
-            <div className="time-markers">
-              <span className="marker twelve"></span>
-              <span className="marker three"></span>
-              <span className="marker six"></span>
-              <span className="marker nine"></span>
-            </div>
-            <div className="inner-circle">
-              <svg className="progress-ring" width="200" height="200">
-                {currentPeriod === 'fasting' ? (
-                  <>
-                    {/* Complete background circle in lighter color */}
-                    <circle
-                      className="progress-ring__circle-background"
-                      stroke="#ff4d4d"
-                      strokeWidth={strokeWidth}
-                      strokeLinecap="round"
-                      fill="transparent"
-                      r={radius}
-                      cx="100"
-                      cy="100"
-                      style={{
-                        opacity: 0.3
-                      }}
-                    />
-                    {/* Green arc for elapsed fasting time */}
-                    <circle
-                      className="progress-ring__circle"
-                      stroke="#3cd097"
-                      strokeWidth={strokeWidth}
-                      strokeLinecap="round"
-                      fill="transparent"
-                      r={radius}
-                      cx="100"
-                      cy="100"
-                      style={{
-                        strokeDasharray: `${circumference}`,
-                        strokeDashoffset: `${circumference * (1 - greenProgress / 100)}`,
-                        transform: 'rotate(-90deg)',
-                        transformOrigin: '50% 50%',
-                        filter: 'drop-shadow(0 0 6px #3cd097)'
-                      }}
-                    />
-                  </>
-                ) : (
-                  <>
-                    {/* Complete background circle in lighter color */}
-                    <circle
-                      className="progress-ring__circle-background"
-                      stroke="#ffd700"
-                      strokeWidth={strokeWidth}
-                      strokeLinecap="round"
-                      fill="transparent"
-                      r={radius}
-                      cx="100"
-                      cy="100"
-                      style={{
-                        opacity: 0.3
-                      }}
-                    />
-                    {/* Yellow arc for eating time */}
-                    <circle
-                      className="progress-ring__circle"
-                      stroke="#ffd700"
-                      strokeWidth={strokeWidth}
-                      strokeLinecap="round"
-                      fill="transparent"
-                      r={radius}
-                      cx="100"
-                      cy="100"
-                      style={{
-                        strokeDasharray: `${circumference}`,
-                        strokeDashoffset: `${circumference * (1 - progress / 100)}`,
-                        transform: 'rotate(-90deg)',
-                        transformOrigin: '50% 50%',
-                        filter: 'drop-shadow(0 0 6px #ffd700)'
-                      }}
-                    />
-                  </>
-                )}
-              </svg>
-              <div className="inner-content">
-                <IoCloudyNight className="weather-icon" />
-                
-                <div className="label">
-                  {remainingTime}<br />
-                  {currentPeriod === 'fasting' ? 'until Iftar' : 'until Syfyr'}
+          {/* Navigation */}
+          <div className="nav-bar fade-in">
+            <HanaLogo className="hana-logo" />
+            {location?.city && (
+              <div className="location">
+                <IoLocationOutline className="location-icon" />
+                {location.city}
+              </div>
+            )}
+          </div>
+          {/* Clock Display */}
+          <div className="clock-container scale-in">
+            <div className="clock-ring">
+              <div className="time-markers">
+                <span className="marker twelve"></span>
+                <span className="marker three"></span>
+                <span className="marker six"></span>
+                <span className="marker nine"></span>
+              </div>
+              <div className="inner-circle">
+                <svg className="progress-ring" width="200" height="200">
+                  {currentPeriod === 'fasting' ? (
+                    <>
+                      {/* Complete background circle in lighter color */}
+                      <circle
+                        className="progress-ring__circle-background"
+                        stroke="#ff4d4d"
+                        strokeWidth={strokeWidth}
+                        strokeLinecap="round"
+                        fill="transparent"
+                        r={radius}
+                        cx="100"
+                        cy="100"
+                        style={{
+                          opacity: 0.3
+                        }}
+                      />
+                      {/* Green arc for elapsed fasting time */}
+                      <circle
+                        className="progress-ring__circle"
+                        stroke="#3cd097"
+                        strokeWidth={strokeWidth}
+                        strokeLinecap="round"
+                        fill="transparent"
+                        r={radius}
+                        cx="100"
+                        cy="100"
+                        style={{
+                          strokeDasharray: `${circumference}`,
+                          strokeDashoffset: `${circumference * (1 - greenProgress / 100)}`,
+                          transform: 'rotate(-90deg)',
+                          transformOrigin: '50% 50%',
+                          filter: 'drop-shadow(0 0 6px #3cd097)'
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {/* Complete background circle in lighter color */}
+                      <circle
+                        className="progress-ring__circle-background"
+                        stroke="#ffd700"
+                        strokeWidth={strokeWidth}
+                        strokeLinecap="round"
+                        fill="transparent"
+                        r={radius}
+                        cx="100"
+                        cy="100"
+                        style={{
+                          opacity: 0.3
+                        }}
+                      />
+                      {/* Yellow arc for eating time */}
+                      <circle
+                        className="progress-ring__circle"
+                        stroke="#ffd700"
+                        strokeWidth={strokeWidth}
+                        strokeLinecap="round"
+                        fill="transparent"
+                        r={radius}
+                        cx="100"
+                        cy="100"
+                        style={{
+                          strokeDasharray: `${circumference}`,
+                          strokeDashoffset: `${circumference * (1 - progress / 100)}`,
+                          transform: 'rotate(-90deg)',
+                          transformOrigin: '50% 50%',
+                          filter: 'drop-shadow(0 0 6px #ffd700)'
+                        }}
+                      />
+                    </>
+                  )}
+                </svg>
+                <div className="inner-content">
+                  <IoCloudyNight className="weather-icon" />
+                  
+                  <div className="label">
+                    {remainingTime}<br />
+                    {currentPeriod === 'fasting' ? 'until Iftar' : 'until Syfyr'}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <RamadanCalendar />
+          <RamadanCalendar />
 
-        {/* Add the new RamadanDaysList component here */}
-        <RamadanDaysList />
+          {/* Add the new RamadanDaysList component here */}
+          <RamadanDaysList />
 
-        {/* Updated Reminder Section */}
-        <div className="reminder-section slide-up">
-          <div className="times-container">
-            <div className={`time-block ${isTimeForSyfyr() ? 'active' : ''}`}>
-              <div className="time-header">
-                <IoMoonOutline className="time-icon" />
-                <span>Syfyru</span>
-                <button 
-                  className={`notification-toggle ${notifications.syfyr ? 'enabled' : ''}`}
-                  onClick={() => toggleNotification('syfyr')}
-                  title={notifications.syfyr ? 'Çaktivizo njoftimet' : 'Aktivizo njoftimet'}
-                >
-                  {notifications.syfyr ? 
-                    <IoNotificationsOutline className="notification-icon" /> : 
-                    <IoNotificationsOffOutline className="notification-icon" />
-                  }
-                </button>
+          {/* Updated Reminder Section */}
+          <div className="reminder-section slide-up">
+            <div className="times-container">
+              <div className={`time-block ${isTimeForSyfyr() ? 'active' : ''}`}>
+                <div className="time-header">
+                  <IoMoonOutline className="time-icon" />
+                  <span>Syfyru</span>
+                  <button 
+                    className={`notification-toggle ${notifications.syfyr ? 'enabled' : ''}`}
+                    onClick={() => toggleNotification('syfyr')}
+                    title={notifications.syfyr ? 'Çaktivizo njoftimet' : 'Aktivizo njoftimet'}
+                  >
+                    {notifications.syfyr ? 
+                      <IoNotificationsOutline className="notification-icon" /> : 
+                      <IoNotificationsOffOutline className="notification-icon" />
+                    }
+                  </button>
+                </div>
+                <div className="time-value">{`${fajrTime.hours}:${String(fajrTime.minutes).padStart(2, '0')}`}</div>
               </div>
-              <div className="time-value">{`${fajrTime.hours}:${String(fajrTime.minutes).padStart(2, '0')}`}</div>
-            </div>
-            
-            <div className={`time-block ${isTimeForIftar() ? 'active' : ''}`}>
-              <div className="time-header">
-                <IoSunnyOutline className="time-icon" />
-                <span>Iftari</span>
-                <button 
-                  className={`notification-toggle ${notifications.iftar ? 'enabled' : ''}`}
-                  onClick={() => toggleNotification('iftar')}
-                  title={notifications.iftar ? 'Çaktivizo njoftimet' : 'Aktivizo njoftimet'}
-                >
-                  {notifications.iftar ? 
-                    <IoNotificationsOutline className="notification-icon" /> : 
-                    <IoNotificationsOffOutline className="notification-icon" />
-                  }
-                </button>
+              
+              <div className={`time-block ${isTimeForIftar() ? 'active' : ''}`}>
+                <div className="time-header">
+                  <IoSunnyOutline className="time-icon" />
+                  <span>Iftari</span>
+                  <button 
+                    className={`notification-toggle ${notifications.iftar ? 'enabled' : ''}`}
+                    onClick={() => toggleNotification('iftar')}
+                    title={notifications.iftar ? 'Çaktivizo njoftimet' : 'Aktivizo njoftimet'}
+                  >
+                    {notifications.iftar ? 
+                      <IoNotificationsOutline className="notification-icon" /> : 
+                      <IoNotificationsOffOutline className="notification-icon" />
+                    }
+                  </button>
+                </div>
+                <div className="time-value">{`${iftarTime.hours}:${String(iftarTime.minutes).padStart(2, '0')}`}</div>
               </div>
-              <div className="time-value">{`${iftarTime.hours}:${String(iftarTime.minutes).padStart(2, '0')}`}</div>
             </div>
           </div>
+
+          <div className="main-content">
+            {/* Existing Suhoor and Iftar section */}
+            
+
+         
+
+
+            {/* Rest of the components */}
+            <RamadanCalendar />
+            <Achievements />
+          </div>
+
+          <BottomNavigation />
         </div>
-
-        <div className="main-content">
-          {/* Existing Suhoor and Iftar section */}
-          
-
-       
-
-
-          {/* Rest of the components */}
-          <RamadanCalendar />
-          <Achievements />
-        </div>
-
-        <BottomNavigation />
       </div>
     </div>
   );

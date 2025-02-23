@@ -21,7 +21,7 @@ const RamadanDaysList: React.FC = () => {
   const currentDayRef = useRef<HTMLDivElement>(null);
   
   // Current day for highlighting
-  const currentDay: number = 18;
+  const currentDay: number = 11;
   
   useEffect(() => {
     const allDays = ramadanTimes.map((day, index) => {
