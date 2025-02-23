@@ -6,8 +6,11 @@ import { IoNutritionOutline } from 'react-icons/io5';
 import { BsPerson } from 'react-icons/bs';
 import ramadanIcon from '../assets/ramadan.png';
 import { ReactComponent as EpageLogo } from '../assets/epage.svg';
+import { useNavigate } from 'react-router-dom';
 
 const BottomNavigation: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="bottom-nav-container">
@@ -15,9 +18,11 @@ const BottomNavigation: React.FC = () => {
           <button className="nav-item">
             <BiBook className="nav-icon" />
           </button>
-          <button className="nav-item">
+          
+          <button className="nav-item" onClick={() => navigate('/duah-v')}>
             <RiRunLine className="nav-icon" />
           </button>
+
           <button className="nav-item add-button">
             <div className="add-button-inner">
               <img src={ramadanIcon} alt="Ramadan" className="main-icon" />
