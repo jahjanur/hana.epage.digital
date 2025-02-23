@@ -1,0 +1,301 @@
+.duah-v-container {
+  background: #3f3ff4;
+  backdrop-filter: blur(20px);
+  min-height: 100vh;
+  padding: 10px 20px 100px 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+
+.duah-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  color: white;
+  position: sticky;
+  top: -11px;
+  z-index: 10;
+  background-color: #3f3ff4;
+  margin-right: -1px;
+  margin-left: -1px;
+
+}
+
+.duah-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: white;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  text-transform: capitalize;
+  padding: 0 50px;
+}
+
+.search-container {
+  margin: 20px 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 45px 12px 15px;
+  border: none;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-input:focus {
+  background-color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.search-input::placeholder {
+  color: #666;
+}
+
+.search-button {
+  position: absolute;
+  right: 8px;
+  background: #3f3ff4;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(63, 63, 244, 0.2);
+  width: 42px;
+  height: 42px;
+}
+
+.search-button img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.search-button:hover {
+  transform: scale(1.05);
+  background: #5252ff;
+  box-shadow: 0 4px 12px rgba(63, 63, 244, 0.3);
+}
+
+.search-button:active {
+  transform: scale(0.95);
+}
+
+.duas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 40px;
+  margin-top: 20px;
+}
+
+.search-container + .duas-list {
+  margin-top: 10px;
+}
+
+.duas-list .dua-item:nth-child(n) {
+  animation-delay: calc(0.1s * var(--index, 0));
+}
+
+.dua-item {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: black;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeScaleIn 0.3s ease-out;
+  opacity: 0;
+  animation-fill-mode: forwards;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.dua-item:hover {
+  transform: scale(1.01);
+  box-shadow: 0 5px 15px rgba(63, 63, 244, 0.1);
+  background-color: #fafafa;
+}
+
+.dua-item:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+.dua-number {
+  font-weight: bold;
+  color: black;
+}
+
+.dua-title {
+  font-size: 0.9rem;
+  color: black;
+}
+
+.dua-detail {
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  scroll-behavior: smooth;
+  border-radius: 15px;
+  padding-top: 50px;
+  margin: -11px -22px 33px -20px;
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dua-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 15px;
+  position: relative;
+  background: white;
+  border-radius: 15px;
+  margin: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.dua-content:hover {
+  transform: scale(1.01);
+}
+
+.dua-content::before {
+  content: attr(data-number);
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  font-size: 14px;
+  color: #3f3ff4;
+  font-weight: bold;
+}
+
+.arabic-text, .transliteration, .translation {
+    
+  margin-left: 25px;
+}
+
+.dua-content:last-child {
+  margin-bottom: 180px;
+}
+
+.arabic-text {
+  font-size: 22px;
+  text-align: right;
+  direction: rtl;
+  line-height: 1.6;
+  color: black;
+}
+
+.transliteration {
+  font-size: 15px;
+  color: #3f3ff4;
+  line-height: 1.5;
+  border-left: 2px solid #030303;
+  margin-right: 10px;
+  padding-left: 9px;
+}
+
+.translation {
+  font-size: 15px;
+  color: black;
+  line-height: 1.5;
+}
+
+.back-button {
+  position: absolute;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
+
+.back-button:hover {
+  transform: translateX(-3px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.back-button:active {
+  transform: translateX(-1px);
+}
+
+.loading,
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #ff6b6b;
+  text-align: center;
+  padding: 20px;
+}
+
+@keyframes fadeScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Add a class that will be toggled by JavaScript when item is centered */
+.dua-item.centered {
+  transform: scale(1.08);
+  box-shadow: 0 8px 25px rgba(63, 63, 244, 0.15);
+  background-color: #ffffff;
+  z-index: 2;
+  border: 2px solid rgba(63, 63, 244, 0.2);
+}
+
+/* Slightly dim non-centered items */
+.dua-item:not(.centered) {
+  opacity: 0.85;
+}
