@@ -6,7 +6,7 @@ import { IoLocationOutline } from "react-icons/io5";
 import BottomNavigation from './BottomNavigation';
 import { ReactComponent as HanaLogo } from '../assets/hanaMainLogoWhite.svg';
 import DuaDisplay from './DuaDisplay';
-import RamadanCalendar from './RamadanCalendar';
+
 import Achievements from './Achievements';
 import RamadanDaysList from './RamadanDaysList';
 import AnimatedBackground from './AnimatedBackground';
@@ -410,7 +410,7 @@ const RamadanCountdown: React.FC = () => {
             </div>
           </div>
 
-          <RamadanCalendar />
+
 
           {/* Add the new RamadanDaysList component here */}
           <RamadanDaysList selectedCity={selectedCity} />
@@ -464,7 +464,7 @@ const RamadanCountdown: React.FC = () => {
 
 
             {/* Rest of the components */}
-            <RamadanCalendar />
+
             <Achievements />
           </div>
 
