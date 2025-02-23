@@ -1,0 +1,165 @@
+.city-selector {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: inline-flex;
+  align-items: center;
+  z-index: 1000;
+}
+
+.city-select {
+  appearance: none;
+  background: rgba(17, 24, 39, 0.7);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  border-radius: 16px;
+  color: white;
+  padding: 12px 45px 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 140px;
+  backdrop-filter: blur(10px);
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  box-shadow: 
+    0 4px 12px -2px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+.city-select:hover {
+  background: rgba(17, 24, 39, 0.8);
+  border-color: rgba(99, 102, 241, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 
+    0 8px 16px -4px rgba(99, 102, 241, 0.25),
+    0 4px 8px -2px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(99, 102, 241, 0.4);
+}
+
+.city-select:focus {
+  outline: none;
+  background: rgba(17, 24, 39, 0.9);
+  border-color: rgba(99, 102, 241, 0.8);
+  box-shadow: 
+    0 0 0 3px rgba(99, 102, 241, 0.25),
+    0 8px 16px -4px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom dropdown arrow */
+.city-selector::after {
+  content: '';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(45deg, rgba(99, 102, 241, 0.8), rgba(129, 140, 248, 1));
+  clip-path: polygon(50% 75%, 0 25%, 100% 25%);
+  transition: all 0.3s ease;
+}
+
+.city-selector:hover::after {
+  transform: translateY(-50%) scale(1.1);
+  opacity: 1;
+}
+
+/* Dropdown options styling */
+.city-select option {
+  background: rgba(17, 24, 39, 0.95);
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  margin: 4px 0;
+}
+
+/* Location icon styling */
+.location-icon {
+  position: absolute;
+  right: 40px;
+  color: rgba(99, 102, 241, 0.8);
+  font-size: 16px;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.city-select:hover + .location-icon {
+  color: rgba(99, 102, 241, 1);
+  transform: scale(1.1);
+}
+
+/* Glow animation */
+@keyframes glow {
+  0%, 100% {
+    opacity: 0.9;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.1);
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 480px) {
+  .city-selector {
+    top: 16px;
+    left: 16px;
+  }
+
+  .city-select {
+    padding: 10px 40px 10px 16px;
+    font-size: 13px;
+    min-width: 130px;
+  }
+
+  .location-icon {
+    right: 36px;
+    font-size: 14px;
+  }
+
+  .city-selector::after {
+    right: 14px;
+    width: 7px;
+    height: 7px;
+  }
+}
+
+/* Dropdown animation */
+@keyframes dropdownAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.city-select option {
+  animation: dropdownAppear 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom scrollbar */
+.city-select::-webkit-scrollbar {
+  width: 6px;
+}
+
+.city-select::-webkit-scrollbar-track {
+  background: rgba(17, 24, 39, 0.3);
+  border-radius: 8px;
+}
+
+.city-select::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.4);
+  border-radius: 8px;
+}
+
+.city-select::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.6);
+} 

@@ -9,7 +9,8 @@
 
 .header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 20px;
   font-size: 14px;
   animation-delay: 100ms;

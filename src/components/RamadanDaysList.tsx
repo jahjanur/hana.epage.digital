@@ -4,6 +4,7 @@ import { ramadanTimes, getCityPrayerTimes } from '../data/prayerTimes';
 import { IoMoonOutline } from "react-icons/io5";
 import { BsSunset } from "react-icons/bs";
 import DuateContent from './DuateContent';
+import CitySelector from './CitySelector';
 
 interface RamadanDay {
   dayNumber: number;
@@ -29,13 +30,12 @@ const RamadanDaysList: React.FC = () => {
       return {
         dayNumber: index + 1,
         date: day.date,
-        weekday: day.weekday.replace('E ', ''),
+        weekday: day.weekday,
         syfyr: cityTimes?.fajr || day.fajr,
         iftar: cityTimes?.maghrib || day.maghrib,
         special: day.special
       };
     });
-
     setVisibleDays(allDays);
 
     // Scroll to current day after render
@@ -60,7 +60,10 @@ const RamadanDaysList: React.FC = () => {
 
   return (
     <div style={{ position: 'relative' }}>
-
+      <CitySelector 
+        selectedCity={selectedCity}
+        onCityChange={setSelectedCity}
+      />
       <div className="schedule">
         <div className="schedule-list">
           {visibleDays.map((day, index) => (

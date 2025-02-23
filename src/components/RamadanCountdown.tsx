@@ -11,6 +11,7 @@ import Achievements from './Achievements';
 import RamadanDaysList from './RamadanDaysList';
 import AnimatedBackground from './AnimatedBackground';
 import Background from './Background';
+import CitySelector from './CitySelector';
 
 const FAJR_TIME = { hours: 4, minutes: 34 }; // Updated Imsak time for the first day
 const IFTAR_TIME = { hours: 21, minutes: 23 }; // Updated Akşam time for the first day
@@ -287,6 +288,10 @@ const RamadanCountdown: React.FC = () => {
           {/* Navigation */}
           <div className="nav-bar fade-in">
             <HanaLogo className="hana-logo" />
+            <CitySelector 
+        selectedCity={selectedCity}
+        onCityChange={setSelectedCity}
+      />
             {location?.city && (
               <div className="location">
                 <IoLocationOutline className="location-icon" />
