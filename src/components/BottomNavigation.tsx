@@ -5,6 +5,7 @@ import { RiRunLine } from 'react-icons/ri';
 import { IoNutritionOutline } from 'react-icons/io5';
 import { BsPerson } from 'react-icons/bs';
 import ramadanIcon from '../assets/ramadan.png';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import { ReactComponent as EpageLogo } from '../assets/epage.svg';
 
 const BottomNavigation: React.FC = () => {
@@ -16,7 +17,7 @@ const BottomNavigation: React.FC = () => {
             <BiBook className="nav-icon" />
           </button>
           <button className="nav-item">
-            <RiRunLine className="nav-icon" />
+          <i className="fas fa-praying-hands"></i>
           </button>
           <button className="nav-item add-button">
             <div className="add-button-inner">
@@ -24,10 +25,10 @@ const BottomNavigation: React.FC = () => {
             </div>
           </button>
           <button className="nav-item">
-            <IoNutritionOutline className="nav-icon" />
+          <i className="fas fa-calendar-days"></i>
           </button>
           <button className="nav-item">
-            <BsPerson className="nav-icon" />
+          <i className="fas fa-bullseye"></i>
           </button>
         </div>
         <div className="powered-by">
