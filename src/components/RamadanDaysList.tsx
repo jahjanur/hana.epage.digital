@@ -11,6 +11,7 @@ interface RamadanDay {
   weekday: string;
   syfyr: string;
   iftar: string;
+  special?: string;
 }
 
 const RamadanDaysList: React.FC = () => {
@@ -20,7 +21,7 @@ const RamadanDaysList: React.FC = () => {
   const currentDayRef = useRef<HTMLDivElement>(null);
   
   // Current day for highlighting
-  const currentDay: number = 23;
+  const currentDay: number = 15;
   
   useEffect(() => {
     const allDays = ramadanTimes.map((day, index) => {
@@ -30,7 +31,8 @@ const RamadanDaysList: React.FC = () => {
         date: day.date,
         weekday: day.weekday.replace('E ', ''),
         syfyr: cityTimes?.fajr || day.fajr,
-        iftar: cityTimes?.maghrib || day.maghrib
+        iftar: cityTimes?.maghrib || day.maghrib,
+        special: day.special
       };
     });
 
@@ -68,18 +70,16 @@ const RamadanDaysList: React.FC = () => {
               className={`schedule-item 
                 ${selectedDay === day.dayNumber ? 'selected' : ''} 
                 ${getDayStatus(day.dayNumber)}
-                ${day.date === "2024-03-26" ? 'laylatul-qadr' : ''}`}
+                ${day.special ? 'laylatul-qadr' : ''}`}
               onClick={() => setSelectedDay(day.dayNumber)}
               style={{ '--index': index } as React.CSSProperties}
             >
-              {day.dayNumber === currentDay && <span className="today-badge">SOT</span>}
+              {day.dayNumber === currentDay && !day.special && <span className="today-badge">SOT</span>}
               <div className="item-left">
                 <div className="day-number">{day.dayNumber}</div>
                 <div className="day-text">
                   {day.weekday}
-                  {day.date === "2024-03-26" && (
-                    <span className="special-night">Nata e Kadrit</span>
-                  )}
+                  {day.special && <span className="special-night">{day.special}</span>}
                 </div>
               </div>
               <div className="item-right">

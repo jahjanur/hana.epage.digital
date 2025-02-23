@@ -2,10 +2,9 @@
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-  background: none;
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 20px;
   overflow: hidden;
-  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -205,7 +204,6 @@
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 16px;
   transition: all 0.2s ease;
@@ -304,13 +302,11 @@
   padding: 20px;
   margin: 20px;
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   z-index: 3;
   height: 320px;
   overflow: hidden;
-  box-shadow: none;
 }
 
 .schedule-list {
@@ -350,14 +346,12 @@
   align-items: center;
   padding: 16px;
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  box-shadow: none;
 }
 
 .schedule-item:hover {
@@ -369,9 +363,6 @@
 .schedule-item.current-day {
   background: rgba(255, 255, 255, 0.95);
   border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 
-    0 4px 12px -2px rgba(59, 130, 246, 0.2),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .schedule-item.current-day .day-number,
@@ -670,50 +661,162 @@
   display: none;
 }
 
-/* Special styling for Laylatul Qadr */
+/* Base styling for Laylatul Qadr */
 .schedule-item.laylatul-qadr {
-  background: linear-gradient(
-    135deg,
-    rgba(234, 179, 8, 0.15),
-    rgba(250, 204, 21, 0.15)
-  );
-  border: 1px solid rgba(234, 179, 8, 0.3);
-  box-shadow: 
-    0 4px 20px -4px rgba(234, 179, 8, 0.2),
-    inset 0 0 0 1px rgba(234, 179, 8, 0.1);
+  background: rgba(234, 179, 8, 0.05);
+  border: 1px solid rgba(234, 179, 8, 0.2);
 }
 
-.schedule-item.laylatul-qadr:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(234, 179, 8, 0.2),
-    rgba(250, 204, 21, 0.2)
-  );
-  transform: translateX(4px) scale(1.01);
-}
-
+/* Special styling for the special night text */
 .special-night {
-  display: block;
   font-size: 0.7rem;
+  color: #FFD700;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 5px;
+  border-radius: 4px;
+  margin-top: 3px;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 380px) {
+  .schedule-item.laylatul-qadr {
+    /* Adjust layout for very small screens */
+    padding: 10px 6px;
+  }
+
+  .schedule-item.laylatul-qadr .item-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .schedule-item.laylatul-qadr .day-text {
+    font-size: 0.75rem;
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+
+  .schedule-item.laylatul-qadr .special-night {
+    font-size: 0.65rem;
+    margin-left: 0;
+    margin-top: 2px;
+    display: inline-block;
+  }
+
+  .schedule-item.laylatul-qadr .item-right {
+    gap: 4px;
+  }
+
+  .schedule-item.laylatul-qadr .time {
+    min-width: 45px;
+    padding: 4px 6px;
+  }
+
+  .schedule-item.laylatul-qadr .time-value {
+    font-size: 0.75rem;
+  }
+
+  .schedule-item.laylatul-qadr .time-icon {
+    font-size: 1rem;
+  }
+}
+
+/* Slightly larger mobile screens */
+@media (min-width: 381px) and (max-width: 480px) {
+  .schedule-item.laylatul-qadr {
+    padding: 12px 8px;
+  }
+
+  .schedule-item.laylatul-qadr .day-text {
+    font-size: 0.8rem;
+  }
+
+  .schedule-item.laylatul-qadr .special-night {
+    font-size: 0.7rem;
+  }
+
+  .schedule-item.laylatul-qadr .time {
+    min-width: 50px;
+    padding: 5px 7px;
+  }
+}
+
+/* Current day styling for Laylatul Qadr */
+.schedule-item.laylatul-qadr.current-day {
+  background: rgba(234, 179, 8, 0.95);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+/* Improve text contrast and readability */
+.schedule-item.laylatul-qadr.current-day .day-number {
+  background: rgba(255, 255, 255, 0.2);
+  color: #000;
   font-weight: 700;
-  color: rgba(234, 179, 8, 1);
-  margin-top: 2px;
-  letter-spacing: 0.3px;
-  text-shadow: 0 0 10px rgba(234, 179, 8, 0.3);
+  padding: 4px 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.laylatul-qadr .time {
-  background: rgba(234, 179, 8, 0.15);
-  border-color: rgba(234, 179, 8, 0.3);
+.schedule-item.laylatul-qadr.current-day .day-text {
+  color: #000;
+  font-weight: 600;
 }
 
-.laylatul-qadr .day-number {
-  font-size: 1.2rem;
-  min-width: 28px;
-  padding: 2px 6px;
-  background: rgba(234, 179, 8, 0.2);
-  color: rgba(234, 179, 8, 1);
-  text-shadow: 0 0 10px rgba(234, 179, 8, 0.3);
+.schedule-item.laylatul-qadr.current-day .special-night {
+  background: rgba(0, 0, 0, 0.15);
+  color: #000;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Improve time display */
+.schedule-item.laylatul-qadr.current-day .time {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-item.laylatul-qadr.current-day .time-value {
+  color: #000;
+  font-weight: 600;
+}
+
+.schedule-item.laylatul-qadr.current-day .time-icon {
+  color: #000;
+  opacity: 0.8;
+}
+
+/* Hover effects */
+.schedule-item.laylatul-qadr.current-day:hover {
+  transform: scale(1.03);
+  box-shadow: 
+    0 12px 28px -8px rgba(234, 179, 8, 0.6),
+    0 4px 6px -2px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Mobile optimization */
+@media (max-width: 480px) {
+  .schedule-item.laylatul-qadr.current-day {
+    padding: 14px 10px;
+    transform: scale(1.01);
+  }
+
+  .schedule-item.laylatul-qadr.current-day:hover {
+    transform: scale(1.02);
+  }
+
+  .schedule-item.laylatul-qadr.current-day .time {
+    padding: 4px 8px;
+  }
 }
 
 /* Add subtle animation */
@@ -750,9 +853,6 @@
 .schedule-item.laylatul-qadr.current-day {
   background: rgba(234, 179, 8, 0.95);
   border: 1px solid rgba(234, 179, 8, 0.3);
-  box-shadow: 
-    0 4px 20px -4px rgba(234, 179, 8, 0.4),
-    inset 0 0 0 1px rgba(234, 179, 8, 0.2);
 }
 
 .schedule-item.laylatul-qadr.current-day .day-number {
