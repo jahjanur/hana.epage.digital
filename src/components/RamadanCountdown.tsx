@@ -267,8 +267,8 @@ const RamadanCountdown: React.FC = () => {
       <div className="countdown-container">
         <Background />
         <div className="content-wrapper" style={{ position: 'relative', zIndex: 3 }}>
-          <DuaDisplay currentLanguage={currentLanguage} />
-         
+
+        
           <AnimatedBackground />
           
           {/* Floating circles */}

@@ -34,7 +34,7 @@ const RamadanDaysList: React.FC = () => {
       };
     });
 
-    setVisibleDays(allDays.slice(0, 3)); // Show only the first 3 days
+    setVisibleDays(allDays);
 
     // Scroll to current day after render
     setTimeout(() => {
@@ -58,7 +58,7 @@ const RamadanDaysList: React.FC = () => {
 
   return (
     <div style={{ position: 'relative' }}>
-      
+
       <div className="schedule">
         <div className="schedule-list">
           {visibleDays.map((day, index) => (
