@@ -126,18 +126,160 @@
 
 /* Ensure content stays centered during animation */
 .inner-content {
-  transform: scale(0.95); /* Compensate for parent scaling */
-  transition: transform 4s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+}
+
+/* Icon styling and animations */
+.icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
+.weather-icon {
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.9);
+  z-index: 2;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+.icon-ring {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  animation: ringPulse 2s ease-in-out infinite;
+}
+
+/* Modern countdown display */
+.countdown-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-digits {
+  display: flex;
+  gap: 1px;
+  align-items: center;
+}
+
+.time-digit {
+  font-size: 28px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  animation: digitPulse 1s ease-in-out infinite;
+  display: inline-block;
+  min-width: 22px;
+  text-align: center;
+}
+
+.period-label {
+  position: relative;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.period-text {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+
+.period-label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shimmer 2s linear infinite;
+}
+
+/* Animations */
+@keyframes iconFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes ringPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.3;
+  }
+}
+
+@keyframes digitPulse {
+  0%, 100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Add glowing effect when in urgent state (last 20 minutes) */
+.urgent .time-digit {
+  color: #ff4d4d;
+  animation: urgentPulse 1s ease-in-out infinite;
+}
+
+.urgent .icon-ring {
+  border-color: rgba(255, 77, 77, 0.3);
+}
+
+@keyframes urgentPulse {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(255, 77, 77, 0.5);
+  }
 }
 
 .inner-circle:hover .inner-content {
   transform: scale(1);
-}
-
-.weather-icon {
-  font-size: 30px;
-  margin-bottom: 10px;
-  color: rgba(255, 255, 255, 0.9);
 }
 
 .inner-circle .time {
@@ -169,13 +311,13 @@
 
 @keyframes pulseText {
   0% {
-    opacity: 1;
+    opacity: 0.8;
   }
   50% {
-    opacity: 0.7;
+    opacity: 1;
   }
   100% {
-    opacity: 1;
+    opacity: 0.8;
   }
 }
 
@@ -282,14 +424,7 @@
 }
 
 .time-value {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.95);
-  position: relative;
-  z-index: 1;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-  letter-spacing: 1px;
-  transition: color 0.3s ease;
+  animation: pulseText 2s infinite ease-in-out;
 }
 
 @keyframes pulse {
@@ -918,7 +1053,7 @@
   width: fit-content;
   margin:  auto;
   padding: 6px 12px;
-  background: rgb(0, 0, 0);
+  background: black;
   backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
@@ -926,7 +1061,7 @@
   font-size: 0.75rem;
   text-decoration: none;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: black;
 }
 
 .powered-by:hover {

@@ -828,3 +828,46 @@
 .schedule-item.current-day:hover {
   background: rgba(255, 255, 255, 0.98);
 }
+
+.schedule-item {
+  position: relative; /* Ensure this is set for absolute positioning of badge */
+}
+
+.today-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #ff5511;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 
+    0 4px 12px rgba(255, 85, 17, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+  animation: badgePulse 2s infinite ease-in-out;
+  z-index: 2;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 4px 12px rgba(255, 85, 17, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 
+      0 4px 16px rgba(255, 85, 17, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Add this to ensure the badge doesn't get cut off */
+.schedule-list {
+  padding-top: 12px;
+}

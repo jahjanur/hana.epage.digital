@@ -21,7 +21,7 @@ const RamadanDaysList: React.FC = () => {
   const currentDayRef = useRef<HTMLDivElement>(null);
   
   // Current day for highlighting
-  const currentDay: number = 11;
+  const currentDay: number = 1;
   
   useEffect(() => {
     const allDays = ramadanTimes.map((day, index) => {
@@ -76,6 +76,7 @@ const RamadanDaysList: React.FC = () => {
               onClick={() => setSelectedDay(day.dayNumber)}
               style={{ '--index': index } as React.CSSProperties}
             >
+              {day.dayNumber === currentDay && <span className="today-badge">SOT</span>}
               <div className="item-left">
                 <div className="day-number">{day.dayNumber}</div>
                 <div className="day-text">

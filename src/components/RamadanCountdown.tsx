@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './RamadanCountdown.css';
 import { IoCloudyNight, IoMoonOutline, IoSunnyOutline, IoNotificationsOutline, IoNotificationsOffOutline } from "react-icons/io5";
-import { FaPrayingHands } from "react-icons/fa";
+import { FaPrayingHands, FaMosque } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 import BottomNavigation from './BottomNavigation';
 import { ReactComponent as HanaLogo } from '../assets/hanaMainLogoWhite.svg';
@@ -381,11 +381,23 @@ const RamadanCountdown: React.FC = () => {
                   )}
                 </svg>
                 <div className="inner-content">
-                  <IoCloudyNight className="weather-icon" />
-                  
-                  <div className="label">
-                    {remainingTime}<br />
-                    {currentPeriod === 'fasting' ? 'until Iftar' : 'until Syfyr'}
+                  <div className="icon-container">
+                    <FaMosque className="weather-icon" />
+                    <div className="icon-ring"></div>
+                  </div>
+                  <div className="countdown-display">
+                    <div className="time-digits">
+                      {remainingTime.split('').map((char, index) => (
+                        <span key={index} className="time-digit">
+                          {char}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="period-label">
+                      <span className="period-text">
+                        {currentPeriod === 'fasting' ? 'until Iftar' : 'until Syfyr'}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
