@@ -1,0 +1,159 @@
+.book-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #3f3ff4;
+  min-height: 100vh; /* This ensures the background covers the full viewport height */
+}
+
+.book-title {
+  text-align: center;
+  margin-bottom: 50px;
+  color: #ffffff;
+  font-size: 3.2rem;
+  padding-top: 40px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 20px;
+  margin-bottom: 130px;
+}
+
+.story-card {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 40px 25px 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.story-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.story-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #222;
+  line-height: 1.5;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  padding: 0 10px;
+}
+
+.story-number {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #3f3ff4;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Add animation for cards appearing */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.story-card {
+  animation: fadeInUp 0.5s ease backwards;
+}
+
+/* Add staggered animation delay for each card */
+.stories-grid > div:nth-child(n) {
+  animation-delay: calc(0.05s * var(--i, 1));
+}
+
+/* Responsive design with modern breakpoints */
+@media (max-width: 1200px) {
+  .stories-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+  .book-title {
+    font-size: 2.8rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .stories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .book-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .stories-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .book-title {
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+  }
+  
+  .story-card {
+    padding: 30px 15px 15px;
+  }
+  
+  .story-card h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Add smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Modern scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}

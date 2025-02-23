@@ -1,6 +1,6 @@
 import React from 'react';
 import './BottomNavigation.css';
-import { BiBook } from 'react-icons/bi';
+import { BiBook, BiBookContent } from 'react-icons/bi';
 import { RiRunLine } from 'react-icons/ri';
 import { IoNutritionOutline } from 'react-icons/io5';
 import { BsPerson } from 'react-icons/bs';
@@ -16,7 +16,9 @@ const BottomNavigation: React.FC = () => {
     <>
       <div className="bottom-nav-container">
         <div className="bottom-nav">
-          <button className="nav-item">
+
+          <button onClick={() => navigate('/book-v')}>
+            
             <BiBook className="nav-icon" />
           </button>
           

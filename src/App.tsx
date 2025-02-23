@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import RamadanCountdown from './components/RamadanCountdown';
 import DuahV from './components/Duah-V';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import BottomNavigation from './components/BottomNavigation';
 import LoaderScreen from './components/LoaderScreen';
+import Book from './components/book/Book-v';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -33,6 +34,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<RamadanCountdown />} />
         <Route path="/duah-v" element={<DuahV />} />
+        <Route path="/book-v" element={<Book />} />
       </Routes>
       <BottomNavigation />
     </>
