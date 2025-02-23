@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import './DuaDisplay.css';
 import { IoBookOutline, IoChevronDown, IoCopyOutline, IoShareSocialOutline } from 'react-icons/io5';
-
+import './DuaDisplay.css'
 interface DuaContent {
   title: string;
   arabic: string;

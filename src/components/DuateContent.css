@@ -1,0 +1,141 @@
+.duate-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.duate-title {
+  color: white;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: 600;
+  background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.duate-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.dua-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 25px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.dua-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(255, 255, 255, 0.1),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.dua-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.dua-card:hover::before {
+  opacity: 1;
+}
+
+.dua-title {
+  color: white;
+  font-size: 1.3rem;
+  margin: 0 0 20px 0;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dua-arabic {
+  color: white;
+  font-size: 1.8rem;
+  text-align: right;
+  margin: 20px 0;
+  font-family: 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+  line-height: 2;
+  direction: rtl;
+  opacity: 0.95;
+}
+
+.dua-transliteration {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.1rem;
+  margin: 15px 0;
+  font-style: italic;
+  line-height: 1.6;
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  padding-left: 15px;
+}
+
+.dua-translation {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  margin: 15px 0;
+  line-height: 1.6;
+}
+
+.dua-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 6px 16px;
+  border-radius: 30px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  margin-top: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.dua-card:hover .dua-time {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateX(4px);
+}
+
+@media (max-width: 480px) {
+  .duate-container {
+    padding: 0 15px;
+  }
+
+  .duate-title {
+    font-size: 1.6rem;
+  }
+
+  .dua-card {
+    padding: 20px;
+  }
+
+  .dua-arabic {
+    font-size: 1.6rem;
+  }
+
+  .dua-transliteration {
+    font-size: 1rem;
+  }
+} 

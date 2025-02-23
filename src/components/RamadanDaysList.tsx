@@ -3,6 +3,8 @@ import './RamadanDaysList.css';
 import { ramadanTimes, getCityPrayerTimes } from '../data/prayerTimes';
 import { IoMoonOutline } from "react-icons/io5";
 import { BsSunset } from "react-icons/bs";
+import CityPicker from './CityPicker';
+import DuateContent from './DuateContent';
 
 interface RamadanDay {
   dayNumber: number;
@@ -15,14 +17,15 @@ interface RamadanDay {
 const RamadanDaysList: React.FC = () => {
   const [visibleDays, setVisibleDays] = useState<RamadanDay[]>([]);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [selectedCity, setSelectedCity] = useState('gostivar');
   const currentDayRef = useRef<HTMLDivElement>(null);
   
   // Current day for highlighting
-  const currentDay: number = 18;
+  const currentDay: number = 11;
   
   useEffect(() => {
     const allDays = ramadanTimes.map((day, index) => {
-      const cityTimes = getCityPrayerTimes('gostivar', day.date);
+      const cityTimes = getCityPrayerTimes(selectedCity, day.date);
       return {
         dayNumber: index + 1,
         date: day.date,
@@ -43,7 +46,7 @@ const RamadanDaysList: React.FC = () => {
         });
       }
     }, 100);
-  }, []);
+  }, [selectedCity]);
 
   const getDayStatus = (dayNumber: number) => {
     if (dayNumber < currentDay) {
@@ -55,45 +58,52 @@ const RamadanDaysList: React.FC = () => {
   };
 
   return (
-    <div className="schedule">
-      <div className="schedule-list">
-        {visibleDays.map((day, index) => (
-          <div 
-            key={day.dayNumber} 
-            ref={day.dayNumber === currentDay ? currentDayRef : null}
-            className={`schedule-item 
-              ${selectedDay === day.dayNumber ? 'selected' : ''} 
-              ${getDayStatus(day.dayNumber)}
-              ${day.date === "2024-03-26" ? 'laylatul-qadr' : ''}`}
-            onClick={() => setSelectedDay(day.dayNumber)}
-            style={{ '--index': index } as React.CSSProperties}
-          >
-            <div className="item-left">
-              <div className="day-number">{day.dayNumber}</div>
-              <div className="day-text">
-                {day.weekday}
-                {day.date === "2024-03-26" && (
-                  <span className="special-night">Nata e Kadrit</span>
-                )}
+    <div style={{ position: 'relative' }}>
+      <CityPicker 
+        selectedCity={selectedCity}
+        onCityChange={setSelectedCity}
+      />
+      <div className="schedule">
+        <div className="schedule-list">
+          {visibleDays.map((day, index) => (
+            <div 
+              key={day.dayNumber} 
+              ref={day.dayNumber === currentDay ? currentDayRef : null}
+              className={`schedule-item 
+                ${selectedDay === day.dayNumber ? 'selected' : ''} 
+                ${getDayStatus(day.dayNumber)}
+                ${day.date === "2024-03-26" ? 'laylatul-qadr' : ''}`}
+              onClick={() => setSelectedDay(day.dayNumber)}
+              style={{ '--index': index } as React.CSSProperties}
+            >
+              <div className="item-left">
+                <div className="day-number">{day.dayNumber}</div>
+                <div className="day-text">
+                  {day.weekday}
+                  {day.date === "2024-03-26" && (
+                    <span className="special-night">Nata e Kadrit</span>
+                  )}
+                </div>
+              </div>
+              <div className="item-right">
+                <div className="time">
+                  <span className="time-label">
+                    <IoMoonOutline className="time-icon" />
+                  </span>
+                  <span className="time-value">{day.syfyr}</span>
+                </div>
+                <div className="time">
+                  <span className="time-label">
+                    <BsSunset className="time-icon" />
+                  </span>
+                  <span className="time-value">{day.iftar}</span>
+                </div>
               </div>
             </div>
-            <div className="item-right">
-              <div className="time">
-                <span className="time-label">
-                  <IoMoonOutline className="time-icon" />
-                </span>
-                <span className="time-value">{day.syfyr}</span>
-              </div>
-              <div className="time">
-                <span className="time-label">
-                  <BsSunset className="time-icon" />
-                </span>
-                <span className="time-value">{day.iftar}</span>
-              </div>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+      <DuateContent />
     </div>
   );
 };

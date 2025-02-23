@@ -1,53 +1,49 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
+import { IoLocationOutline, IoChevronDown, IoChevronUp } from "react-icons/io5";
 import './CityPicker.css';
-import { cityAdjustments } from '../data/prayerTimes';
 
 interface CityPickerProps {
-  onCityChange: (cityId: string) => void;
   selectedCity: string;
+  onCityChange: (city: string) => void;
 }
 
-const CityPicker: React.FC<CityPickerProps> = ({ onCityChange, selectedCity }) => {
+const CityPicker: React.FC<CityPickerProps> = ({ selectedCity, onCityChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const cities = Object.entries(cityAdjustments).map(([id, city]) => ({
-    id,
-    name: city.nameAlb
-  }));
+  const cities = [
+    { id: 'gostivar', name: 'Gostivar' },
+    { id: 'tetovo', name: 'Tetovo' },
+    { id: 'skopje', name: 'Skopje' },
+    { id: 'struga', name: 'Struga' },
+    { id: 'ohrid', name: 'Ohrid' },
+    { id: 'debar', name: 'Dibër' }
+  ];
 
-  const selectedCityName = cityAdjustments[selectedCity]?.nameAlb || 'Gostivar';
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  const handleCitySelect = (cityId: string) => {
+    onCityChange(cityId);
+    setIsOpen(false);
+  };
 
   return (
-    <div className="language-picker" ref={dropdownRef}>
+    <div className="city-picker">
       <button 
-        className="language-button"
+        className="city-button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="language-icon">🕌</span>
-        <span className="language-code">{selectedCityName}</span>
+        <IoLocationOutline className="city-icon" />
+        <span className="city-name">
+          {cities.find(city => city.id === selectedCity)?.name || selectedCity}
+        </span>
+        {isOpen ? <IoChevronUp /> : <IoChevronDown />}
       </button>
+
       {isOpen && (
-        <div className="language-dropdown">
-          {cities.map((city) => (
+        <div className="city-dropdown">
+          {cities.map(city => (
             <button
               key={city.id}
-              className={`language-option ${selectedCity === city.id ? 'active' : ''}`}
-              onClick={() => {
-                onCityChange(city.id);
-                setIsOpen(false);
-              }}
+              className={`city-option ${selectedCity === city.id ? 'active' : ''}`}
+              onClick={() => handleCitySelect(city.id)}
             >
               {city.name}
             </button>
