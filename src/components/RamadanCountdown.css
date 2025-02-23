@@ -912,3 +912,25 @@
     font-size: 1.1rem;
   }
 }
+
+.powered-by {
+  display: block;
+  width: fit-content;
+  margin:  auto;
+  padding: 6px 12px;
+  background: rgb(0, 0, 0);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.75rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.powered-by:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 1);
+}
