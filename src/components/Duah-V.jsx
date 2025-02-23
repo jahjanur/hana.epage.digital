@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+/*import React, { useEffect } from 'react';
 
 const DuahV = () => {
   useEffect(() => {
@@ -28,7 +28,7 @@ const DuahV = () => {
     // Initial check
     handleScroll();
 
-    // Cleanup
+    // Cleanupß
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -37,4 +37,4 @@ const DuahV = () => {
   );
 };
 
-export default DuahV; 
+export default DuahV; */

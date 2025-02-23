@@ -45,6 +45,12 @@
     black 90%,
     transparent 100%
   );
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.schedule-body::-webkit-scrollbar {
+  display: none;
 }
 
 .schedule-row {
@@ -135,17 +141,6 @@
 
 .schedule-row:hover .time-cell {
   background: rgba(59, 130, 246, 0.15);
-}
-
-/* Hide scrollbar */
-.schedule-body {
-  scrollbar-width: none;
-  
-  -ms-overflow-style: none;
-}
-
-.schedule-body::-webkit-scrollbar {
-  display: none;
 }
 
 /* Desktop styles */
@@ -301,15 +296,15 @@
 
 .schedule {
   position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
   padding: 20px;
-  margin: 20px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 24px;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  z-index: 3;
-  height: 320px;
-  overflow: hidden;
 }
 
 .schedule-list {
@@ -342,34 +337,26 @@
 }
 
 .schedule-item {
-  min-height: 90px;
-  flex-shrink: 0;
+  position: relative;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 16px;
+  margin-bottom: 10px;
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   transition: all 0.3s ease;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .schedule-item:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateX(4px);
 }
 
 /* Current day styling */
 .schedule-item.current-day {
   background: rgba(255, 255, 255, 0.95);
-  border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 
-    0 4px 12px -2px rgba(59, 130, 246, 0.2),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .schedule-item.current-day .day-number,
@@ -381,8 +368,10 @@
 }
 
 .schedule-item.current-day .time {
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Item layout */
@@ -417,15 +406,10 @@
 }
 
 .time {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 55px;
-  padding: 6px 8px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  text-align: center;
-  gap: 2px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .time-label {
@@ -464,9 +448,6 @@
 .schedule-item.past-day {
   background: rgba(34, 197, 94, 0.2);
   border-color: rgba(34, 197, 94, 0.5);
-  box-shadow: 
-    0 4px 12px -4px rgba(34, 197, 94, 0.3),
-    inset 0 0 0 1px rgba(34, 197, 94, 0.2);
   position: relative;
 }
 
@@ -507,20 +488,10 @@
 }
 
 .time {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 85px;
-  padding: 10px;
-  background: rgba(59, 130, 246, 0.1);
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  border: 2px solid rgba(59, 130, 246, 0.2);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 
-    0 2px 8px -2px rgba(59, 130, 246, 0.15),
-    inset 0 0 0 1px rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .past-day .time {
@@ -676,9 +647,6 @@
     rgba(250, 204, 21, 0.15)
   );
   border: 1px solid rgba(234, 179, 8, 0.3);
-  box-shadow: 
-    0 4px 20px -4px rgba(234, 179, 8, 0.2),
-    inset 0 0 0 1px rgba(234, 179, 8, 0.1);
 }
 
 .schedule-item.laylatul-qadr:hover {
@@ -748,15 +716,11 @@
 .schedule-item.laylatul-qadr.current-day {
   background: rgba(234, 179, 8, 0.95);
   border: 1px solid rgba(234, 179, 8, 0.3);
-  box-shadow: 
-    0 4px 20px -4px rgba(234, 179, 8, 0.4),
-    inset 0 0 0 1px rgba(234, 179, 8, 0.2);
 }
 
 .schedule-item.laylatul-qadr.current-day .day-number {
   background: rgba(234, 179, 8, 0.3);
   color: #1e293b;
-  text-shadow: none;
 }
 
 .schedule-item.laylatul-qadr.current-day .day-text {
@@ -766,7 +730,6 @@
 .schedule-item.laylatul-qadr.current-day .special-night {
   color: #1e293b;
   font-weight: 700;
-  text-shadow: none;
 }
 
 .schedule-item.laylatul-qadr.current-day .time {

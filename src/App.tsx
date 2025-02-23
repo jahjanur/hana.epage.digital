@@ -24,9 +24,12 @@ const App: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  if (isLoading) {
+    return <LoaderScreen />;
+  }
+
   return (
     <>
-     {isLoading ? <LoaderScreen /> : <RamadanCountdown />}
       <Routes>
         <Route path="/" element={<RamadanCountdown />} />
         <Route path="/duah-v" element={<DuahV />} />

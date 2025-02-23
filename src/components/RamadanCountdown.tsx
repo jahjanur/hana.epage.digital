@@ -5,7 +5,6 @@ import { FaPrayingHands, FaMosque } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 import BottomNavigation from './BottomNavigation';
 import { ReactComponent as HanaLogo } from '../assets/hanaMainLogoWhite.svg';
-import LanguagePicker from './LanguagePicker';
 import DuaDisplay from './DuaDisplay';
 import RamadanCalendar from './RamadanCalendar';
 import Achievements from './Achievements';
@@ -269,9 +268,7 @@ const RamadanCountdown: React.FC = () => {
         <Background />
         <div className="content-wrapper" style={{ position: 'relative', zIndex: 3 }}>
           <DuaDisplay currentLanguage={currentLanguage} />
-          <LanguagePicker 
-            onLanguageChange={(lang) => setCurrentLanguage(lang.code)} 
-          />
+         
           <AnimatedBackground />
           
           {/* Floating circles */}
