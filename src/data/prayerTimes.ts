@@ -57,7 +57,8 @@ export const ramadanTimes = [
   { "date": "2025-03-25", "weekday": "e Martë", "fajr": "3:51", "dhuhr": "11:49", "asr": "15:15", "maghrib": "17:59", "isha": "19:27" },
   { "date": "2025-03-26", "weekday": "e Mërkurë", "fajr": "3:49", "dhuhr": "11:49", "asr": "15:15", "maghrib": "18:01", "isha": "19:29", "special": "Nata e Kadrit" },
   { "date": "2025-03-27", "weekday": "e Enjte", "fajr": "3:47", "dhuhr": "11:49", "asr": "15:16", "maghrib": "18:02", "isha": "19:30" },
-  { "date": "2025-03-28", "weekday": "e Premte", "fajr": "3:45", "dhuhr": "11:49", "asr": "15:16", "maghrib": "18:03", "isha": "19:31" }
+  { "date": "2025-03-28", "weekday": "e Premte", "fajr": "3:45", "dhuhr": "11:49", "asr": "15:16", "maghrib": "18:03", "isha": "19:31" },
+  { "date": "2025-03-29", "weekday": "e Shtunë", "fajr": "3:43", "dhuhr": "11:48", "asr": "15:17", "maghrib": "18:04", "isha": "19:33" }
 ]
 
 

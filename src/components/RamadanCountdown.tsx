@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './RamadanCountdown.css';
 import { IoCloudyNight, IoMoonOutline, IoSunnyOutline, IoNotificationsOutline, IoNotificationsOffOutline } from "react-icons/io5";
 import { FaPrayingHands, FaMosque } from "react-icons/fa";
@@ -12,6 +12,7 @@ import RamadanDaysList from './RamadanDaysList';
 import AnimatedBackground from './AnimatedBackground';
 import Background from './Background';
 import CitySelector from './CitySelector';
+import { getCityPrayerTimes } from '../data/prayerTimes';
 
 const FAJR_TIME = { hours: 4, minutes: 34 }; // Updated Imsak time for the first day
 const IFTAR_TIME = { hours: 21, minutes: 23 }; // Updated Akşam time for the first day
@@ -25,8 +26,8 @@ const RamadanCountdown: React.FC = () => {
   const [remainingTime, setRemainingTime] = useState<string>('');
   const [progress, setProgress] = useState<number>(0);
   const [location, setLocation] = useState<{
-    latitude: number;
-    longitude: number;
+    latitude?: number;
+    longitude?: number;
     city?: string;
   } | null>(null);
   const [currentLanguage, setCurrentLanguage] = useState('sq');
@@ -41,8 +42,7 @@ const RamadanCountdown: React.FC = () => {
   const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
   const [completedProgress, setCompletedProgress] = useState<number>(0);
   const [remainingProgress, setRemainingProgress] = useState<number>(0);
-
-
+  const [selectedCity, setSelectedCity] = useState('gostivar');
 
   // Create date objects for comparison
   const getCurrentFajrAndIftar = (now: Date) => {
@@ -263,13 +263,27 @@ const RamadanCountdown: React.FC = () => {
     }
   };
 
+  // Update prayer times when city changes
+  useEffect(() => {
+    const cityTimes = getCityPrayerTimes(selectedCity, new Date().toISOString().split('T')[0]);
+    if (cityTimes) {
+      const [fajrHours, fajrMinutes] = cityTimes.fajr.split(':').map(Number);
+      const [maghribHours, maghribMinutes] = cityTimes.maghrib.split(':').map(Number);
+      
+      setFajrTime({ hours: fajrHours, minutes: fajrMinutes });
+      setIftarTime({ hours: maghribHours, minutes: maghribMinutes });
+    }
+  }, [selectedCity]);
+
   return (
     <div className="ramadan-countdown">
       <div className="countdown-container">
         <Background />
+        <CitySelector 
+          selectedCity={selectedCity}
+          onCityChange={setSelectedCity}
+        />
         <div className="content-wrapper" style={{ position: 'relative', zIndex: 3 }}>
-
-        
           <AnimatedBackground />
           
           {/* Floating circles */}
@@ -288,16 +302,6 @@ const RamadanCountdown: React.FC = () => {
           {/* Navigation */}
           <div className="nav-bar fade-in">
             <HanaLogo className="hana-logo" />
-            <CitySelector 
-        selectedCity={selectedCity}
-        onCityChange={setSelectedCity}
-      />
-            {location?.city && (
-              <div className="location">
-                <IoLocationOutline className="location-icon" />
-                {location.city}
-              </div>
-            )}
           </div>
           {/* Clock Display */}
           <div className="clock-container scale-in">
@@ -409,7 +413,7 @@ const RamadanCountdown: React.FC = () => {
           <RamadanCalendar />
 
           {/* Add the new RamadanDaysList component here */}
-          <RamadanDaysList />
+          <RamadanDaysList selectedCity={selectedCity} />
 
           {/* Updated Reminder Section */}
           <div className="reminder-section slide-up">
