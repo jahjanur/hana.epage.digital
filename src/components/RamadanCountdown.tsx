@@ -5,9 +5,6 @@ import { FaPrayingHands, FaMosque } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 import BottomNavigation from './BottomNavigation';
 import { ReactComponent as HanaLogo } from '../assets/hanaMainLogoWhite.svg';
-import DuaDisplay from './DuaDisplay';
-
-import Achievements from './Achievements';
 import RamadanDaysList from './RamadanDaysList';
 import AnimatedBackground from './AnimatedBackground';
 import Background from './Background';
@@ -151,10 +148,16 @@ const RamadanCountdown: React.FC = () => {
         setCurrentPeriod('fasting');
 
         // Format the remaining time without HTML tags
-        const hours = Math.floor(remainingFasting / (1000 * 60 * 60));
-        const minutes = Math.floor((remainingFasting % (1000 * 60 * 60)) / (1000 * 60));
-        
-        setRemainingTime(`${hours}h ${minutes}m`);
+        const hoursLeft = Math.floor(remainingFasting / (1000 * 60 * 60));
+        const minutesLeft = Math.floor((remainingFasting % (1000 * 60 * 60)) / (1000 * 60));
+        const secondsLeft = Math.floor((remainingFasting % (1000 * 60)) / 1000);
+
+        // Format the time with padStart to ensure two digits
+        const formattedHours = String(hoursLeft).padStart(2, '0');
+        const formattedMinutes = String(minutesLeft).padStart(2, '0');
+        const formattedSeconds = String(secondsLeft).padStart(2, '0');
+
+        setRemainingTime(`${formattedHours}:${formattedMinutes}:${formattedSeconds}`);
       } else {
         // Eating period
         let nextSyfyr = new Date(syfyr);
@@ -174,7 +177,14 @@ const RamadanCountdown: React.FC = () => {
 
         const hoursLeft = Math.floor(timeLeftEating / (1000 * 60 * 60));
         const minutesLeft = Math.floor((timeLeftEating % (1000 * 60 * 60)) / (1000 * 60));
-        setRemainingTime(`${hoursLeft}h ${minutesLeft}m `);
+        const secondsLeft = Math.floor((timeLeftEating % (1000 * 60)) / 1000);
+
+        // Format the time with padStart to ensure two digits
+        const formattedHours = String(hoursLeft).padStart(2, '0');
+        const formattedMinutes = String(minutesLeft).padStart(2, '0');
+        const formattedSeconds = String(secondsLeft).padStart(2, '0');
+
+        setRemainingTime(`${formattedHours}:${formattedMinutes}:${formattedSeconds}`);
       }
     };
 
@@ -410,8 +420,6 @@ const RamadanCountdown: React.FC = () => {
             </div>
           </div>
 
-
-
           {/* Add the new RamadanDaysList component here */}
           <RamadanDaysList selectedCity={selectedCity} />
 
@@ -464,8 +472,6 @@ const RamadanCountdown: React.FC = () => {
 
 
             {/* Rest of the components */}
-
-            <Achievements />
           </div>
 
           <BottomNavigation />

@@ -101,7 +101,7 @@
   transform: translate(-50%, -50%);
   width: 200px;
   height: 200px;
-  background: #3f3ff4;
+  background: #ffffff;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -146,7 +146,7 @@
 
 .weather-icon {
   font-size: 28px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(6, 6, 6, 0.9);
   z-index: 2;
   animation: iconFloat 3s ease-in-out infinite;
 }
@@ -170,25 +170,33 @@
 
 .time-digits {
   display: flex;
-  gap: 1px;
   align-items: center;
 }
 
 .time-digit {
-  font-size: 28px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-  animation: digitPulse 1s ease-in-out infinite;
+  font-size: 16px;
+  font-weight: 900;
+  color: rgba(35, 35, 35, 0.95);
   display: inline-block;
-  min-width: 22px;
+  min-width: 18px;
   text-align: center;
+}
+
+.time-separator {
+  opacity: 0.7;
+  animation: blinkSeparator 1s infinite;
+  margin: 0 2px;
+}
+
+@keyframes blinkSeparator {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .period-label {
   position: relative;
   padding: 4px 10px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(51, 0, 255, 0.94);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -311,13 +319,10 @@
 }
 
 @keyframes pulseText {
-  0% {
-    opacity: 0.8;
-  }
-  50% {
+  0%, 100% {
     opacity: 1;
   }
-  100% {
+  50% {
     opacity: 0.8;
   }
 }
@@ -528,7 +533,7 @@
   }
 
   .number {
-    font-size: 2rem;
+    font-size: 0.5rem;
   }
 
   .label {
@@ -820,6 +825,16 @@
   .time-block {
     width: 100%;
   }
+
+  .remaining-time {
+    font-size: 1.75rem;
+    padding: 6px 12px;
+  }
+  
+  .time-digit {
+    font-size: 16px;
+    min-width: 16px;
+  }
 }
 
 .notification-toggle {
@@ -1069,4 +1084,19 @@
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.3);
   color: rgba(255, 255, 255, 1);
+}
+
+.remaining-time {
+  font-family: 'SF Mono', 'Roboto Mono', monospace;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  letter-spacing: 1px;
+  text-align: center;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: inline-block;
+  margin: 0 auto;
 }

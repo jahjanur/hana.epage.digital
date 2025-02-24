@@ -15,7 +15,7 @@ const duas: DuaContent[] = [
     title: 'Nijeti',
     arabic: 'Nevejtu en esume gaden lil-lahi teala',
     translations: {
-      sq: 'Kam për qëllim të agjëroj nesër për hir të Allahut të Madhëruar',
+      sq: 'Kam për qëllim të agjëroj nesër për hir të Allahut të Madhëruarssssss',
       en: 'I intend to fast tomorrow for the sake of Allah'
     }
   },
