@@ -39,89 +39,121 @@
 }
 
 .clock-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 0;
-  margin-top: -20px;
-  animation-delay: 300ms;
-}
-
-.clock-ring {
   position: relative;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: transparent;
-}
-
-.progress-ring {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
-
-.progress-ring__circle {
-  opacity: 0;
-  animation: 
-    progressFadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards,
-    glowPulse 2s infinite;
-  transition: stroke 0.3s ease;
-}
-
-.progress-ring__circle-bg {
-  filter: blur(1px);
-  stroke: rgba(255, 255, 255, 0.1);
-}
-
-.time-markers {
-  position: absolute;
   width: 100%;
-  height: 100%;
-  z-index: 1;
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 20px;
+  display: none;
 }
-
-.marker {
-  position: absolute;
-  font-size: 20px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.twelve { top: 0; left: 50%; transform: translateX(-50%); }
-.three { right: 0; top: 50%; transform: translateY(-50%); }
-.six { bottom: 0; left: 50%; transform: translateX(-50%); }
-.nine { left: 0; top: 50%; transform: translateY(-50%); }
 
 .inner-circle {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 12px 48px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.inner-content {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
-  background: #ffffff;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 0 0 20px rgba(255, 255, 255, 0.05);
-  animation: breathe 4s ease-in-out infinite;
+  width: 100%;
+  text-align: center;
+  padding: 45px;
 }
 
-@keyframes breathe {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
-    box-shadow: 
-      0 0 0 20px rgba(255, 255, 255, 0.05),
-      0 0 30px rgba(255, 255, 255, 0.1);
+.icon-container {
+  position: relative;
+  margin-bottom: 22px;
+}
+
+.weather-icon {
+  font-size: 3.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 22px;
+}
+
+.countdown-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.time-digits {
+  font-size: 5.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  text-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+  letter-spacing: 3px;
+  line-height: 1;
+}
+
+.time-digit {
+  display: inline-block;
+  width: 0.7em;
+  text-align: center;
+}
+
+.time-separator {
+  display: inline-block;
+  width: 0.3em;
+  text-align: center;
+  margin: 0 3px;
+}
+
+.period-label {
+  font-size: 1.8rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .clock-container {
+    max-width: 480px;
   }
-  50% {
-    transform: translate(-50%, -50%) scale(1.05);
-    box-shadow: 
-      0 0 0 25px rgba(255, 255, 255, 0.08),
-      0 0 40px rgba(255, 255, 255, 0.15);
+
+  .time-digits {
+    font-size: 4.5rem;
+  }
+
+  .period-label {
+    font-size: 1.65rem;
+  }
+
+  .weather-icon {
+    font-size: 3.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .clock-container {
+    max-width: 420px;
+  }
+
+  .time-digits {
+    font-size: 3.75rem;
+  }
+
+  .period-label {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+  }
+
+  .weather-icon {
+    font-size: 3rem;
   }
 }
 
@@ -144,13 +176,6 @@
   margin-bottom: 2px;
 }
 
-.weather-icon {
-  font-size: 28px;
-  color: rgba(6, 6, 6, 0.9);
-  z-index: 2;
-  animation: iconFloat 3s ease-in-out infinite;
-}
-
 .icon-ring {
   position: absolute;
   width: 48px;
@@ -166,39 +191,6 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-}
-
-.time-digits {
-  display: flex;
-  align-items: center;
-}
-
-.time-digit {
-  font-size: 16px;
-  font-weight: 900;
-  color: rgba(35, 35, 35, 0.95);
-  display: inline-block;
-  min-width: 18px;
-  text-align: center;
-}
-
-.time-separator {
-  opacity: 0.7;
-  animation: blinkSeparator 1s infinite;
-  margin: 0 2px;
-}
-
-@keyframes blinkSeparator {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.period-label {
-  position: relative;
-  padding: 4px 10px;
-  background: rgba(51, 0, 255, 0.94);
-  border-radius: 12px;
-  overflow: hidden;
 }
 
 .period-text {

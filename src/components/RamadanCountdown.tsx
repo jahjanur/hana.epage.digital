@@ -11,9 +11,6 @@ import Background from './Background';
 import CitySelector from './CitySelector';
 import { getCityPrayerTimes } from '../data/prayerTimes';
 
-const FAJR_TIME = { hours: 4, minutes: 34 }; // Updated Imsak time for the first day
-const IFTAR_TIME = { hours: 21, minutes: 23 }; // Updated Akşam time for the first day
-
 const RamadanCountdown: React.FC = () => {
 
   const [greenProgress, setGreenProgress] = useState<number>(0);
@@ -34,8 +31,8 @@ const RamadanCountdown: React.FC = () => {
   });
   const [currentPeriod, setCurrentPeriod] = useState<'fasting' | 'eating' | 'free'>('free');
   const [isIftarDone, setIsIftarDone] = useState(false);
-  const [fajrTime, setFajrTime] = useState<{ hours: number; minutes: number }>({ hours: FAJR_TIME.hours, minutes: FAJR_TIME.minutes });
-  const [iftarTime, setIftarTime] = useState<{ hours: number; minutes: number }>({ hours: IFTAR_TIME.hours, minutes: IFTAR_TIME.minutes });
+  const [fajrTime, setFajrTime] = useState<{ hours: number; minutes: number }>({ hours: 0, minutes: 0 });
+  const [iftarTime, setIftarTime] = useState<{ hours: number; minutes: number }>({ hours: 0, minutes: 0 });
   const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
   const [completedProgress, setCompletedProgress] = useState<number>(0);
   const [remainingProgress, setRemainingProgress] = useState<number>(0);
@@ -159,14 +156,19 @@ const RamadanCountdown: React.FC = () => {
 
         setRemainingTime(`${formattedHours}:${formattedMinutes}:${formattedSeconds}`);
       } else {
-        // Eating period
-        let nextSyfyr = new Date(syfyr);
-        if (now > iftar) {
+        // Eating period - calculate time until next Syfyr
+        let nextSyfyr = new Date(now);
+        
+        // If we're past Iftar but before midnight, set nextSyfyr to tomorrow's Syfyr
+        if (now > iftar && now.getHours() >= iftar.getHours()) {
           nextSyfyr.setDate(nextSyfyr.getDate() + 1);
         }
-
-        const totalEatingDuration = nextSyfyr.getTime() - iftar.getTime();
+        
+        // Set the next Syfyr time
+        nextSyfyr.setHours(fajrTime.hours, fajrTime.minutes, 0, 0);
+        
         const timeLeftEating = nextSyfyr.getTime() - now.getTime();
+        const totalEatingDuration = nextSyfyr.getTime() - iftar.getTime();
         
         // Calculate yellow progress (starts at 100% and decreases)
         const yellowProg = (timeLeftEating / totalEatingDuration) * 100;
@@ -273,9 +275,11 @@ const RamadanCountdown: React.FC = () => {
     }
   };
 
-  // Update prayer times when city changes
+  // Get today's prayer times based on selected city
   useEffect(() => {
-    const cityTimes = getCityPrayerTimes(selectedCity, new Date().toISOString().split('T')[0]);
+    const today = new Date().toISOString().split('T')[0];
+    const cityTimes = getCityPrayerTimes(selectedCity, today);
+    
     if (cityTimes) {
       const [fajrHours, fajrMinutes] = cityTimes.fajr.split(':').map(Number);
       const [maghribHours, maghribMinutes] = cityTimes.maghrib.split(':').map(Number);
@@ -283,7 +287,16 @@ const RamadanCountdown: React.FC = () => {
       setFajrTime({ hours: fajrHours, minutes: fajrMinutes });
       setIftarTime({ hours: maghribHours, minutes: maghribMinutes });
     }
-  }, [selectedCity]);
+  }, [selectedCity, currentDateTime]);
+
+  // Update current date time every minute
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 60000); // Update every minute
+    
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div className="ramadan-countdown">
@@ -315,105 +328,23 @@ const RamadanCountdown: React.FC = () => {
           </div>
           {/* Clock Display */}
           <div className="clock-container scale-in">
-            <div className="clock-ring">
-              <div className="time-markers">
-                <span className="marker twelve"></span>
-                <span className="marker three"></span>
-                <span className="marker six"></span>
-                <span className="marker nine"></span>
-              </div>
-              <div className="inner-circle">
-                <svg className="progress-ring" width="200" height="200">
-                  {currentPeriod === 'fasting' ? (
-                    <>
-                      {/* Complete background circle in lighter color */}
-                      <circle
-                        className="progress-ring__circle-background"
-                        stroke="#ff4d4d"
-                        strokeWidth={strokeWidth}
-                        strokeLinecap="round"
-                        fill="transparent"
-                        r={radius}
-                        cx="100"
-                        cy="100"
-                        style={{
-                          opacity: 0.3
-                        }}
-                      />
-                      {/* Green arc for elapsed fasting time */}
-                      <circle
-                        className="progress-ring__circle"
-                        stroke="#3cd097"
-                        strokeWidth={strokeWidth}
-                        strokeLinecap="round"
-                        fill="transparent"
-                        r={radius}
-                        cx="100"
-                        cy="100"
-                        style={{
-                          strokeDasharray: `${circumference}`,
-                          strokeDashoffset: `${circumference * (1 - greenProgress / 100)}`,
-                          transform: 'rotate(-90deg)',
-                          transformOrigin: '50% 50%',
-                          filter: 'drop-shadow(0 0 6px #3cd097)'
-                        }}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      {/* Complete background circle in lighter color */}
-                      <circle
-                        className="progress-ring__circle-background"
-                        stroke="#ffd700"
-                        strokeWidth={strokeWidth}
-                        strokeLinecap="round"
-                        fill="transparent"
-                        r={radius}
-                        cx="100"
-                        cy="100"
-                        style={{
-                          opacity: 0.3
-                        }}
-                      />
-                      {/* Yellow arc for eating time */}
-                      <circle
-                        className="progress-ring__circle"
-                        stroke="#ffd700"
-                        strokeWidth={strokeWidth}
-                        strokeLinecap="round"
-                        fill="transparent"
-                        r={radius}
-                        cx="100"
-                        cy="100"
-                        style={{
-                          strokeDasharray: `${circumference}`,
-                          strokeDashoffset: `${circumference * (1 - progress / 100)}`,
-                          transform: 'rotate(-90deg)',
-                          transformOrigin: '50% 50%',
-                          filter: 'drop-shadow(0 0 6px #ffd700)'
-                        }}
-                      />
-                    </>
-                  )}
-                </svg>
-                <div className="inner-content">
-                  <div className="icon-container">
-                    <FaMosque className="weather-icon" />
-                    <div className="icon-ring"></div>
+            <div className="inner-circle">
+              <div className="inner-content">
+                <div className="icon-container">
+                  <div className="weather-icon">
+                    {currentPeriod === 'fasting' ? '🌙' : '☀️'}
                   </div>
-                  <div className="countdown-display">
-                    <div className="time-digits">
-                      {remainingTime.split('').map((char, index) => (
-                        <span key={index} className="time-digit">
-                          {char}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="period-label">
-                      <span className="period-text">
-                        {currentPeriod === 'fasting' ? 'until Iftar' : 'until Syfyr'}
-                      </span>
-                    </div>
+                </div>
+                <div className="countdown-display">
+                  <div className="time-digits">
+                    <span className="time-digit">{parseInt(remainingTime.split(':')[0], 10).toString().padStart(2, '0')}</span>
+                    <span className="time-separator">:</span>
+                    <span className="time-digit">{parseInt(remainingTime.split(':')[1], 10).toString().padStart(2, '0')}</span>
+                    <span className="time-separator">:</span>
+                    <span className="time-digit">{parseInt(remainingTime.split(':')[2], 10).toString().padStart(2, '0')}</span>
+                  </div>
+                  <div className="period-label">
+                    <span className="period-text">{currentPeriod === 'fasting' ? 'Until Iftar' : 'Until Syfyr'}</span>
                   </div>
                 </div>
               </div>

@@ -1122,3 +1122,243 @@
     font-size: 0.8rem;
   }
 }
+
+/* Modern Circular Countdown Styles */
+.countdown-circle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  padding: 20px;
+  position: relative;
+}
+
+.countdown-circle-wrapper {
+  position: relative;
+  width: 312px;
+  height: 312px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
+  padding: 20px;
+  box-shadow: 
+    0 10px 42px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Outer glow effect */
+.countdown-circle-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(60, 208, 151, 0.2) 0%,
+    rgba(60, 208, 151, 0) 70%
+  );
+  animation: breathe 4s ease-in-out infinite;
+  z-index: -1;
+}
+
+.countdown-circle-wrapper[data-period='eating']::before {
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 215, 0, 0.2) 0%,
+    rgba(255, 215, 0, 0) 70%
+  );
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.countdown-circle {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.3));
+}
+
+.countdown-circle-bg {
+  transition: stroke 0.3s ease;
+  stroke-width: 10;
+  opacity: 0.1;
+}
+
+.countdown-circle-progress {
+  transition: stroke-dashoffset 1s ease-in-out, stroke 0.3s ease;
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+/* Enhanced gradient progress */
+.countdown-circle-progress[stroke="#3cd097"] {
+  stroke: url(#greenGradient);
+  filter: drop-shadow(0 0 8px rgba(60, 208, 151, 0.5));
+  animation: glowGreen 2s ease-in-out infinite;
+}
+
+.countdown-circle-progress[stroke="#ffd700"] {
+  stroke: url(#goldGradient);
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+  animation: glowGold 2s ease-in-out infinite;
+}
+
+@keyframes glowGreen {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(60, 208, 151, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(60, 208, 151, 0.8));
+  }
+}
+
+@keyframes glowGold {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+  }
+}
+
+.countdown-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 80%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  backdrop-filter: blur(8px);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+  animation: pulseBackground 4s ease-in-out infinite;
+}
+
+.countdown-time {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.countdown-digit {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  text-shadow: 0 3px 13px rgba(0, 0, 0, 0.3);
+  line-height: 1;
+  width: 0.6em;
+  display: inline-block;
+}
+
+/* Smaller font size for eating period */
+.countdown-circle-wrapper[data-period='eating'] .countdown-digit {
+  font-size: 2.8rem;
+}
+
+.countdown-digit:nth-child(3),
+.countdown-digit:nth-child(6) {
+  width: 0.3em;
+  margin: 0 0.1em;
+}
+
+.countdown-label {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes pulseBackground {
+  0%, 100% {
+    background: radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+  }
+  50% {
+    background: radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .countdown-circle-wrapper {
+    width: 260px;
+    height: 260px;
+  }
+
+  .countdown-digit {
+    font-size: 3rem;
+  }
+
+  .countdown-circle-wrapper[data-period='eating'] .countdown-digit {
+    font-size: 2.4rem;
+  }
+
+  .countdown-label {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .countdown-circle-wrapper {
+    width: 234px;
+    height: 234px;
+    padding: 16px;
+  }
+
+  .countdown-digit {
+    font-size: 2.5rem;
+  }
+
+  .countdown-circle-wrapper[data-period='eating'] .countdown-digit {
+    font-size: 2rem;
+  }
+
+  .countdown-label {
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+  }
+}
