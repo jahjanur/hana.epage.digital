@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import BottomNavigation from './components/BottomNavigation';
 import LoaderScreen from './components/LoaderScreen';
 
+
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,6 +35,7 @@ const App: React.FC = () => {
         <Route path="/" element={<RamadanCountdown />} />
         <Route path="/duah-v" element={<DuahV />} />
       </Routes>
+
       <BottomNavigation />
     </>
   );
