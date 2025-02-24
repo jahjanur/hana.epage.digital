@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import { BrowserRouter } from 'react-router-dom';
+<<<<<<< HEAD
 
 // ✅ Ensure Service Worker Registers Properly
 if ("serviceWorker" in navigator) {
@@ -19,6 +20,8 @@ if ("serviceWorker" in navigator) {
     }
   });
 }
+=======
+>>>>>>> 1a9269964cb738760b78859b203f48ed2e6c06c5
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
