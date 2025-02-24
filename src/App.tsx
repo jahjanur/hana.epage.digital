@@ -6,6 +6,7 @@ import GoalsTracker from './components/GoalsTracker';
 import { Routes, Route } from 'react-router-dom';
 import BottomNavigation from './components/BottomNavigation';
 import LoaderScreen from './components/LoaderScreen';
+import Notifications from './components/Notifications/Notifications';
 
 
 const App: React.FC = () => {
@@ -32,6 +33,8 @@ const App: React.FC = () => {
 
   return (
     <>
+    {/*Global notifcations testing */}
+    <Notifications/>
       <Routes>
         <Route path="/" element={<RamadanCountdown />} />
         <Route path="/duah-v" element={<DuahV />} />
