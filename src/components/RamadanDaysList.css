@@ -1027,26 +1027,37 @@
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: fixed;
+  bottom: 80px;
+  left: 0;
+  right: 0;
+  max-width: 500px;
+  margin: 0 auto;
+  z-index: 1000;
 }
 
 .dua-header {
-  padding: 20px;
+  padding: 16px;
   border-bottom: 1px solid rgba(60, 60, 67, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: rgba(255, 255, 255, 0.98);
+  flex-direction: row;
+  position: relative;
 }
 
 .dua-title {
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.2rem;
+  font-weight: 600;
   color: #1c1c1e;
-  letter-spacing: -0.5px;
+  margin: 0;
+  padding-left: 8px;
 }
 
 .close-button {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: rgba(60, 60, 67, 0.1);
   border: none;
@@ -1056,6 +1067,11 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 12px;
+  right: 12px;
 }
 
 .close-button:hover {
@@ -1063,63 +1079,62 @@
 }
 
 .dua-content {
-  padding: 24px;
+  padding: 20px;
+  max-height: calc(100vh - 250px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .arabic-text {
   font-family: 'Noto Naskh Arabic', serif;
-  font-size: 1.8rem;
-  line-height: 2.2;
+  font-size: 1.6rem;
+  line-height: 2;
   color: #1c1c1e;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   direction: rtl;
 }
 
 .transliteration {
   font-size: 1rem;
-  color: #3f3ff4;
-  margin-bottom: 16px;
+  line-height: 1.5;
+  color: #3c3c43;
   text-align: center;
-  font-weight: 500;
-  letter-spacing: -0.2px;
+  margin-bottom: 12px;
 }
 
 .translation {
   font-size: 1rem;
-  color: #6c6c70;
-  line-height: 1.6;
+  line-height: 1.5;
+  color: #3c3c43;
   text-align: center;
-  letter-spacing: -0.2px;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 480px) {
-  .dua-buttons-container {
-    padding: 0 16px;
+@media (max-width: 380px) {
+  .dua-content-wrapper {
+    margin: 0 12px;
+    bottom: 70px;
   }
   
-  .dua-button {
-    padding: 8px 12px;
-    height: 34px;
+  .dua-header {
+    padding: 12px;
   }
   
-  .dua-button-icon {
-    font-size: 16px;
+  .dua-title {
+    font-size: 1.1rem;
   }
   
-  .dua-button-text {
-    font-size: 0.8rem;
+  .close-button {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .dua-content {
+    padding: 16px;
+  }
+  
+  .arabic-text {
+    font-size: 1.4rem;
   }
 }
 
