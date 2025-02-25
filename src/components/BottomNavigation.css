@@ -1,80 +1,66 @@
 .bottom-nav-container {
   position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 300px;
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
-  padding: 0 20px;
+  background: white;
+  box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.1);
 }
 
 .bottom-nav {
-  background: rgba(255, 255, 255, 0.98);
-  border-radius: 20px;
-  padding: 12px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  box-shadow: 
-    0 4px 6px rgba(0, 0, 0, 0.1),
-    0 10px 15px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 12px 0;
 }
 
 .nav-item {
-  background: none;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 14px;
-  position: relative;
-  width: 44px;
-  height: 44px;
-}
-
-.nav-icon {
-  font-size: 22px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 8px;
+  color: #666;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  width: 48px;
+  height: 48px;
 }
 
 .nav-item:hover {
-  color: #3f3ff4;
-  transform: translateY(-2px);
-  background: rgba(63, 63, 244, 0.08);
+  color: #333;
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .nav-item.active {
   color: #3f3ff4;
-  background: rgba(63, 63, 244, 0.12);
-  transform: translateY(-2px);
+  background: rgba(63, 63, 244, 0.1);
 }
 
-.nav-item.active .nav-icon {
+.nav-icon {
+  font-size: 24px;
+  transition: transform 0.2s ease;
+}
+
+.nav-item:hover .nav-icon {
   transform: scale(1.1);
 }
 
-.nav-item::after {
-  content: '';
-  position: absolute;
-  bottom: 2px;
-  left: 50%;
-  transform: translateX(-50%) scaleX(0);
-  height: 3px;
-  width: 15px;
-  background: #3f3ff4;
-  border-radius: 2px;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nav-item.active::after {
-  transform: translateX(-50%) scaleX(1);
+@media (max-width: 380px) {
+  .nav-item {
+    width: 40px;
+    height: 40px;
+    padding: 6px;
+  }
+  
+  .nav-icon {
+    font-size: 20px;
+  }
 }
 
 /* Remove old styles */
@@ -83,21 +69,4 @@
 .powered-by,
 .epage-logo {
   display: none;
-}
-
-/* Responsive adjustments */
-@media (max-width: 380px) {
-  .bottom-nav-container {
-    padding: 0 10px;
-    bottom: 20px;
-  }
-
-  .nav-item {
-    width: 40px;
-    height: 40px;
-  }
-
-  .nav-icon {
-    font-size: 20px;
-  }
 } 

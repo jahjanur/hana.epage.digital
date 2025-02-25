@@ -1,45 +1,45 @@
 import React from 'react';
 import './BottomNavigation.css';
-import { AiOutlineHome, AiOutlineFlag } from 'react-icons/ai';
+import { BiHomeAlt2, BiBook } from 'react-icons/bi';
 import { FaPrayingHands } from 'react-icons/fa';
-import { FaTrophy } from 'react-icons/fa';
+import { IoTrophyOutline } from 'react-icons/io5';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const BottomNavigation: React.FC = () => {
+export const BottomNavigation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   return (
     <div className="bottom-nav-container">
-      <nav className="bottom-nav">
+      <div className="bottom-nav">
         <button 
           className={`nav-item ${location.pathname === '/' ? 'active' : ''}`}
           onClick={() => navigate('/')}
         >
-          <AiOutlineHome className="nav-icon" />
+          <BiHomeAlt2 className="nav-icon" />
         </button>
 
         <button 
           className={`nav-item ${location.pathname === '/goals' ? 'active' : ''}`}
           onClick={() => navigate('/goals')}
         >
-          <FaTrophy className="nav-icon" />
+          <IoTrophyOutline className="nav-icon" />
         </button>
-        
+
+        <button 
+          className={`nav-item ${location.pathname === '/book-v' ? 'active' : ''}`}
+          onClick={() => navigate('/book-v')}
+        >
+          <BiBook className="nav-icon" />
+        </button>
+
         <button 
           className={`nav-item ${location.pathname === '/duah-v' ? 'active' : ''}`}
           onClick={() => navigate('/duah-v')}
         >
           <FaPrayingHands className="nav-icon" />
         </button>
-
-        <button 
-          className={`nav-item ${location.pathname === '/quran' ? 'active' : ''}`}
-          onClick={() => navigate('/quran')}
-        >
-          <AiOutlineFlag className="nav-icon" />
-        </button>
-      </nav>
+      </div>
     </div>
   );
 };

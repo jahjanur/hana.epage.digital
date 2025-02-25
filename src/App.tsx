@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import RamadanCountdown from './components/RamadanCountdown';
 import DuahV from './components/Duah-V';
 import GoalsTracker from './components/GoalsTracker';
 import { Routes, Route } from 'react-router-dom';
-import BottomNavigation from './components/BottomNavigation';
+import { BottomNavigation } from './components/BottomNavigation';
 import LoaderScreen from './components/LoaderScreen';
+import Book from './components/book/Book-v';
+import 'font-awesome/css/font-awesome.min.css';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Force scroll to top and prevent default scroll restoration
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
@@ -30,14 +32,15 @@ const App: React.FC = () => {
   }
 
   return (
-    <>
+    <div className="App">
       <Routes>
         <Route path="/" element={<RamadanCountdown />} />
         <Route path="/duah-v" element={<DuahV />} />
         <Route path="/goals" element={<GoalsTracker />} />
+        <Route path="/book-v" element={<Book />} />
       </Routes>
       <BottomNavigation />
-    </>
+    </div>
   );
 };
 
