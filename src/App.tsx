@@ -8,7 +8,6 @@ import { BottomNavigation } from './components/BottomNavigation';
 import LoaderScreen from './components/LoaderScreen';
 import Book from './components/book/Book-v';
 import 'font-awesome/css/font-awesome.min.css';
-import AppHeader from './components/AppHeader';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -36,20 +35,16 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <AppHeader 
-        selectedCity={selectedCity} 
-        onCityChange={setSelectedCity}
-        selectedLanguage={selectedLanguage}
-        onLanguageChange={setSelectedLanguage}
-      />
       <Routes>
         <Route path="/" element={
-          <RamadanCountdown 
-            selectedCity={selectedCity} 
-            onCityChange={setSelectedCity}
-            selectedLanguage={selectedLanguage}
-            onLanguageChange={setSelectedLanguage}
-          />
+          <>
+            <RamadanCountdown 
+              selectedCity={selectedCity} 
+              onCityChange={setSelectedCity}
+              selectedLanguage={selectedLanguage}
+              onLanguageChange={setSelectedLanguage}
+            />
+          </>
         } />
         <Route path="/duah-v" element={<DuahV />} />
         <Route path="/goals" element={<GoalsTracker />} />
