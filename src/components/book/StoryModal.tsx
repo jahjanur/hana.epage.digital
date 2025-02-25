@@ -1,51 +1,65 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './StoryModal.css';
-import backgroundImage from '../../assets/backgroundForBooks.jpeg';
+import backgroundImage from './book-wallpaper-stories/1.webp';
 
-interface StoryModalProps {
-  story: {
-    title: string;
-    content: string;
-  } | null;
-  onClose: () => void;
+interface Story {
+  id: number;
+  title: string;
+  content: string;
+  image?: string; // Optional property for the image
 }
 
-const StoryModal: React.FC<StoryModalProps> = ({ story, onClose }) => {
-  const [readingProgress, setReadingProgress] = useState(0);
+interface StoryModalProps {
+  story: Story;
+  onClose: () => void;
+  onNavigate: (direction: 'next' | 'prev') => void;
+}
 
-  useEffect(() => {
-    const container = document.querySelector('.story-container');
-    
-    const updateScroll = () => {
-      if (container) {
-        const scrollPosition = container.scrollTop;
-        const totalHeight = container.scrollHeight - container.clientHeight;
-        const progress = (scrollPosition / totalHeight) * 100;
-        setReadingProgress(progress);
-      }
-    };
-
-    container?.addEventListener('scroll', updateScroll);
-    return () => container?.removeEventListener('scroll', updateScroll);
-  }, []);
-
-  if (!story) return null;
+const StoryModal: React.FC<StoryModalProps> = ({ story, onClose, onNavigate }) => {
+  if (!story) {
+    return <div>Loading...</div>; // Handle loading or error state
+  }
 
   const paragraphs = story.content.split('\n\n');
 
+  const handleShare = () => {
+    const shareText = `${story.title}\n\n${story.content}`;
+    if (navigator.share) {
+      navigator.share({
+        title: story.title,
+        text: shareText,
+        url: window.location.href,
+      })
+      .then(() => console.log('Share successful'))
+      .catch((error) => console.log('Error sharing:', error));
+    } else {
+      // Fallback for browsers that do not support the Web Share API
+      alert('Sharing is not supported in this browser. Copy the text to share it.');
+    }
+  };
+
   return (
-    <div className="story-page" style={{ backgroundImage: `url(${backgroundImage})` }}>
-      <div className="reading-progress">
-        <div className="reading-progress-bar" style={{ width: `${readingProgress}%` }} />
-      </div>
+    <div className="story-page" style={{ height: '100vh' }}>
       <button className="back-button" onClick={onClose}>←</button>
+      <div className="story-image-section" style={{ backgroundImage: `url(${story.image})`, backgroundSize: 'cover' }}>
+        {/* You can remove the img tag if you want to use the background image only */}
+      </div>
       <div className="story-container">
         <div className="story-content-wrapper">
-          <h1>{story.title}</h1>
+          <h1>
+            {story.title}
+            <button className="share-button" onClick={handleShare}>
+              <i className="fa fa-share-alt"></i>
+            </button>
+          </h1>
           {paragraphs.map((paragraph, index) => (
             <p key={index}>{paragraph}</p>
           ))}
         </div>
+      </div>
+      <div className="navigation-buttons">
+        <button className="nav-button" onClick={() => onNavigate('prev')}>&#9664;</button>
+        <button className="nav-button" onClick={() => onNavigate('next')}>&#9654;</button>
       </div>
     </div>
   );

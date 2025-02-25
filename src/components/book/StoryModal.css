@@ -127,10 +127,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('/src/assets/backgroundForBooks.jpeg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: #1a1a4b; /* Changed to a darker blue */
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -163,24 +160,24 @@
 .story-container {
   width: 100%;
   max-width: 400px;
-  margin-top: 450px;
+  margin-top: 330px;
   padding: 20px;
   margin-bottom: 200px;
-  height: 400px;
-  overflow-y: auto;
   position: relative;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 40px;
 }
 
-
 .story-content-wrapper {
-  
-  
   text-align: left;
   padding: 20px;
   max-width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .story-content-wrapper h1 {
@@ -193,6 +190,8 @@
   line-height: 1.4;
   letter-spacing: -0.02em;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .story-content-wrapper p {
@@ -202,7 +201,7 @@
   margin-bottom: 24px;
   white-space: pre-wrap;
   text-align: left;
-  padding: 0 15px;
+  padding: 0 20px;
   font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -218,19 +217,25 @@
   letter-spacing: 0.02em;
 }
 
-/* Custom scrollbar for story container */
+/* Custom scrollbar styling */
+.story-content-wrapper::-webkit-scrollbar {
+  width: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.story-content-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+}
+
+.story-content-wrapper::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+/* Remove the old scrollbar hiding style */
 .story-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.story-container::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
-
-.story-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
+  display: block;
 }
 
 /* Reading progress indicator */
@@ -259,4 +264,64 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-} 
+}
+
+.story-image-section {
+  width: 100%;
+  max-width: 349px;
+  height: 270px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  display: flex
+;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  margin: 12px auto 74px;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 99%;
+  z-index: 2;
+}
+
+.nav-button {
+  background-color: #0d0d2b; /* Darker blue background */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px; /* Add padding for better appearance */
+  font-size: 24px; /* Increase font size for arrows */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; /* Transition for both background and text color */
+}
+
+.nav-button:hover {
+  background-color: #1a1a4b; /* Slightly lighter blue on hover */
+  color: #ffffff; /* Keep text color white on hover */
+}
+
+.share-button {
+  background: none;
+  border: none;
+  color: white; /* White color for the share icon */
+  font-size: 32px; /* Increase size for better visibility */
+  cursor: pointer;
+  margin-left: 10px; /* Space between title and share icon */
+  transition: color 0.3s;
+}
+
+.share-button:hover {
+  color: #ffeb3b; /* Change color on hover */
+}
