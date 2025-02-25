@@ -31,14 +31,38 @@ const GoalsTracker: React.FC = () => {
   const [selectedPrayers, setSelectedPrayers] = useState<
     Set<"fajr" | "dhuhr" | "asr" | "maghrib" | "isha">
   >(new Set());
-  // For quran and teravi modals
-  const [prayerDetails, setPrayerDetails] = useState({ pagesRead: 0, tarawihRakats: 0 });
+  // Separate state for local inputs
+  const [quranPages, setQuranPages] = useState<number>(0);
+  const [taraweehPrayed, setTaraweehPrayed] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<"goals" | "reports">("goals");
+  // New combined state to hold today's progress (for Quran and Taraweeh)
+  const [todayProgress, setTodayProgress] = useState<{ quran: number; taraweeh: boolean }>({
+    quran: 0,
+    taraweeh: false,
+  });
 
   // Persist goals locally
   useEffect(() => {
     localStorage.setItem("ramadanGoals", JSON.stringify(goals));
   }, [goals]);
+
+  // On mount, load today's progress from the database (if any)
+  useEffect(() => {
+    const loadTodayProgress = async () => {
+      const userEmail = localStorage.getItem("userEmail");
+      if (userEmail) {
+        const today = new Date().toISOString().split("T")[0];
+        const fetchedData = await getProgress(userEmail, today);
+        if (fetchedData && Object.keys(fetchedData).length > 0 && fetchedData.email === userEmail) {
+          setTodayProgress({
+            quran: fetchedData.quran_progress ?? 0,
+            taraweeh: fetchedData.taraweeh ?? false,
+          });
+        }
+      }
+    };
+    loadTodayProgress();
+  }, []);
 
   // When the namaz modal opens, initialize selectedPrayers from today's goals
   useEffect(() => {
@@ -66,11 +90,9 @@ const GoalsTracker: React.FC = () => {
     );
     switch (type) {
       case "namaz":
-        // Cap the count at 5
         const count = Math.min(todayGoals.length, 5);
         return `${count}/5 Prayers`;
       case "teravi":
-        // Show "Prayed" if any entry for today has tarawihRakats === 20; otherwise "Not Prayed"
         const todayTaraweeh = todayGoals.find(
           (goal) => goal.details.tarawihRakats !== undefined
         );
@@ -88,7 +110,7 @@ const GoalsTracker: React.FC = () => {
     }
   };
 
-  // When user clicks a prayer button (for namaz), log it only if not already recorded
+  // When user clicks a prayer button (for namaz)
   const handlePrayerClick = async (
     prayer: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha"
   ) => {
@@ -99,7 +121,6 @@ const GoalsTracker: React.FC = () => {
     }
     const today = new Date().toISOString().split("T")[0];
 
-    // Check if this prayer has already been logged (in saved goals or current selection)
     const alreadyLogged = goals.some(
       (goal) =>
         goal.type === "namaz" &&
@@ -110,17 +131,15 @@ const GoalsTracker: React.FC = () => {
       console.log("Prayer already logged");
       return;
     }
-    // Also check if already reached 5 prayers (considering both saved and selected)
     const todayNamazCount =
-      goals.filter((goal) => goal.type === "namaz" && goal.date === today)
-        .length + selectedPrayers.size;
+      goals.filter((goal) => goal.type === "namaz" && goal.date === today).length +
+      selectedPrayers.size;
     if (todayNamazCount >= 5) {
       console.log("Already 5 prayers logged for today.");
       return;
     }
     try {
       const updatedPrayers = [...Array.from(selectedPrayers), prayer];
-      // Save with 0 quran pages and taraweeh false (since this is just a prayer log update)
       await saveDailyActivity(userEmail, today, 0, updatedPrayers, false);
       console.log(`✅ Prayer ${prayer} logged successfully!`);
       setSelectedPrayers((prev) => new Set([...prev, prayer]));
@@ -129,7 +148,7 @@ const GoalsTracker: React.FC = () => {
     }
   };
 
-  // When user submits the modal for quran, teravi, or namaz, update progress without overwriting other fields
+  // When user submits the modal for namaz, quran, or teravi, update progress without overwriting other fields
   const handleModalSubmit = async () => {
     if (!modalType) return;
     const userEmail = localStorage.getItem("userEmail");
@@ -139,8 +158,17 @@ const GoalsTracker: React.FC = () => {
     }
     const today = new Date().toISOString().split("T")[0];
 
+    // Merge local updates with today's progress
+    let newProgress = { ...todayProgress };
+    if (modalType === "quran") {
+      newProgress.quran = todayProgress.quran + quranPages;
+    }
+    if (modalType === "teravi") {
+      newProgress.taraweeh = taraweehPrayed;
+    }
+
     try {
-      // Fetch existing data from Firestore and ensure it belongs to the current user
+      // Fetch existing prayer log for today's namaz (if any)
       const fetchedData = await getProgress(userEmail, today);
       const existingData =
         fetchedData &&
@@ -148,19 +176,17 @@ const GoalsTracker: React.FC = () => {
         fetchedData.email === userEmail
           ? fetchedData
           : {};
-
       const previousPrayers: string[] = existingData.prayer_log || [];
-      const previousQuranPages: number =
-        typeof existingData.quran_progress === "number"
-          ? existingData.quran_progress
-          : 0;
-      const previousTaraweeh: boolean =
-        typeof existingData.taraweeh === "boolean"
-          ? existingData.taraweeh
-          : false;
 
+      // Save the merged progress
+      await saveDailyActivity(userEmail, today, newProgress.quran, previousPrayers, newProgress.taraweeh);
+      console.log("✅ Activity Saved Successfully!");
+
+      // Update the combined state with the new progress
+      setTodayProgress(newProgress);
+
+      // Update local goals based on modalType
       if (modalType === "namaz") {
-        // For each newly selected prayer (not already in goals), add an entry
         const newNamazGoals: Goal[] = Array.from(selectedPrayers)
           .filter(
             (prayer) =>
@@ -175,83 +201,47 @@ const GoalsTracker: React.FC = () => {
             id: Date.now().toString() + prayer,
             type: "namaz",
             date: today,
-            details: {
-              prayerName: prayer,
-            },
+            details: { prayerName: prayer },
           }));
-        // Update the prayer log in Firestore by merging previous entries with new selections
-        const updatedPrayers = Array.from(
-          new Set([...previousPrayers, ...Array.from(selectedPrayers)])
-        );
-        await saveDailyActivity(
-          userEmail,
-          today,
-          0,
-          updatedPrayers,
-          previousTaraweeh
-        );
-        console.log("✅ Daily Prayers Saved Successfully!");
         setGoals((prev) => [...prev, ...newNamazGoals]);
       } else if (modalType === "quran") {
-        const updatedQuranPages = previousQuranPages + prayerDetails.pagesRead;
-        await saveDailyActivity(
-          userEmail,
-          today,
-          updatedQuranPages,
-          previousPrayers,
-          previousTaraweeh
-        );
-        console.log("✅ Quran Reading Saved Successfully!");
         setGoals((prev) => [
           ...prev,
           {
             id: Date.now().toString(),
             type: "quran",
             date: today,
-            details: {
-              pagesRead: prayerDetails.pagesRead,
-            },
+            details: { pagesRead: quranPages },
           },
         ]);
       } else if (modalType === "teravi") {
-        // Only allow one Taraweeh entry per day.
         if (!goals.some((goal) => goal.type === "teravi" && goal.date === today)) {
-          await saveDailyActivity(
-            userEmail,
-            today,
-            previousQuranPages,
-            previousPrayers,
-            prayerDetails.tarawihRakats === 20
-          );
-          console.log("✅ Taraweeh Activity Saved Successfully!");
           setGoals((prev) => [
             ...prev,
             {
               id: Date.now().toString(),
               type: "teravi",
               date: today,
-              details: {
-                tarawihRakats: prayerDetails.tarawihRakats === 20 ? 20 : 0,
-              },
+              details: { tarawihRakats: taraweehPrayed ? 20 : 0 },
             },
           ]);
-        } else {
-          console.log("Taraweeh already logged for today.");
         }
       }
 
+      // Reset local inputs
       setIsModalOpen(false);
       setSelectedPrayers(new Set());
-      setPrayerDetails({ pagesRead: 0, tarawihRakats: 0 });
+      setQuranPages(0);
+      setTaraweehPrayed(false);
     } catch (error) {
       console.error("❌ Error saving activity:", error);
     }
   };
 
   // Compute if Taraweeh is already logged for today
-  const today = new Date().toISOString().split("T")[0];
+  const todayStr = new Date().toISOString().split("T")[0];
   const alreadyPrayedTaraweeh = goals.some(
-    (goal) => goal.type === "teravi" && goal.date === today
+    (goal) => goal.type === "teravi" && goal.date === todayStr
   );
 
   const renderPrayerSelector = () => (
@@ -259,9 +249,7 @@ const GoalsTracker: React.FC = () => {
       {(["fajr", "dhuhr", "asr", "maghrib", "isha"] as const).map((prayer) => (
         <button
           key={prayer}
-          className={`prayer-button ${
-            selectedPrayers.has(prayer) ? "completed" : "pending"
-          }`}
+          className={`prayer-button ${selectedPrayers.has(prayer) ? "completed" : "pending"}`}
           onClick={() => handlePrayerClick(prayer)}
           disabled={selectedPrayers.has(prayer)}
         >
@@ -281,16 +269,10 @@ const GoalsTracker: React.FC = () => {
 
       <div className="goals-content">
         <div className="tabs">
-          <button
-            className={`tab ${activeTab === "goals" ? "active" : ""}`}
-            onClick={() => setActiveTab("goals")}
-          >
+          <button className={`tab ${activeTab === "goals" ? "active" : ""}`} onClick={() => setActiveTab("goals")}>
             Goals
           </button>
-          <button
-            className={`tab ${activeTab === "reports" ? "active" : ""}`}
-            onClick={() => setActiveTab("reports")}
-          >
+          <button className={`tab ${activeTab === "reports" ? "active" : ""}`} onClick={() => setActiveTab("reports")}>
             Reports
           </button>
         </div>
@@ -299,35 +281,17 @@ const GoalsTracker: React.FC = () => {
           <div className="quick-actions">
             <h2>Quick Actions</h2>
             <div className="action-cards">
-              <div
-                className="action-card"
-                onClick={() => {
-                  setModalType("namaz");
-                  setIsModalOpen(true);
-                }}
-              >
+              <div className="action-card" onClick={() => { setModalType("namaz"); setIsModalOpen(true); }}>
                 <FaPrayingHands />
                 <h3>Daily Prayers</h3>
                 <p>{getGoalProgress("namaz")}</p>
               </div>
-              <div
-                className="action-card"
-                onClick={() => {
-                  setModalType("teravi");
-                  setIsModalOpen(true);
-                }}
-              >
+              <div className="action-card" onClick={() => { setModalType("teravi"); setIsModalOpen(true); }}>
                 <FaMosque />
                 <h3>Taraweeh</h3>
                 <p>{getGoalProgress("teravi")}</p>
               </div>
-              <div
-                className="action-card"
-                onClick={() => {
-                  setModalType("quran");
-                  setIsModalOpen(true);
-                }}
-              >
+              <div className="action-card" onClick={() => { setModalType("quran"); setIsModalOpen(true); }}>
                 <FaQuran />
                 <h3>Quran Reading</h3>
                 <p>{getGoalProgress("quran")}</p>
@@ -347,15 +311,9 @@ const GoalsTracker: React.FC = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h2>
-                {modalType
-                  ? `Add ${modalType.charAt(0).toUpperCase() +
-                    modalType.slice(1)}`
-                  : "Add Activity"}
+                {modalType ? `Add ${modalType.charAt(0).toUpperCase() + modalType.slice(1)}` : "Add Activity"}
               </h2>
-              <button
-                className="modal-close"
-                onClick={() => setIsModalOpen(false)}
-              >
+              <button className="modal-close" onClick={() => setIsModalOpen(false)}>
                 <IoClose />
               </button>
             </div>
@@ -363,48 +321,31 @@ const GoalsTracker: React.FC = () => {
             <div className="modal-body">
               {modalType === "namaz" && (
                 <>
-                  <p className="modal-subtitle">
-                    Select the prayers you've completed
-                  </p>
+                  <p className="modal-subtitle">Select the prayers you've completed</p>
                   {renderPrayerSelector()}
                 </>
               )}
               {modalType === "teravi" && (
                 <>
-                  <p className="modal-subtitle">
-                    Did you pray Taraweeh today?
-                  </p>
+                  <p className="modal-subtitle">Did you pray Taraweeh today?</p>
                   {alreadyPrayedTaraweeh ? (
-                    <p style={{ color: "green", fontWeight: "bold" }}>
-                      You have already prayed Taraweeh today.
-                    </p>
+                    <>
+                      <p style={{ color: "green", fontWeight: "bold" }}>
+                        You have already prayed Taraweeh today.
+                      </p>
+                      <button onClick={() => setIsModalOpen(false)} className="go-to-goals-button">
+                        Go to Goals
+                      </button>
+                    </>
                   ) : (
                     <div className="tarawih-selector">
-                      <button
-                        className={`tarawih-button ${
-                          prayerDetails.tarawihRakats === 20 ? "completed" : ""
-                        }`}
-                        onClick={() =>
-                          setPrayerDetails({
-                            ...prayerDetails,
-                            tarawihRakats: 20,
-                          })
-                        }
-                      >
+                      <button className={`tarawih-button ${taraweehPrayed ? "completed" : "not-prayed"}`}
+                        onClick={() => setTaraweehPrayed(true)}>
                         <FaMosque />
                         <span>Prayed</span>
                       </button>
-                      <button
-                        className={`tarawih-button ${
-                          prayerDetails.tarawihRakats === 0 ? "not-prayed" : ""
-                        }`}
-                        onClick={() =>
-                          setPrayerDetails({
-                            ...prayerDetails,
-                            tarawihRakats: 0,
-                          })
-                        }
-                      >
+                      <button className={`tarawih-button ${!taraweehPrayed ? "not-prayed" : "completed"}`}
+                        onClick={() => setTaraweehPrayed(false)}>
                         <IoClose />
                         <span>Not Prayed</span>
                       </button>
@@ -414,24 +355,16 @@ const GoalsTracker: React.FC = () => {
               )}
               {modalType === "quran" && (
                 <>
-                  <p className="modal-subtitle">
-                    How many pages did you read?
-                  </p>
-                  {/* Updated Quran reading input to a slider */}
+                  <p className="modal-subtitle">How many pages did you read?</p>
                   <div className="quran-input">
                     <input
                       type="range"
                       min="0"
                       max="20"
-                      value={prayerDetails.pagesRead}
-                      onChange={(e) =>
-                        setPrayerDetails({
-                          ...prayerDetails,
-                          pagesRead: parseInt(e.target.value),
-                        })
-                      }
+                      value={quranPages}
+                      onChange={(e) => setQuranPages(parseInt(e.target.value))}
                     />
-                    <span>{prayerDetails.pagesRead} Pages</span>
+                    <span>{quranPages} Pages</span>
                   </div>
                 </>
               )}
