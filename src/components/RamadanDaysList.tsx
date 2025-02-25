@@ -4,6 +4,7 @@ import { ramadanTimes, getCityPrayerTimes } from '../data/prayerTimes';
 import { IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
 import { BsSunset } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
+import confetti from 'canvas-confetti';
 
 
 interface RamadanDay {
@@ -27,6 +28,8 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   const [countdown, setCountdown] = useState('00:00:00');
   const [progress, setProgress] = useState(0);
   const [currentPeriod, setCurrentPeriod] = useState<'fasting' | 'eating'>('fasting');
+  const [isIftarTime, setIsIftarTime] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   
   // Current day for highlighting
   const currentDay: number = 29;
@@ -71,6 +74,38 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
     }, 100);
   }, [selectedCity]);
 
+  // Function to trigger confetti
+  const triggerCelebration = () => {
+    const duration = 15 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    function randomInRange(min: number, max: number) {
+      return Math.random() * (max - min) + min;
+    }
+
+    const interval: any = setInterval(function() {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+      });
+    }, 250);
+  };
+
   // Calculate countdown and progress
   useEffect(() => {
     const updateCountdown = () => {
@@ -90,6 +125,17 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
 
       let timeLeft: number;
       let totalDuration: number;
+
+      // Check if it's exactly Iftar time
+      if (now.getHours() === maghribHours && now.getMinutes() === maghribMinutes && !isIftarTime) {
+        setIsIftarTime(true);
+        setShowCelebration(true);
+        triggerCelebration();
+        setTimeout(() => {
+          setShowCelebration(false);
+          setIsIftarTime(false);
+        }, 60000); // Reset after 1 minute
+      }
 
       if (now >= fajrTime && now <= maghribTime) {
         // During fasting period
@@ -123,7 +169,7 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
 
     const timer = setInterval(updateCountdown, 1000);
     return () => clearInterval(timer);
-  }, [visibleDays, currentDay]);
+  }, [visibleDays, currentDay, isIftarTime]);
 
   const getDayStatus = (dayNumber: number) => {
     if (dayNumber < currentDay) {
@@ -135,99 +181,81 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   };
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative' }} className={showCelebration ? 'celebration-active' : ''}>
       {/* Modern Circular Progress Section */}
       <div className="countdown-circle-container">
         <div className="countdown-circle-wrapper" data-period={currentPeriod}>
-          <svg className="countdown-circle" viewBox="0 0 100 100">
-            {/* Gradient definitions */}
-            <defs>
-              <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style={{ 
-                  stopColor: '#ff4d4d',
-                  stopOpacity: 1 
-                }} />
-                <stop offset={`${progress}%`} style={{ 
-                  stopColor: progress < 50 ? '#ff4d4d' : '#3cd097',
-                  stopOpacity: 1 
-                }} />
-                <stop offset="100%" style={{ 
-                  stopColor: '#3cd097',
-                  stopOpacity: 1 
-                }} />
-              </linearGradient>
-              <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style={{ stopColor: '#3cd097', stopOpacity: 1 }} />
-                <stop offset="50%" style={{ stopColor: '#2ecc71', stopOpacity: 1 }} />
-                <stop offset="100%" style={{ stopColor: '#27ae60', stopOpacity: 1 }} />
-              </linearGradient>
-              <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style={{ stopColor: '#ffd700', stopOpacity: 1 }} />
-                <stop offset="50%" style={{ stopColor: '#ffb900', stopOpacity: 1 }} />
-                <stop offset="100%" style={{ stopColor: '#ff9500', stopOpacity: 1 }} />
-              </linearGradient>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
-            
-            {/* Background circle */}
-            <circle
-              className="countdown-circle-bg"
-              cx="50"
-              cy="50"
-              r="43"
-              fill="none"
-              stroke={currentPeriod === 'fasting' ? 'url(#greenGradient)' : 'url(#goldGradient)'}
-              filter="url(#glow)"
-            />
-            {/* Progress circle */}
-            <circle
-              className="countdown-circle-progress"
-              cx="50"
-              cy="50"
-              r="43"
-              fill="none"
-              stroke={currentPeriod === 'fasting' ? 'url(#progressGradient)' : 'url(#goldGradient)'}
-              strokeDasharray="270.2"
-              strokeDashoffset={270.2 - (270.2 * progress) / 100}
-              transform="rotate(-90 50 50)"
-              filter="url(#glow)"
-            />
-          </svg>
-          <div className="countdown-content">
-            <div className="countdown-time">
-              {countdown.split('').map((char, index) => (
-                <span 
-                  key={index} 
-                  className="countdown-digit"
-                  style={{
-                    color: currentPeriod === 'fasting' 
-                      ? progress < 50 
-                        ? `rgba(255, ${Math.round(77 + (progress * 2.5))}, ${Math.round(77 + (progress * 2.5))}, 1)`
-                        : '#3cd097'
-                      : '#ffd700',
-                    textShadow: `0 0 20px ${
-                      currentPeriod === 'fasting'
-                        ? progress < 50
-                          ? 'rgba(255, 77, 77, 0.5)'
-                          : 'rgba(60, 208, 151, 0.5)'
-                        : 'rgba(255, 215, 0, 0.5)'
-                    }`
-                  }}
-                >
-                  {char}
-                </span>
-              ))}
+          {!showCelebration ? (
+            <>
+              <svg 
+                className="countdown-circle" 
+                viewBox="0 0 100 100"
+                data-progress={Math.round(progress)}
+              >
+                {/* Gradient definitions */}
+                <defs>
+                  <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" />
+                    <stop offset="100%" />
+                  </linearGradient>
+                </defs>
+                
+                {/* Background circle */}
+                <circle
+                  className="countdown-circle-bg"
+                  cx="50"
+                  cy="50"
+                  r="43"
+                  fill="none"
+                  stroke="rgba(255, 255, 255, 0.1)"
+                />
+                {/* Progress circle */}
+                <circle
+                  className="countdown-circle-progress"
+                  cx="50"
+                  cy="50"
+                  r="43"
+                  fill="none"
+                  strokeDasharray="270.2"
+                  strokeDashoffset={270.2 - (270.2 * progress) / 100}
+                  transform="rotate(-90 50 50)"
+                />
+              </svg>
+              <div className="countdown-content">
+                <div className="countdown-time">
+                  {countdown.split('').map((char, index) => (
+                    <span 
+                      key={index} 
+                      className="countdown-digit"
+                      style={{
+                        color: currentPeriod === 'fasting' 
+                          ? progress < 50 
+                            ? `rgba(255, ${Math.round(77 + (progress * 2.5))}, ${Math.round(77 + (progress * 2.5))}, 1)`
+                            : '#3cd097'
+                          : '#ffd700',
+                        textShadow: `0 0 20px ${
+                          currentPeriod === 'fasting'
+                            ? progress < 50
+                              ? 'rgba(255, 77, 77, 0.5)'
+                              : 'rgba(60, 208, 151, 0.5)'
+                            : 'rgba(255, 215, 0, 0.5)'
+                        }`
+                      }}
+                    >
+                      {char}
+                    </span>
+                  ))}
+                </div>
+                <div className="countdown-label">
+                  {currentPeriod === 'fasting' ? 'until Iftar' : 'until Syfyr'}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="celebration-message">
+              Zoti jua pranoftë agjërimin!
             </div>
-            <div className="countdown-label">
-              {currentPeriod === 'fasting' ? 'until Iftar' : 'until Syfyr'}
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
