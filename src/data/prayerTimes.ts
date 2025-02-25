@@ -208,8 +208,18 @@ const adjustTime = (time: string, minutes: number): string => {
 
 // Function to get prayer times for a specific city
 export const getCityPrayerTimes = (cityId: string, date: string): PrayerTime | null => {
-  const baseTime = ramadanTimes.find(day => day.date === date);
-  const cityAdj = cityAdjustments[cityId];
+  // Check if the city is from Kosovo
+  const isKosovoCity = Object.keys(kosovoCityAdjustments).includes(cityId);
+  
+  // Get base times from the appropriate country
+  const baseTime = isKosovoCity 
+    ? kosovoRamadanTimes.find(day => day.date === date)
+    : ramadanTimes.find(day => day.date === date);
+
+  // Get city adjustments from the appropriate country
+  const cityAdj = isKosovoCity 
+    ? kosovoCityAdjustments[cityId]
+    : cityAdjustments[cityId];
 
   if (!baseTime || !cityAdj) return null;
 
@@ -220,4 +230,118 @@ export const getCityPrayerTimes = (cityId: string, date: string): PrayerTime | n
     maghrib: adjustTime(baseTime.maghrib, cityAdj.adjustment.maghrib),
     isha: adjustTime(baseTime.isha, cityAdj.adjustment.isha),
   };
+};
+
+// Base times for Kosovo (Prishtina as reference)
+export const kosovoRamadanTimes = [
+  { "date": "2025-03-01", "weekday": "e shtunë", "fajr": "4:34", "dhuhr": "11:51", "asr": "14:59", "maghrib": "17:33", "isha": "19:03" },
+  { "date": "2025-03-02", "weekday": "e diel", "fajr": "4:33", "dhuhr": "11:50", "asr": "15:00", "maghrib": "17:34", "isha": "19:05" },
+  { "date": "2025-03-03", "weekday": "e hënë", "fajr": "4:31", "dhuhr": "11:50", "asr": "15:01", "maghrib": "17:36", "isha": "19:07" },
+  { "date": "2025-03-04", "weekday": "e martë", "fajr": "4:29", "dhuhr": "11:50", "asr": "15:02", "maghrib": "17:37", "isha": "19:08" },
+  { "date": "2025-03-05", "weekday": "e mërkurë", "fajr": "4:27", "dhuhr": "11:50", "asr": "15:02", "maghrib": "17:38", "isha": "19:09" },
+  { "date": "2025-03-06", "weekday": "e enjte", "fajr": "4:25", "dhuhr": "11:50", "asr": "15:03", "maghrib": "17:39", "isha": "19:10" },
+  { "date": "2025-03-07", "weekday": "e premte", "fajr": "4:23", "dhuhr": "11:50", "asr": "15:03", "maghrib": "17:40", "isha": "19:11" },
+  { "date": "2025-03-08", "weekday": "e shtunë", "fajr": "4:21", "dhuhr": "11:50", "asr": "15:04", "maghrib": "17:42", "isha": "19:13" },
+  { "date": "2025-03-09", "weekday": "e diel", "fajr": "4:20", "dhuhr": "11:50", "asr": "15:05", "maghrib": "17:43", "isha": "19:14" },
+  { "date": "2025-03-10", "weekday": "e hënë", "fajr": "4:18", "dhuhr": "11:50", "asr": "15:06", "maghrib": "17:44", "isha": "19:15" },
+  { "date": "2025-03-11", "weekday": "e martë", "fajr": "4:16", "dhuhr": "11:50", "asr": "15:06", "maghrib": "17:45", "isha": "19:16" },
+  { "date": "2025-03-12", "weekday": "e mërkurë", "fajr": "4:15", "dhuhr": "11:49", "asr": "15:07", "maghrib": "17:47", "isha": "19:18" },
+  { "date": "2025-03-13", "weekday": "e enjte", "fajr": "4:14", "dhuhr": "11:49", "asr": "15:08", "maghrib": "17:48", "isha": "19:19" },
+  { "date": "2025-03-14", "weekday": "e premte", "fajr": "4:13", "dhuhr": "11:49", "asr": "15:08", "maghrib": "17:49", "isha": "19:20" },
+  { "date": "2025-03-15", "weekday": "e shtunë", "fajr": "4:11", "dhuhr": "11:49", "asr": "15:08", "maghrib": "17:50", "isha": "19:21" },
+  { "date": "2025-03-16", "weekday": "e diel", "fajr": "4:09", "dhuhr": "11:49", "asr": "15:08", "maghrib": "17:51", "isha": "19:22" },
+  { "date": "2025-03-17", "weekday": "e hënë", "fajr": "4:08", "dhuhr": "11:48", "asr": "15:09", "maghrib": "17:52", "isha": "19:23" },
+  { "date": "2025-03-18", "weekday": "e martë", "fajr": "4:06", "dhuhr": "11:48", "asr": "15:09", "maghrib": "17:53", "isha": "19:25" },
+  { "date": "2025-03-19", "weekday": "e mërkurë", "fajr": "4:04", "dhuhr": "11:48", "asr": "15:10", "maghrib": "17:55", "isha": "19:26" },
+  { "date": "2025-03-20", "weekday": "e enjte", "fajr": "4:02", "dhuhr": "11:48", "asr": "15:11", "maghrib": "17:56", "isha": "19:27" },
+  { "date": "2025-03-21", "weekday": "e premte", "fajr": "4:00", "dhuhr": "11:48", "asr": "15:12", "maghrib": "17:57", "isha": "19:28" },
+  { "date": "2025-03-22", "weekday": "e shtunë", "fajr": "3:57", "dhuhr": "11:47", "asr": "15:12", "maghrib": "17:58", "isha": "19:30" },
+  { "date": "2025-03-23", "weekday": "e diel", "fajr": "3:55", "dhuhr": "11:47", "asr": "15:13", "maghrib": "17:59", "isha": "19:31" },
+  { "date": "2025-03-24", "weekday": "e hënë", "fajr": "3:53", "dhuhr": "11:46", "asr": "15:13", "maghrib": "18:00", "isha": "19:32" },
+  { "date": "2025-03-25", "weekday": "e martë", "fajr": "3:51", "dhuhr": "11:45", "asr": "15:14", "maghrib": "18:02", "isha": "19:34" },
+  { "date": "2025-03-26", "weekday": "e mërkurë", "fajr": "3:49", "dhuhr": "11:45", "asr": "15:15", "maghrib": "18:03", "isha": "19:35" },
+  { "date": "2025-03-27", "weekday": "e enjte", "fajr": "3:46", "dhuhr": "11:45", "asr": "15:15", "maghrib": "18:04", "isha": "19:36" },
+  { "date": "2025-03-28", "weekday": "e premte", "fajr": "3:44", "dhuhr": "11:45", "asr": "15:16", "maghrib": "18:05", "isha": "19:37" },
+  { "date": "2025-03-29", "weekday": "e shtunë", "fajr": "3:41", "dhuhr": "11:44", "asr": "15:16", "maghrib": "18:06", "isha": "19:38" }
+];
+
+// Time adjustments for Kosovo cities relative to Prishtina
+export const kosovoCityAdjustments: Record<string, CityAdjustment> = {
+  prishtina: {
+    name: "Prishtina",
+    nameAlb: "Prishtinë",
+    adjustment: {
+      fajr: -1,
+      dhuhr: -1,
+      asr: -1,
+      maghrib: -1,
+      isha: -1
+    }
+  },
+  sharr: {
+    name: "Sharr",
+    nameAlb: "Sharr",
+    adjustment: {
+      fajr: +2,
+      dhuhr: +2,
+      asr: +2,
+      maghrib: +2,
+      isha: +2
+    }
+  },
+  ferizaj: {
+    name: "Ferizaj",
+    nameAlb: "Ferizaj",
+    adjustment: {
+      fajr: -1,
+      dhuhr: -1,
+      asr: -1,
+      maghrib: -1,
+      isha: -1
+    }
+  },
+  gjilan: {
+    name: "Gjilan",
+    nameAlb: "Gjilan",
+    adjustment: {
+      fajr: -1,
+      dhuhr: -1,
+      asr: -1,
+      maghrib: -1,
+      isha: -1
+    }
+  },
+  podujeva: {
+    name: "Podujeva",
+    nameAlb: "Podujevë",
+    adjustment: {
+      fajr: -1,
+      dhuhr: -1,
+      asr: -1,
+      maghrib: -1,
+      isha: -1
+    }
+  },
+  vushtrri: {
+    name: "Vushtrri",
+    nameAlb: "Vushtrri",
+    adjustment: {
+      fajr: -1,
+      dhuhr: -1,
+      asr: -1,
+      maghrib: -1,
+      isha: -1
+    }
+  },
+  presheva: {
+    name: "Presheva",
+    nameAlb: "Preshevë",
+    adjustment: {
+      fajr: -2,
+      dhuhr: -2,
+      asr: -2,
+      maghrib: -2,
+      isha: -2
+    }
+  }
 }; 

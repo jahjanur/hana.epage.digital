@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './CitySelector.css';
 import { IoLocationOutline } from "react-icons/io5";
 import { IoChevronDownOutline } from "react-icons/io5";
-import { cityAdjustments } from '../data/prayerTimes';
+import { cityAdjustments, kosovoCityAdjustments } from '../data/prayerTimes';
 
 interface CitySelectorProps {
   selectedCity: string;
@@ -11,29 +11,81 @@ interface CitySelectorProps {
 
 const CitySelector: React.FC<CitySelectorProps> = ({ selectedCity, onCityChange }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<'macedonia' | 'kosovo'>('macedonia');
 
-  // Sort cities alphabetically by Albanian name
-  const sortedCities = Object.entries(cityAdjustments)
-    .sort(([, a], [, b]) => a.nameAlb.localeCompare(b.nameAlb));
+  const getCityName = (cityId: string) => {
+    const macedoniaCities = cityAdjustments[cityId];
+    const kosovoCities = kosovoCityAdjustments[cityId];
+    return (macedoniaCities || kosovoCities)?.nameAlb || cityId;
+  };
+
+  const handleCountryChange = (country: 'macedonia' | 'kosovo') => {
+    setSelectedCountry(country);
+    // Select first city of the country by default
+    const cities = country === 'macedonia' ? Object.keys(cityAdjustments) : Object.keys(kosovoCityAdjustments);
+    if (cities.length > 0) {
+      onCityChange(cities[0]);
+    }
+  };
 
   return (
     <div className="city-selector">
-      <IoLocationOutline className="city-location-icon" />
-      <select 
-        value={selectedCity}
-        onChange={(e) => onCityChange(e.target.value)}
-        onFocus={() => setIsOpen(true)}
-        onBlur={() => setIsOpen(false)}
-        className="city-select"
-        aria-label="Select city"
+      <button
+        className="city-button"
+        onClick={() => setIsOpen(!isOpen)}
       >
-        {sortedCities.map(([cityId, city]) => (
-          <option key={cityId} value={cityId}>
-            {city.nameAlb}
-          </option>
-        ))}
-      </select>
-      <IoChevronDownOutline className={`dropdown-icon ${isOpen ? 'open' : ''}`} />
+        <IoLocationOutline className="city-icon" />
+        <span className="city-name">{getCityName(selectedCity)}</span>
+        <IoChevronDownOutline className={`chevron ${isOpen ? 'open' : ''}`} />
+      </button>
+
+      {isOpen && (
+        <div className="city-dropdown">
+          <div className="country-selector">
+            <button
+              className={`country-option ${selectedCountry === 'macedonia' ? 'active' : ''}`}
+              onClick={() => handleCountryChange('macedonia')}
+            >
+              Maqedonia
+            </button>
+            <button
+              className={`country-option ${selectedCountry === 'kosovo' ? 'active' : ''}`}
+              onClick={() => handleCountryChange('kosovo')}
+            >
+              Kosova
+            </button>
+          </div>
+          <div className="cities-list">
+            {selectedCountry === 'macedonia' ? (
+              Object.entries(cityAdjustments).map(([cityId, city]) => (
+                <button
+                  key={cityId}
+                  className={`city-option ${selectedCity === cityId ? 'active' : ''}`}
+                  onClick={() => {
+                    onCityChange(cityId);
+                    setIsOpen(false);
+                  }}
+                >
+                  {city.nameAlb}
+                </button>
+              ))
+            ) : (
+              Object.entries(kosovoCityAdjustments).map(([cityId, city]) => (
+                <button
+                  key={cityId}
+                  className={`city-option ${selectedCity === cityId ? 'active' : ''}`}
+                  onClick={() => {
+                    onCityChange(cityId);
+                    setIsOpen(false);
+                  }}
+                >
+                  {city.nameAlb}
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

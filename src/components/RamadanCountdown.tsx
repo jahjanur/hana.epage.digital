@@ -314,18 +314,6 @@ const RamadanCountdown: React.FC = () => {
           <div className="floating-circle"></div>
           <div className="floating-circle"></div>
           
-          {/* Header */}
-          <div className="header fade-in">
-            <div className="status-icons">
-              <div className="signal"></div>
-              <div className="wifi"></div>
-              <div className="battery"></div>
-            </div>
-          </div>
-          {/* Navigation */}
-          <div className="nav-bar fade-in">
-            <HanaLogo className="hana-logo" />
-          </div>
           {/* Clock Display */}
           <div className="clock-container scale-in">
             <div className="inner-circle">

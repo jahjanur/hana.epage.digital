@@ -1534,3 +1534,21 @@
     padding: 10px;
   }
 }
+
+.powered-by {
+  text-align: center;
+  padding: 20px 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  margin-top: 20px;
+}
+
+.powered-by a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.powered-by a:hover {
+  color: white;
+}

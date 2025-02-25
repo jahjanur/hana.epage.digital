@@ -36,13 +36,13 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   
   const duas = {
     syfyr: {
-      title: "Dua e Syfyrit",
+      title: "Nijeti",
       arabic: "نَوَيْتُ صَوْمَ غَدٍ عَنْ أَدَاءِ فَرْضِ شَهْرِ رَمَضَانَ هٰذِهِ السَّنَةِ لِلّٰهِ تَعَالَى",
       transliteration: "Nevejtus savme gadin min šehri Ramadane",
       translation: "Kam për qëllim të agjëroj nesër në muajin e Ramazanit për hir të Allahut të Madhëruar."
     },
     iftar: {
-      title: "Dua e Iftarit",
+      title: "Duaja e Iftarit",
       arabic: "اَللّٰهُمَّ لَكَ صُمْتُ وَبِكَ آمَنْتُ وَعَلَى رِزْقِكَ أَفْطَرْتُ وَعَلَيْكَ تَوَكَّلْتُ",
       transliteration: "Allahumme leke sumtu ve bike amentu ve ala rizkike eftertu ve alejke tevekkeltu",
       translation: "O Allah, për Ty agjërova, në Ty besova, me furnizimin Tënd e prisha agjërimin dhe në Ty u mbështeta."
@@ -265,14 +265,14 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
           onClick={() => setExpandedDua(expandedDua === 'syfyr' ? null : 'syfyr')}
         >
           <IoMoonOutline className="dua-button-icon" />
-          <span className="dua-button-text">Dua e Syfyrit</span>
+          <span className="dua-button-text">Nijeti</span>
         </button>
         <button 
           className="dua-button"
           onClick={() => setExpandedDua(expandedDua === 'iftar' ? null : 'iftar')}
         >
           <IoSunnyOutline className="dua-button-icon" />
-          <span className="dua-button-text">Dua e Iftarit</span>
+          <span className="dua-button-text">Duaja e Iftarit</span>
         </button>
       </div>
 
@@ -330,6 +330,10 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="powered-by">
+        Powered by <a href="https://epage.digital" target="_blank" rel="noopener noreferrer">epage.digital</a>
       </div>
     </div>
   );

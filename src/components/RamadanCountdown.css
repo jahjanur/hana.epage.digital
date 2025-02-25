@@ -7,37 +7,6 @@
   overflow: hidden;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  font-size: 14px;
-  animation-delay: 100ms;
-}
-
-.status-icons {
-  display: flex;
-  gap: 5px;
-}
-
-.nav-bar {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0 20px 20px;
-  animation-delay: 200ms;
-}
-
-.nav-bar h1 {
-  display: none;
-}
-
-.back-button, .menu-button {
-  font-size: 24px;
-}
-
 .clock-container {
   position: relative;
   width: 100%;
@@ -602,20 +571,6 @@
   }
 }
 
-.hana-logo {
-  height: 50px;
-  width: auto;
-  margin: 0 0 5px;
-  fill: white;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
-}
-
-.hana-logo:hover {
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
-  transform: scale(1.02);
-  transition: all 0.3s ease;
-}
-
 /* Add animated gradient background */
 .countdown-container::before {
   content: '';
@@ -781,10 +736,6 @@
 
 /* Adjust mobile size as well */
 @media (max-width: 768px) {
-  .hana-logo {
-    height: 40px;
-  }
-
   .times-container {
     margin: 15px;
     padding: 20px;
