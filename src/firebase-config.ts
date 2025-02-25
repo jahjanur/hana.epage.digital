@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";  // ✅ Firestore Import
 import { getMessaging, getToken } from "firebase/messaging";
 
+// ✅ Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCyhXfYXNGwP3wjbxkBZ6c_uFYg4DxjK3c",
   authDomain: "hana-epage-digital.firebaseapp.com",
@@ -13,16 +15,21 @@ const firebaseConfig = {
 
 // ✅ Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// ✅ Firestore Setup (for tracking user Quran & prayer progress)
+const db = getFirestore(app);
+
+// ✅ Firebase Messaging (Notifications)
 const messaging = getMessaging(app);
 
-// ✅ Define VAPID_KEY and Export It
+// ✅ VAPID Key (For Web Push Notifications)
 export const VAPID_KEY = "BOJ499dPvHi1U-P_CuKL9gFIS8mhl099CKv6jNMLZDuE3ay3U068BBltliaMedozGoYAJnakLq1sTj3NFMB6vbU";
 
 // ✅ Register Service Worker Before Requesting Token
 navigator.serviceWorker.ready
   .then((registration) => {
     return getToken(messaging, {
-      vapidKey: VAPID_KEY,  // ✅ Now it exists
+      vapidKey: VAPID_KEY,
       serviceWorkerRegistration: registration,
     });
   })
@@ -37,4 +44,5 @@ navigator.serviceWorker.ready
     console.error("❌ Error getting FCM token:", err);
   });
 
-export { messaging, getToken };
+// ✅ Export Firestore (`db`) and Messaging (`messaging`)
+export { db, messaging, getToken };
