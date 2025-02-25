@@ -301,7 +301,7 @@
   position: relative;
   padding: 20px;
   margin: 20px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.47);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   z-index: 3;
@@ -345,8 +345,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.733);
+  border-color: rgba(34, 197, 94, 0.5);
   border-radius: 16px;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -356,7 +356,7 @@
 
 .schedule-item:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgb(255, 255, 255);
 }
 
 /* Current day styling */
@@ -455,7 +455,7 @@
 
 /* Past day styling */
 .schedule-item.past-day {
-  background: rgba(34, 197, 94, 0.2);
+  background: rgba(0, 0, 0, 0.733);
   border-color: rgba(34, 197, 94, 0.5);
   box-shadow: 
     0 4px 12px -4px rgba(34, 197, 94, 0.3),
@@ -972,4 +972,583 @@
 /* Add this to ensure the badge doesn't get cut off */
 .schedule-list {
   padding-top: 12px;
+}
+
+/* Apple-inspired Dua Section */
+.dua-buttons-container {
+  display: flex;
+  gap: 10px;
+  padding: 0 20px;
+  margin-bottom: 16px;
+  justify-content: center;
+}
+
+.dua-button {
+  flex: 0 1 auto;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.733);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  width: 140px;
+  height: 38px;
+  justify-content: center;
+}
+
+.dua-button:hover {
+  background: rgba(0, 0, 0, 0.85);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dua-button-icon {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.dua-button-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.dua-content-wrapper {
+  margin: 0 20px;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dua-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(60, 60, 67, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dua-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1c1c1e;
+  letter-spacing: -0.5px;
+}
+
+.close-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(60, 60, 67, 0.1);
+  border: none;
+  color: #3f3ff4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background: rgba(60, 60, 67, 0.2);
+}
+
+.dua-content {
+  padding: 24px;
+}
+
+.arabic-text {
+  font-family: 'Noto Naskh Arabic', serif;
+  font-size: 1.8rem;
+  line-height: 2.2;
+  color: #1c1c1e;
+  text-align: center;
+  margin-bottom: 24px;
+  direction: rtl;
+}
+
+.transliteration {
+  font-size: 1rem;
+  color: #3f3ff4;
+  margin-bottom: 16px;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+
+.translation {
+  font-size: 1rem;
+  color: #6c6c70;
+  line-height: 1.6;
+  text-align: center;
+  letter-spacing: -0.2px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .dua-buttons-container {
+    padding: 0 16px;
+  }
+  
+  .dua-button {
+    padding: 8px 12px;
+    height: 34px;
+  }
+  
+  .dua-button-icon {
+    font-size: 16px;
+  }
+  
+  .dua-button-text {
+    font-size: 0.8rem;
+  }
+}
+
+/* Modern Circular Countdown Styles */
+.countdown-circle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  padding: 20px;
+  position: relative;
+}
+
+.countdown-circle-wrapper {
+  position: relative;
+  width: 312px;
+  height: 312px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
+  padding: 20px;
+  box-shadow: 
+    0 10px 42px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  animation: breatheCircle 6s ease-in-out infinite;
+}
+
+/* Wave effects */
+.countdown-circle-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: -40px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  animation: waveEffect 4s linear infinite;
+}
+
+.countdown-circle-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.03);
+  animation: waveEffect 4s linear infinite 1s;
+}
+
+/* Add wave keyframes */
+@keyframes waveEffect {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Add breathing animation */
+@keyframes breatheCircle {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 10px 42px rgba(0, 0, 0, 0.2),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 
+      0 15px 52px rgba(0, 0, 0, 0.25),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Update the progress circle with breathing effect */
+.countdown-circle-progress {
+  transition: stroke-dashoffset 1s ease-in-out;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke: url(#progressGradient);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+  animation: breatheProgress 6s ease-in-out infinite;
+}
+
+@keyframes breatheProgress {
+  0%, 100% {
+    stroke-width: 10;
+  }
+  50% {
+    stroke-width: 12;
+  }
+}
+
+/* Add wave effects for eating period */
+.countdown-circle-wrapper[data-period='eating']::after {
+  border-color: rgba(255, 85, 17, 0.05);
+}
+
+.countdown-circle-wrapper[data-period='eating']::before {
+  border-color: rgba(255, 85, 17, 0.03);
+}
+
+/* Add wave effects for fasting period */
+.countdown-circle-wrapper[data-period='fasting']::after {
+  border-color: rgba(60, 208, 151, 0.05);
+}
+
+.countdown-circle-wrapper[data-period='fasting']::before {
+  border-color: rgba(60, 208, 151, 0.03);
+}
+
+.countdown-circle {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.3));
+}
+
+.countdown-circle-bg {
+  transition: stroke 0.3s ease;
+  stroke-width: 10;
+  opacity: 0.1;
+}
+
+/* Remove old gradient definitions */
+.countdown-circle-progress[stroke="#3cd097"],
+.countdown-circle-progress[stroke="#ffd700"] {
+  stroke: url(#progressGradient);
+}
+
+/* Dynamic progress gradient */
+.countdown-circle defs {
+  position: absolute;
+}
+
+#progressGradient stop {
+  transition: stop-color 0.3s ease;
+}
+
+#progressGradient stop:first-child {
+  stop-color: #ff5511;
+}
+
+#progressGradient stop:last-child {
+  stop-color: #3cd097;
+}
+
+/* Update the gradient stops based on progress */
+.countdown-circle[data-progress="0"] #progressGradient stop {
+  stop-color: #ff5511;
+}
+
+.countdown-circle[data-progress="100"] #progressGradient stop {
+  stop-color: #3cd097;
+}
+
+/* Intermediate progress states */
+.countdown-circle[data-progress="25"] #progressGradient stop:first-child {
+  stop-color: #ff5511;
+}
+
+.countdown-circle[data-progress="25"] #progressGradient stop:last-child {
+  stop-color: #ff8855;
+}
+
+.countdown-circle[data-progress="50"] #progressGradient stop:first-child {
+  stop-color: #ff8855;
+}
+
+.countdown-circle[data-progress="50"] #progressGradient stop:last-child {
+  stop-color: #80c070;
+}
+
+.countdown-circle[data-progress="75"] #progressGradient stop:first-child {
+  stop-color: #80c070;
+}
+
+.countdown-circle[data-progress="75"] #progressGradient stop:last-child {
+  stop-color: #3cd097;
+}
+
+/* Glow effects based on progress */
+@keyframes progressGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(255, 85, 17, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(255, 85, 17, 0.8));
+  }
+}
+
+.countdown-circle[data-progress="0"] .countdown-circle-progress {
+  filter: drop-shadow(0 0 8px rgba(255, 85, 17, 0.5));
+  animation: progressGlow 2s ease-in-out infinite;
+}
+
+.countdown-circle[data-progress="100"] .countdown-circle-progress {
+  filter: drop-shadow(0 0 8px rgba(60, 208, 151, 0.5));
+  animation: none;
+}
+
+.countdown-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 80%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  backdrop-filter: blur(8px);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+  animation: pulseBackground 4s ease-in-out infinite;
+}
+
+.countdown-time {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.countdown-digit {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  text-shadow: 0 3px 13px rgba(0, 0, 0, 0.3);
+  line-height: 1;
+  width: 0.6em;
+  display: inline-block;
+}
+
+/* Smaller font size for eating period */
+.countdown-circle-wrapper[data-period='eating'] .countdown-digit {
+  font-size: 2rem;
+  color: #ff5511;
+}
+
+.countdown-digit:nth-child(3),
+.countdown-digit:nth-child(6) {
+  width: 0.3em;
+  margin: 0 0.1em;
+}
+
+.countdown-label {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes pulseBackground {
+  0%, 100% {
+    background: radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+  }
+  50% {
+    background: radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .countdown-circle-wrapper {
+    width: 260px;
+    height: 260px;
+  }
+
+  .countdown-digit {
+    font-size: 1.6rem;
+  }
+
+  .countdown-circle-wrapper[data-period='eating'] .countdown-digit {
+    font-size: 1.6rem;
+  }
+
+  .countdown-label {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .countdown-circle-wrapper {
+    width: 234px;
+    height: 234px;
+    padding: 16px;
+  }
+
+  .countdown-digit {
+    font-size: 1.4rem;
+  }
+
+  .countdown-circle-wrapper[data-period='eating'] .countdown-digit {
+    font-size: 1.4rem;
+  }
+
+  .countdown-label {
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+  }
+}
+
+.celebration-active {
+  animation: celebrationBackground 4s infinite;
+}
+
+@keyframes celebrationBackground {
+  0%, 100% {
+    background: rgba(0, 0, 0, 0);
+  }
+  50% {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+
+.celebration-message {
+  font-size: 2rem;
+  color: #ff5511;
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 20px;
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    #ff5511 0%,
+    #ff7744 50%,
+    #ff5511 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: celebrationMessage 2s infinite;
+}
+
+@keyframes celebrationMessage {
+  0% {
+    background-position: 0% 50%;
+    transform: scale(1);
+  }
+  50% {
+    background-position: 100% 50%;
+    transform: scale(1.05);
+  }
+  100% {
+    background-position: 0% 50%;
+    transform: scale(1);
+  }
+}
+
+/* Remove the celebration ring animation and glow effects */
+.celebration-message::after {
+  display: none;
+}
+
+@keyframes celebrationRing {
+  0%, 100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive styles for celebration message */
+@media (max-width: 768px) {
+  .celebration-message {
+    font-size: 1.6rem;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .celebration-message {
+    font-size: 1.4rem;
+    padding: 10px;
+  }
+}
+
+.powered-by {
+  text-align: center;
+  padding: 20px 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  margin-top: 20px;
+}
+
+.powered-by a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.powered-by a:hover {
+  color: white;
 }
