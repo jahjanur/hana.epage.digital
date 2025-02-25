@@ -159,7 +159,7 @@
 
   .schedule-body {
     height: 280px;
-    padding: 12px;
+    padding: 30px;
   }
 
   .schedule-row {
@@ -1143,7 +1143,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px auto;
+  margin: 50px auto 20px;
   padding: 20px;
   position: relative;
 }

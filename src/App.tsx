@@ -8,9 +8,12 @@ import { BottomNavigation } from './components/BottomNavigation';
 import LoaderScreen from './components/LoaderScreen';
 import Book from './components/book/Book-v';
 import 'font-awesome/css/font-awesome.min.css';
+import AppHeader from './components/AppHeader';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedCity, setSelectedCity] = useState('gostivar');
+  const [selectedLanguage, setSelectedLanguage] = useState('sq');
 
   React.useEffect(() => {
     // Force scroll to top and prevent default scroll restoration
@@ -33,8 +36,21 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
+      <AppHeader 
+        selectedCity={selectedCity} 
+        onCityChange={setSelectedCity}
+        selectedLanguage={selectedLanguage}
+        onLanguageChange={setSelectedLanguage}
+      />
       <Routes>
-        <Route path="/" element={<RamadanCountdown />} />
+        <Route path="/" element={
+          <RamadanCountdown 
+            selectedCity={selectedCity} 
+            onCityChange={setSelectedCity}
+            selectedLanguage={selectedLanguage}
+            onLanguageChange={setSelectedLanguage}
+          />
+        } />
         <Route path="/duah-v" element={<DuahV />} />
         <Route path="/goals" element={<GoalsTracker />} />
         <Route path="/book-v" element={<Book />} />

@@ -1,0 +1,72 @@
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent);
+}
+
+.header-left {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.header-right {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-logo {
+  width: auto;
+  height: 40px;
+  fill: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  animation: logoFloat 4s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+  }
+  50% {
+    transform: translateY(-3px) scale(1.02);
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.3));
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    padding: 12px 0;
+  }
+
+  .header-left {
+    min-width: 120px;
+    padding-left: 12px;
+  }
+
+  .header-right {
+    min-width: 120px;
+    padding-right: 12px;
+  }
+
+  .app-logo {
+    height: 32px;
+  }
+} 

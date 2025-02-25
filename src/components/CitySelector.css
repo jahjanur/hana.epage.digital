@@ -13,6 +13,7 @@
   padding: 6px 12px;
   border-radius: 10px;
   color: white;
+  left: 10px;
   cursor: pointer;
   font-size: 0.85rem;
   backdrop-filter: blur(10px);
@@ -150,9 +151,8 @@
 /* Mobile Optimization */
 @media (max-width: 480px) {
   .city-selector {
-    position: relative;
-    display: inline-block;
-    margin-top: 8px;
+
+    margin-lef: -330px;
   }
 
   .city-button {

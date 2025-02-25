@@ -11,7 +11,19 @@ import Background from './Background';
 import CitySelector from './CitySelector';
 import { getCityPrayerTimes } from '../data/prayerTimes';
 
-const RamadanCountdown: React.FC = () => {
+interface RamadanCountdownProps {
+  selectedCity: string;
+  onCityChange: (cityId: string) => void;
+  selectedLanguage: string;
+  onLanguageChange: (lang: string) => void;
+}
+
+const RamadanCountdown: React.FC<RamadanCountdownProps> = ({ 
+  selectedCity, 
+  onCityChange,
+  selectedLanguage,
+  onLanguageChange 
+}) => {
 
   const [greenProgress, setGreenProgress] = useState<number>(0);
   const [redProgress, setRedProgress] = useState<number>(0);
@@ -36,7 +48,6 @@ const RamadanCountdown: React.FC = () => {
   const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
   const [completedProgress, setCompletedProgress] = useState<number>(0);
   const [remainingProgress, setRemainingProgress] = useState<number>(0);
-  const [selectedCity, setSelectedCity] = useState('gostivar');
 
   // Create date objects for comparison
   const getCurrentFajrAndIftar = (now: Date) => {
@@ -302,10 +313,6 @@ const RamadanCountdown: React.FC = () => {
     <div className="ramadan-countdown">
       <div className="countdown-container">
         <Background />
-        <CitySelector 
-          selectedCity={selectedCity}
-          onCityChange={setSelectedCity}
-        />
         <div className="content-wrapper" style={{ position: 'relative', zIndex: 3 }}>
           <AnimatedBackground />
           
