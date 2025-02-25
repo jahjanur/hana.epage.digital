@@ -7,7 +7,7 @@ import { Routes, Route } from 'react-router-dom';
 import { BottomNavigation } from './components/BottomNavigation';
 import LoaderScreen from './components/LoaderScreen';
 import Book from './components/book/Book-v';
-import 'font-awesome/css/font-awesome.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
