@@ -26,7 +26,7 @@ const DuateContent: React.FC = () => {
           <div key={index} className="dua-card">
              <span className="dua-time">{dua.time}</span>
             <p className="dua-arabic">{dua.arabic}</p>
-            <p className="dua-transliteration">{dua.transliteration}</p>
+            {/* <p className="dua-transliteration">{dua.transliteration}</p> */}
             <p className="dua-translation">{dua.translation}</p>
            
           </div>
