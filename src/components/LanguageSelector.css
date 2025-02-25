@@ -91,10 +91,11 @@
 }
 
 @media (max-width: 480px) {
-  .language-button {
-    padding: 5px 10px;
-    font-size: 0.8rem;
-  }
+    .language-button {
+        font-size: 0.8rem;
+         margin-right: 10px; 
+    }
+
 
   .language-icon {
     font-size: 0.9rem;

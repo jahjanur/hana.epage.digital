@@ -13,7 +13,6 @@
   padding: 6px 12px;
   border-radius: 10px;
   color: white;
-  left: 10px;
   cursor: pointer;
   font-size: 0.85rem;
   backdrop-filter: blur(10px);
@@ -52,7 +51,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 8px;
-  min-width: 200px;
+  min-width: 400px;
   backdrop-filter: blur(10px);
   animation: slideIn 0.2s ease;
   z-index: 1000;
@@ -151,8 +150,9 @@
 /* Mobile Optimization */
 @media (max-width: 480px) {
   .city-selector {
-
-    margin-lef: -330px;
+    position: relative;
+    display: inline-block;
+    margin-top: 8px;
   }
 
   .city-button {

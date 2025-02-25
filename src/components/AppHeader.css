@@ -37,23 +37,15 @@
   height: 40px;
   fill: white;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-  animation: logoFloat 4s ease-in-out infinite;
+
 }
 
-@keyframes logoFloat {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
-  }
-  50% {
-    transform: translateY(-3px) scale(1.02);
-    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.3));
-  }
-}
+
 
 @media (max-width: 480px) {
   .app-header {
     padding: 12px 0;
+    
   }
 
   .header-left {
@@ -68,5 +60,6 @@
 
   .app-logo {
     height: 32px;
+    margin-left: -10px;
   }
 } 

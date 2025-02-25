@@ -25,4 +25,4 @@ const YourMainComponent: React.FC = () => {
     );
 };
 
-export default YourMainComponent; 
+export default YourMainComponent;

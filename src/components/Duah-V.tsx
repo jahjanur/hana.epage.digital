@@ -40,7 +40,10 @@ const DuahV: React.FC = () => {
   if (isLoading) {
     return (
       <div className="duah-v-container">
-        <div className="loading">Loading...</div>
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <span>Loading duas...</span>
+        </div>
       </div>
     );
   }
@@ -48,7 +51,11 @@ const DuahV: React.FC = () => {
   if (error) {
     return (
       <div className="duah-v-container">
-        <div className="error">{error}</div>
+        <div className="error-message">
+          <span>⚠️</span>
+          <p>{error}</p>
+          <button onClick={() => window.location.reload()}>Try Again</button>
+        </div>
       </div>
     );
   }
@@ -56,8 +63,11 @@ const DuahV: React.FC = () => {
   if (selectedDua) {
     return (
       <div className="duah-v-container">
+        <button className="back-button" onClick={() => setSelectedDua(null)}>
+          <span className="back-icon">←</span>
+          <span className="back-text"></span>
+        </button>
         <div className="duah-header">
-          <button className="back-button" onClick={() => setSelectedDua(null)}>←</button>
           <h1>{selectedDua.title}</h1>
         </div>
         <div className="dua-detail">
@@ -75,32 +85,42 @@ const DuahV: React.FC = () => {
 
   return (
     <div className="duah-v-container">
-      <div className="duah-header">
-        <h1>Duas</h1>
+      <div className="duah-header main-header">
+        <h1>Duas Collection</h1>
         <button 
-          className="search-button" 
+          className="search-toggle" 
           onClick={() => setIsSearchVisible(!isSearchVisible)}
+          aria-label="Toggle search"
         >
-          <img src={searchIcon} alt="Search" />
+          <img src={searchIcon} alt="" />
         </button>
       </div>
-      {isSearchVisible && (
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search duas..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
-            autoFocus
-          />
-        </div>
-      )}
-      <div className="duas-list">
+      
+      <div className={`search-wrapper ${isSearchVisible ? 'visible' : ''}`}>
+        <input
+          type="text"
+          placeholder="Search duas..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-input"
+          autoFocus
+        />
+      </div>
+
+      <div className="duas-grid">
         {filteredDuas.map((dua) => (
-          <div key={dua.id} className="dua-item" onClick={() => handleDuaClick(dua)}>
-            <span className="dua-number">{dua.id}</span>
-            <span className="dua-title">{dua.title}</span>
+          <div 
+            key={dua.id} 
+            className="dua-card" 
+            onClick={() => handleDuaClick(dua)}
+          >
+            <div className="dua-card-content">
+              <span className="dua-number">{dua.id}</span>
+              <h2 className="dua-title">{dua.title}</h2>
+              <div className="dua-card-footer">
+                <span className="read-more">Lexo →</span>
+              </div>
+            </div>
           </div>
         ))}
       </div>
@@ -108,4 +128,4 @@ const DuahV: React.FC = () => {
   );
 };
 
-export default DuahV; 
+export default DuahV;

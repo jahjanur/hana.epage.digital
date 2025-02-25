@@ -102,4 +102,4 @@ const DuaDisplay: React.FC<{ currentLanguage: string }> = ({ currentLanguage }) 
   );
 };
 
-export default DuaDisplay; 
+export default DuaDisplay;

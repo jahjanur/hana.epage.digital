@@ -663,8 +663,10 @@
 
 /* Base styling for Laylatul Qadr */
 .schedule-item.laylatul-qadr {
-  background: rgba(234, 179, 8, 0.05);
+  background: rgba(0, 0, 0, 0.733);
+  border-color: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(234, 179, 8, 0.2);
+  color: rgb(0, 0, 0);
 }
 
 /* Special styling for the special night text */
@@ -677,8 +679,8 @@
   border-radius: 4px;
   margin-top: 3px;
   display: inline-block;
-  vertical-align: middle;
-  white-space: nowrap;
+  /* vertical-align: middle; */
+  /* white-space: nowrap; */
 }
 
 /* Mobile-specific adjustments */

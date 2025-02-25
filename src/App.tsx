@@ -5,12 +5,10 @@ import DuahV from './components/Duah-V';
 import GoalsTracker from './components/GoalsTracker';
 import { Routes, Route } from 'react-router-dom';
 import { BottomNavigation } from './components/BottomNavigation';
-import LoaderScreen from './components/LoaderScreen';
 import Book from './components/book/Book-v';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedCity, setSelectedCity] = useState('gostivar');
   const [selectedLanguage, setSelectedLanguage] = useState('sq');
 
@@ -20,18 +18,7 @@ const App: React.FC = () => {
       window.history.scrollRestoration = 'manual';
     }
     window.scrollTo(0, 0);
-
-    // Add a small delay for the loader
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
   }, []);
-
-  if (isLoading) {
-    return <LoaderScreen />;
-  }
 
   return (
     <div className="App">

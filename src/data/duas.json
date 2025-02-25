@@ -2,233 +2,280 @@
   "duas": [
     {
       "id": "01",
-      "title": "When waking up",
+      "title": "Kur zgjohemi",
       "contents": [
         {
           "arabic": ["الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ"],
           "transliteration": ["Alhamdulillahil-ladhi ahyana ba'da ma amatana wa ilaihin-nushur."],
-          "translation": ["All praise is due to Allah who gave us life after causing us to die, and to Him is the resurrection."]
+          "translation": [
+            "Të gjitha lavdërimet i takojnë Allahut, i cili na dha jetë pas na vdiq, dhe tek Ai është ringjallja."
+          ]
         },
         {
-          "arabic": ["لاَ إِلَهَ إِلاَّ اللهُ وَحْدَهُ لاَ شَرِيكَ لَهُ ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ ، سُبْحَانَ اللهِ وَالْحَمْدُ لِلهِ ، وَلاَ إِلَهَ إِلاَّ اللهُ وَاللهُ أَكْبَرُ ، وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللهِ الْعَلِيِّ الْعَظِيمِ رَبِّ اغْفِرْ لِي"],
+          "arabic": ["لاَ إِلَهَ إِلَّا اللهُ وَحْدَهُ لاَ شَرِيكَ لَهُ ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ ، سُبْحَانَ اللهِ وَالْحَمْدُ لِلهِ ، وَلاَ إِلَهَ إِلَّا اللهُ وَاللهُ أَكْبَرُ ، وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللهِ الْعَلِيِّ الْعَظِيمِ رَبِّ اغْفِرْ لِي"],
           "transliteration": ["La ilaha illa l-lahu wahdahu la sharika lahu, lahu-l-mulku wa lahu-l-hamdu, wa huwa ala kulli shay'in qadir. Subhana l-lahi, wa-l-hamdu li-l-lahi, wa la ilaha illa l-lahu, wa l-lahu akbaru, wa la hawla wa la quwwata illa bi-l-lahi-l-'aliyyi-l-'azim. Rabbi ghfir li."],
-          "translation": ["None has the right to be worshipped except Allah, alone without associate, to Him belongs sovereignty and praise and He is over all things wholly capable. How perfect Allah is, and all praise is for Allah, and none has the right to be worshipped except Allah, and Allah is the greatest, and there is no power nor might except with Allah, The Most High, The Supreme. O my Lord forgive me."]
+          "translation": [
+            "Nuk ka zot tjetër përveç Allahut, vetëm Ai, pa asnjë shok, të Tij i takon mbretëria dhe lavdërimi, dhe Ai është mbi çdo gjë i aftë. Si është i përsosur Allahu, dhe të gjitha lavdërimet janë për Allahun, dhe nuk ka zot tjetër përveç Allahut, dhe Allahu është më i madhi, dhe nuk ka fuqi e as forcë përveç me Allahun, të Lartin, të Madhin. O Zoti im, më fal."
+          ]
         },
         {
           "arabic": ["الْحَمْدُ لِلَّهِ الَّذِي عَافَانِي فِي جَسَدِي، وَرَدَّ عَلَيَّ رُوحِي، وَأَذِنَ لِي بِذِكْرِهِ"],
           "transliteration": ["Al hamdu li-l-lahi l-ladhi 'afani fi jasadi wa radda 'alayya ruhi, wa adhina li bi-dhikrihi."],
-          "translation": ["All praise is for Allah who restored to me my health and returned my soul and has allowed me to remember Him."]
+          "translation": [
+            "Të gjitha lavdërimet i takojnë Allahut, i cili më riktheu shëndetin dhe më ktheu shpirtin tim dhe më lejoi të kujtoj Atë."
+          ]
         }
       ]
     },
     {
       "id": "02",
-      "title": "Before sleeping",
+      "title": "Para gjumit",
       "contents": [
         {
           "arabic": ["بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا"],
           "transliteration": ["Bismika Allahumma amutu wa ahya."],
-          "translation": ["In Your name, O Allah, I live and die."]
+          "translation": [
+            "Në emrin Tënd, o Allah, unë jetoj dhe vdes."
+          ]
         }
       ]
     },
     {
       "id": "03",
-      "title": "At the start of prayer (after Takbeer)",
+      "title": "Në fillim të namazit (pas Takbeer)",
       "contents": [
         {
           "arabic": ["سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، وَتَبَارَكَ اسْمُكَ، وَتَعَالَى جَدُّكَ، وَلَا إِلَهَ غَيْرُكَ"],
           "transliteration": ["Subhanak-Allahumma wa bihamdika, wa tabarakasmuka, wa ta'ala jadduka, wa la ilaha ghayruk."],
-          "translation": ["O Allah, You are free from every imperfection; praise be to You. Blessed is Your Name, exalted is Your Majesty, and there is no deity worthy of worship except You."]
+          "translation": [
+            "O Allah, Ti je i lirë nga çdo imperfeksion; lavdërimi të takon Ty.",
+            "Emri Yt është i bekuar, madhështia Jote është e lartë, dhe nuk ka zot tjetër përveç Teje."
+          ]
         }
       ]
     },
     {
       "id": "04",
-      "title": "While bowing in prayer (Ruku)",
+      "title": "Gjatë përkuljes në namaz (Ruku)",
       "contents": [
         {
           "arabic": ["سُبْحَانَ رَبِّيَ الْعَظِيمِ"],
           "transliteration": ["Subhana Rabbiyal Adheem."],
-          "translation": ["Glory is to my Lord, the Most Great."]
+          "translation": [
+            "Lavdi i takon Zotit tim, të Madhit."
+          ]
         }
       ]
     },
     {
       "id": "05",
-      "title": "While prostrating (Sujood)",
+      "title": "Gjatë sexhdes (Sujood)",
       "contents": [
         {
           "arabic": ["سُبْحَانَ رَبِّيَ الْأَعْلَى"],
           "transliteration": ["Subhana Rabbiyal A'la."],
-          "translation": ["Glory is to my Lord, the Most High."]
+          "translation": [
+            "Lavdi i takon Zotit tim, të Lartë."
+          ]
         }
       ]
     },
     {
       "id": "06",
-      "title": "After completing the prayer (Salam)",
+      "title": "Pas përfundimit të namazit (Salam)",
       "contents": [
         {
           "arabic": ["أَسْتَغْفِرُ اللَّهَ، اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ"],
           "transliteration": ["Astaghfirullah (3x), Allahumma antas-Salam wa minkas-Salam, tabarakta ya dhal-jalali wal-ikram."],
-          "translation": ["I seek forgiveness from Allah. O Allah, You are peace, and from You is peace. Blessed are You, O Possessor of glory and honor."]
+          "translation": [
+            "Kërkoj falje nga Allahu.",
+            "O Allah, Ti je paqe, dhe nga Ti është paqja.",
+            "I bekuar je, o Zot i lavdisë dhe nderit."
+          ]
         }
       ]
     },
     {
       "id": "07",
-      "title": "Before eating",
+      "title": "Para ngrënies",
       "contents": [
         {
           "arabic": ["بِسْمِ اللَّهِ وَعَلَى بَرَكَةِ اللَّهِ"],
           "transliteration": ["Bismillah wa 'ala barakatillah."],
-          "translation": ["In the name of Allah and upon the blessings of Allah."]
+          "translation": [
+            "Në emrin e Allahut dhe mbi bekimin e Allahut."
+          ]
         }
       ]
     },
     {
       "id": "08",
-      "title": "After eating",
+      "title": "Pas ngrënies",
       "contents": [
         {
           "arabic": ["الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ"],
           "transliteration": ["Alhamdulillahilladhi at'amana wa saqana wa ja'alana muslimin."],
-          "translation": ["All praise is due to Allah who has fed us and given us drink, and made us Muslims."]
+          "translation": [
+            "Të gjitha lavdërimet i takojnë Allahut, i cili na ushqeu dhe na dha të pijmë, dhe na bëri muslimanë."
+          ]
         }
       ]
     },
     {
       "id": "09",
-      "title": "When leaving the house",
+      "title": "Kur largohemi nga shtëpia",
       "contents": [
         {
           "arabic": ["بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ"],
           "transliteration": ["Bismillah, tawakkaltu 'alallah, la hawla wa la quwwata illa billah."],
-          "translation": ["In the name of Allah, I place my trust in Allah, there is no power nor might except with Allah."]
+          "translation": [
+            "Në emrin e Allahut, unë e vendos besimin tim te Allahu, nuk ka fuqi e as forcë përveç me Allahun."
+          ]
         }
       ]
     },
     {
       "id": "10",
-      "title": "When entering the house",
+      "title": "Kur hyjmë në shtëpi",
       "contents": [
         {
           "arabic": ["بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى رَبِّنَا تَوَكَّلْنَا"],
           "transliteration": ["Bismillahi walajna, wa bismillahi kharajna, wa 'ala rabbina tawakkalna."],
-          "translation": ["In the name of Allah, we enter, and in the name of Allah, we leave, and upon our Lord, we rely."]
+          "translation": [
+            "Në emrin e Allahut, ne hyjmë, dhe në emrin e Allahut, ne dalim, dhe mbi Zotin tonë, ne mbështetemi."
+          ]
         }
       ]
     },
     {
       "id": "11",
-      "title": "Before entering the toilet",
+      "title": "Para hyrjes në tualet",
       "contents": [
         {
           "arabic": ["اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ"],
           "transliteration": ["Allahumma inni a'udhu bika minal-khubuthi wal-khaba'ith."],
-          "translation": ["O Allah, I seek refuge in You from evil and impure beings."]
+          "translation": [
+            "O Allah, kërkoj strehim te Ti nga të këqijat dhe qentë e këqij."
+          ]
         }
       ]
     },
     {
       "id": "12",
-      "title": "After leaving the toilet",
+      "title": "Pas daljes nga tualeti",
       "contents": [
         {
           "arabic": ["غُفْرَانَكَ"],
           "transliteration": ["Ghufranak."],
-          "translation": ["I seek Your forgiveness."]
+          "translation": [
+            "Kërkoj faljen Tënde."
+          ]
         }
       ]
     },
     {
       "id": "13",
-      "title": "For protection from evil and harm",
+      "title": "Për mbrojtje nga e keqja dhe dëmimi",
       "contents": [
         {
           "arabic": ["أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ"],
           "transliteration": ["A'udhu billahi minash-shaytanir-rajim."],
-          "translation": ["I seek refuge in Allah from the accursed devil."]
+          "translation": [
+            "Kërkoj strehim te Allahu nga djalli i mallkuar."
+          ]
         }
       ]
     },
     {
       "id": "14",
-      "title": "For seeking forgiveness (Istighfar)",
+      "title": "Për kërkimin e faljes (Istighfar)",
       "contents": [
         {
           "arabic": ["أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ"],
           "transliteration": ["Astaghfirullahal-ladhi la ilaha illa huwal-hayyul-qayyum wa atubu ilayh."],
-          "translation": ["I seek forgiveness from Allah, there is no deity except Him, the Ever-Living, the Sustainer, and I repent to Him."]
+          "translation": [
+            "Kërkoj falje nga Allahu, nuk ka zot tjetër përveç Tij, Ai është i Gjalli, i Qëndrueshmi, dhe unë pendohem te Ai."
+          ]
         }
       ]
     },
     {
       "id": "15",
-      "title": "For anxiety and sorrow",
+      "title": "Për ankthin dhe trishtimin",
       "contents": [
         {
           "arabic": ["اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ"],
           "transliteration": ["Allahumma inni a'udhu bika minal-hammi wal-hazan, wal-'ajzi wal-kasal, wal-bukhli wal-jubn, wa dala'id-dayni wa ghalabatir-rijal."],
-          "translation": ["O Allah, I seek refuge in You from anxiety and sorrow, from weakness and laziness, from miserliness and cowardice, and from being burdened by debt and overpowered by men."]
+          "translation": [
+            "O Allah, kërkoj strehim te Ti nga ankthi dhe trishtimi, nga dobësia dhe lenia, nga lakmia dhe frika, dhe nga barra e borxheve dhe dominimi i burrave."
+          ]
         }
       ]
     },
     {
       "id": "16",
-      "title": "For seeking guidance (Istikhara before making a decision)",
+      "title": "Për kërkimin e udhëzimit (Istikhara para marrjes së një vendimi)",
       "contents": [
         {
           "arabic": ["اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ، وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ، وَأَسْأَلُكَ مِنْ فَضْلِكَ الْعَظِيمِ"],
           "transliteration": ["Allahumma inni astakhiruka bi 'ilmika, wa astaqdiruka bi qudratika, wa as'aluka min fadhlikal-'azim."],
-          "translation": ["O Allah, I seek guidance from Your knowledge, and I seek power from Your might, and I ask You from Your great bounty."]
+          "translation": [
+            "O Allah, kërkoj udhëzim nga njohuria Jote, dhe kërkoj fuqinë nga fuqia Jote, dhe të kërkoj nga bujaria Jote të madhe."
+          ]
         }
       ]
     },
     {
       "id": "17",
-      "title": "Upon hearing the call to prayer (Athan response)",
+      "title": "Kur dëgjojmë thirrjen për namaz (përgjigja ndaj Athanit)",
       "contents": [
         {
           "arabic": ["أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ"],
           "transliteration": ["Ashhadu alla ilaha illallah, wahdahu la sharika lah, wa ashhadu anna Muhammadan abduhu wa rasooluh."],
-          "translation": ["I bear witness that there is no deity except Allah alone, with no partner, and I bear witness that Muhammad is His servant and Messenger."]
+          "translation": [
+            "Dëshmoj se nuk ka zot tjetër përveç Allahut, vetëm Ai, pa asnjë shok, dhe dëshmoj se Muhamedi është shërbëtori dhe Dërguari i Tij."
+          ]
         }
       ]
     },
     {
       "id": "18",
-      "title": "For seeking sustenance (Rizq)",
+      "title": "Për kërkimin e furnizimit (Rizq)",
       "contents": [
         {
           "arabic": ["اللَّهُمَّ إِنِّي أَسْأَلُكَ رِزْقًا طَيِّبًا، وَعِلْمًا نَافِعًا، وَعَمَلًا مُتَقَبَّلًا"],
           "transliteration": ["Allahumma inni as'aluka rizqan tayyiban, wa 'ilman nafi'an, wa 'amalan mutaqabbalan."],
-          "translation": ["O Allah, I ask You for pure sustenance, beneficial knowledge, and accepted deeds."]
+          "translation": [
+            "O Allah, të kërkoj furnizim të pastër, njohuri të dobishme, dhe vepra të pranuara."
+          ]
         }
       ]
     },
     {
       "id": "19",
-      "title": "For protection from trials and difficulties",
+      "title": "Për mbrojtje nga provat dhe vështirësitë",
       "contents": [
         {
           "arabic": ["اللَّهُمَّ لَا سَهْلَ إِلَّا مَا جَعَلْتَهُ سَهْلًا، وَأَنْتَ تَجْعَلُ الْحَزْنَ إِذَا شِئْتَ سَهْلًا"],
           "transliteration": ["Allahumma la sahla illa ma ja'altahu sahla, wa anta taj'alul-hazna idha shi'ta sahla."],
-          "translation": ["O Allah, there is nothing easy except what You make easy, and You make the difficult easy if You wish."]
+          "translation": [
+            "O Allah, nuk ka asgjë të lehtë përveç asaj që Ti e bën të lehtë, dhe Ti e bën të vështirën të lehtë nëse dëshiron."
+          ]
         }
       ]
     },
     {
       "id": "20",
-      "title": "For protection when traveling",
+      "title": "Për mbrojtje gjatë udhëtimit",
       "contents": [
         {
           "arabic": ["سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ، وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ"],
           "transliteration": ["Subhanal-ladhi sakhkhara lana hadha wa ma kunna lahu muqrinin, wa inna ila rabbina lamunqalibun."],
-          "translation": ["Glory is to Him who has subjected this to us, and we could not have done it on our own, and indeed to our Lord, we will return."]
+          "translation": [
+            "Lavdi i takon Atij që e bëri këtë për ne, dhe ne nuk mund ta bënim vetë, dhe me të vërtetë, ne do të kthehemi te Zoti ynë."
+          ]
         }
       ]
     }
   ]
-} 
+}

@@ -65,4 +65,4 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, onClose, onNavigate }) =
   );
 };
 
-export default StoryModal; 
+export default StoryModal;

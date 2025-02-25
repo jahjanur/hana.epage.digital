@@ -7,12 +7,13 @@
 
 .duate-title {
   color: white;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   text-align: center;
   margin-bottom: 30px;
   font-weight: 600;
   background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.8));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
 }
@@ -62,7 +63,7 @@
 
 .dua-title {
   color: white;
-  font-size: 1.3rem;
+  font-size: 20px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -137,4 +138,4 @@
   .dua-transliteration {
     font-size: 1rem;
   }
-} 
+}
