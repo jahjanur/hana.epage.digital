@@ -16,9 +16,22 @@ import {
   getDoc,
   setDoc,
   DocumentReference,
-  DocumentData 
+  DocumentData,
+  orderBy,
+  limit
 } from 'firebase/firestore';
-import { format } from 'date-fns';
+import { format, subDays } from 'date-fns';
+import { 
+  AreaChart, 
+  Area, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  BarChart,
+  Bar
+} from 'recharts';
 
 const PRAYER_TIMES = [
   { id: 'fajr', label: 'Fajr', icon: <FaPrayingHands /> },
@@ -56,45 +69,63 @@ const GoalsTracker: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   const [selectedPrayerTime, setSelectedPrayerTime] = useState<string | null>(null);
   const [prayedToday, setPrayedToday] = useState<Record<string, boolean>>({});
+  const [chartData, setChartData] = useState<any[]>([]);
 
   const progress = getTodayProgress();
   
-  const chartData = [
-    { name: 'Prayers', value: (progress.prayers / 5) * 100, color: '#00ff87' },
-    { name: 'Taraweeh', value: (progress.taraweeh / 20) * 100, color: '#4a4aff' },
-    { name: 'Quran', value: Math.min((progress.quran / 10) * 100, 100), color: '#ff4a4a' }
-  ];
-
-  // Fetch today's activities when component mounts
+  // Fetch data based on active tab
   useEffect(() => {
-    if (currentUser) {
-      const fetchTodayActivities = async () => {
-        const today = format(new Date(), 'yyyy-MM-dd');
+    if (!currentUser) return;
+
+    const fetchActivityData = async () => {
+      try {
         const activitiesRef = collection(db, 'daily_activities');
-        const q = query(
+        let q = query(
           activitiesRef,
           where('userId', '==', currentUser.uid),
-          where('date', '==', today)
+          orderBy('date', 'desc'), // Changed to DESC order
+          limit(30)
         );
 
         const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const data = querySnapshot.docs[0].data() as DailyActivity;
-          // Update local state with fetched data
-          setPrayedToday({
-            fajr: data.prayers.fajr,
-            dhuhr: data.prayers.dhuhr,
-            asr: data.prayers.asr,
-            maghrib: data.prayers.maghrib,
-            isha: data.prayers.isha
-          });
-          setInputValue(data.quran_progress || 0);
-        }
-      };
+        const data = querySnapshot.docs.map(doc => ({
+          ...doc.data(),
+          id: doc.id
+        })) as (DailyActivity & { id: string })[];
 
-      fetchTodayActivities();
-    }
-  }, [currentUser]);
+        // Filter and sort the data
+        const today = new Date();
+        const startDate = format(
+          activeTab === 'daily' ? today :
+          activeTab === 'weekly' ? subDays(today, 7) :
+          subDays(today, 30),
+          'yyyy-MM-dd'
+        );
+
+        const filteredData = data
+          .filter(item => 
+            item.date >= startDate && 
+            item.date <= format(today, 'yyyy-MM-dd')
+          )
+          .sort((a, b) => a.date.localeCompare(b.date)); // Sort by date ascending
+
+        // Process data for charts with unique keys
+        const processedData = filteredData.map(day => ({
+          id: day.id, // Add unique ID for React keys
+          date: format(new Date(day.date), 'MMM dd'),
+          prayers: Object.values(day.prayers).filter(Boolean).length,
+          taraweeh: day.taraweeh ? 1 : 0,
+          quran: day.quran_progress || 0
+        }));
+
+        setChartData(processedData);
+      } catch (error) {
+        console.error('Error fetching activity data:', error);
+      }
+    };
+
+    fetchActivityData();
+  }, [activeTab, currentUser]);
 
   const handleSignIn = async () => {
     try {
@@ -337,88 +368,68 @@ const GoalsTracker: React.FC = () => {
             </motion.button>
           </div>
 
-          <div className="goals-grid">
-            <motion.div 
-              className="progress-section"
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              <div className="progress-rings">
-                {chartData.map((item, index) => (
-                  <motion.div 
-                    key={item.name}
-                    className="progress-item"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: index * 0.1 }}
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <CircularProgressWithLabel
-                      value={item.value}
-                      label={item.name}
-                      icon={
-                        item.name === 'Prayers' ? <FaPrayingHands /> :
-                        item.name === 'Taraweeh' ? <FaMosque /> :
-                        <FaQuran />
-                      }
-                      color={item.color}
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+          <div className="charts-container">
+            {/* Prayer Progress Chart */}
+            <div className="chart-card">
+              <h3>Prayer Progress</h3>
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis domain={[0, 5]} />
+                  <Tooltip />
+                  <Bar 
+                    dataKey="prayers" 
+                    fill="#00ff87" 
+                    name="Prayers"
+                    isAnimationActive={false} // Disable animation to prevent key warnings
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
 
-            <motion.div 
-              className="activity-section"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              <h2>Recent Activities</h2>
-              <div className="activity-list">
-                {goals.slice(-5).reverse().map((goal, index) => (
-                  <motion.div 
-                    key={index}
-                    className="activity-item"
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <div className="activity-icon">
-                      {goal.type === 'prayer' ? <FaPrayingHands /> :
-                       goal.type === 'taraweeh' ? <FaMosque /> :
-                       <FaQuran />}
-                    </div>
-                    <div className="activity-details">
-                      <span className="activity-type">
-                        {goal.type.charAt(0).toUpperCase() + goal.type.slice(1)}
-                      </span>
-                      <span className="activity-value">
-                        {goal.value} {goal.type === 'quran' ? 'pages' : 'rakats'}
-                      </span>
-                    </div>
-                    <span className="activity-time">
-                      {new Date(goal.date).toLocaleTimeString([], { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                      })}
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+            {/* Quran Progress Chart */}
+            <div className="chart-card">
+              <h3>Quran Pages Read</h3>
+              <ResponsiveContainer width="100%" height={200}>
+                <AreaChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Area 
+                    type="monotone" 
+                    dataKey="quran" 
+                    stroke="#ff4a4a" 
+                    fill="#ff4a4a" 
+                    fillOpacity={0.3}
+                    name="Pages"
+                    isAnimationActive={false}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Taraweeh Progress Chart */}
+            <div className="chart-card">
+              <h3>Taraweeh Completion</h3>
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis domain={[0, 1]} />
+                  <Tooltip />
+                  <Bar 
+                    dataKey="taraweeh" 
+                    fill="#4a4aff" 
+                    name="Completed"
+                    radius={[4, 4, 0, 0]}
+                    isAnimationActive={false}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-
-          <motion.button
-            className="add-activity-btn"
-            onClick={() => setIsModalOpen(true)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <IoAddOutline size={24} />
-            Add New Activity
-          </motion.button>
 
           <AnimatePresence>
             {isModalOpen && (
