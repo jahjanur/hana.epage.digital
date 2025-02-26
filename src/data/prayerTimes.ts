@@ -235,27 +235,63 @@ const adjustTime = (time: string, minutes: number): string => {
 
 // Function to get prayer times for a specific city
 export const getCityPrayerTimes = (cityId: string, date: string): PrayerTime | null => {
-  let baseTime;
+  
+   // Check which country's data to use
+   const isKosovoCity = Object.keys(kosovoCityAdjustments).includes(cityId);
+   const isSwissCity = Object.keys(swissCityAdjustments).includes(cityId);
+   const isAustrianCity = Object.keys(austriaCityAdjustments).includes(cityId); // Check for Austrian cities
+   const isGermanCity = Object.keys(germanCityAdjustments).includes(cityId); // Check for German cities
+   
+   // Get base times from the appropriate country or city
+   let baseTime;
+   
+   // Handle Austrian cities with direct times
+   if (isAustrianCity) {
+   baseTime = austriaRamadanTimes.find(day => day.date === date);
+   } else if (isGermanCity) {
+   baseTime = berlinRamadanTimes.find(day => day.date === date);
+   } else if (isKosovoCity) {
+   baseTime = kosovoRamadanTimes.find(day => day.date === date);
+   } else if (isSwissCity) {
+   baseTime = swissRamadanTimes.find(day => day.date === date);
+   } else {
+   baseTime = ramadanTimes.find(day => day.date === date);
+   }
+   
+   if (!baseTime) return null;
+   
+   // For cities with direct times
+   if (isAustrianCity || isGermanCity) {
+   return {
+   fajr: baseTime.fajr,
+   dhuhr: baseTime.dhuhr,
+   asr: baseTime.asr,
+   maghrib: baseTime.maghrib,
+   isha: baseTime.isha,
+   };
+   }
+   
+   // For cities that still use adjustments
+   const cityAdj = isKosovoCity ? kosovoCityAdjustments[cityId] :
+   isSwissCity ? swissCityAdjustments[cityId] :
+   cityAdjustments[cityId];
+   
+   if (!cityAdj) return null;
+   
+   return {
+   fajr: adjustTime(baseTime.fajr, cityAdj.adjustment.fajr),
+   dhuhr: adjustTime(baseTime.dhuhr, cityAdj.adjustment.dhuhr),
+   asr: adjustTime(baseTime.asr, cityAdj.adjustment.asr),
+   maghrib: adjustTime(baseTime.maghrib, cityAdj.adjustment.maghrib),
+   isha: adjustTime(baseTime.isha, cityAdj.adjustment.isha),
+   }
+}
+ 
+   
 
-  if (cityId === 'berlin') {
-    baseTime = berlinRamadanTimes.find(day => day.date === date);
-  } else if (cityId === 'hamburg') {
-    baseTime = hamburgRamadanTimes.find(day => day.date === date);
-  } else if (cityId === 'frankfurt') {
-    baseTime = frankfurtRamadanTimes.find(day => day.date === date);
-  }
-  // Add more conditions for other cities...
 
-  if (!baseTime) return null;
 
-  return {
-    fajr: baseTime.fajr,
-    dhuhr: baseTime.dhuhr,
-    asr: baseTime.asr,
-    maghrib: baseTime.maghrib,
-    isha: baseTime.isha,
-  };
-};
+ 
 
 // Base times for Austria (Vienna as reference)
 export const austriaRamadanTimes = [
@@ -1779,3 +1815,4 @@ export const nuernbergRamadanTimes = [
   { "date": "2025-03-28", "weekday": "E Diel", "fajr": "04:11", "dhuhr": "12:26", "asr": "15:54", "maghrib": "18:47", "isha": "20:17" },
   { "date": "2025-03-29", "weekday": "E Hënë", "fajr": "04:08", "dhuhr": "12:26", "asr": "15:54", "maghrib": "18:49", "isha": "20:19" }
 ];
+
