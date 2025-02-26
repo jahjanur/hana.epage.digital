@@ -71,6 +71,19 @@ interface ChartDataPoint {
   quran: number;
 }
 
+interface ActivityData {
+  email: string;
+  date: string;
+  lastUpdated: Date;
+  fajr?: number;
+  dhuhr?: number;
+  asr?: number;
+  maghrib?: number;
+  isha?: number;
+  taraweeh?: number;
+  quran?: number;
+}
+
 const selectedStyle = {
   background: 'rgba(74, 74, 255, 0.1)',
   borderColor: '#4a4aff'
@@ -83,6 +96,15 @@ const completedStyle = {
   cursor: 'not-allowed' as const
 };
 
+interface PrayerStatus {
+  fajr: boolean;
+  dhuhr: boolean;
+  asr: boolean;
+  maghrib: boolean;
+  isha: boolean;
+  taraweeh: boolean;
+}
+
 const GoalsTracker: React.FC = () => {
   const { 
     getTodayProgress, 
@@ -94,7 +116,14 @@ const GoalsTracker: React.FC = () => {
   const [selectedType, setSelectedType] = useState<'prayer' | 'taraweeh' | 'quran' | null>(null);
   const [inputValue, setInputValue] = useState(0);
   const [activeTab, setActiveTab] = useState<'daily' | 'weekly' | 'monthly'>('daily');
-  const [prayedToday, setPrayedToday] = useState<Record<string, boolean>>({});
+  const [prayedToday, setPrayedToday] = useState<PrayerStatus>({
+    fajr: false,
+    dhuhr: false,
+    asr: false,
+    maghrib: false,
+    isha: false,
+    taraweeh: false
+  });
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [selectedPrayerTimes, setSelectedPrayerTimes] = useState<Set<PrayerTime>>(new Set());
   const [isLoading, setIsLoading] = useState(false);
@@ -102,27 +131,54 @@ const GoalsTracker: React.FC = () => {
   const [email, setEmail] = useState('');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchTodayProgress = async () => {
-      try {
-        const progress = await getTodayProgress();
-        setPrayedToday({
-          fajr: progress.prayers.fajr,
-          dhuhr: progress.prayers.dhuhr,
-          asr: progress.prayers.asr,
-          maghrib: progress.prayers.maghrib,
-          isha: progress.prayers.isha,
-          taraweeh: progress.taraweeh
-        });
-      } catch (error) {
-        console.error('Error fetching today\'s progress:', error);
-      }
-    };
+  const fetchTodayProgress = useCallback(async () => {
+    if (!currentUser) return;
 
+    try {
+      const today = format(new Date(), 'yyyy-MM-dd');
+      const activityRef = doc(db, 'daily_activities', `${currentUser.email}_${today}`);
+      const docSnap = await getDoc(activityRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setPrayedToday({
+          fajr: data.fajr === 1,
+          dhuhr: data.dhuhr === 1,
+          asr: data.asr === 1,
+          maghrib: data.maghrib === 1,
+          isha: data.isha === 1,
+          taraweeh: data.taraweeh === 1
+        });
+
+        setChartData(prevData => {
+          const updatedData = [...prevData];
+          const todayIndex = updatedData.findIndex(item => item.rawDate === today);
+          
+          if (todayIndex >= 0) {
+            updatedData[todayIndex] = {
+              ...updatedData[todayIndex],
+              fajr: data.fajr || 0,
+              dhuhr: data.dhuhr || 0,
+              asr: data.asr || 0,
+              maghrib: data.maghrib || 0,
+              isha: data.isha || 0,
+              taraweeh: data.taraweeh || 0
+            };
+          }
+          
+          return updatedData;
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching today\'s progress:', error);
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
     if (currentUser) {
       fetchTodayProgress();
     }
-  }, [currentUser, getTodayProgress]);
+  }, [currentUser, fetchTodayProgress]);
 
   const fetchActivityData = useCallback(async () => {
     if (!currentUser) return;
@@ -251,134 +307,70 @@ const GoalsTracker: React.FC = () => {
   };
 
   const handlePrayerTimeToggle = (prayerId: PrayerTime) => {
-    if (prayedToday[prayerId]) {
-      return;
+    if (prayedToday[prayerId as keyof PrayerStatus]) {
+      return; // Prevent clicking again if already submitted
     }
-
-    if (selectedPrayerTimes.has(prayerId)) {
-      return;
-    }
-
+  
     setSelectedPrayerTimes(prev => {
       const newSet = new Set(prev);
-      newSet.add(prayerId);
+      if (newSet.has(prayerId)) {
+        newSet.delete(prayerId); // Allow unselecting if not submitted
+      } else {
+        newSet.add(prayerId);
+      }
       return newSet;
     });
   };
 
   const handleAddActivity = async () => {
-    if (!currentUser) {
-      console.error('No current user found');
-      return;
-    }
+    if (!currentUser) return;
 
     try {
       const today = format(new Date(), 'yyyy-MM-dd');
-      const activityId = `${currentUser.email.replace(/\./g, '_')}_${today}`;
-
-      const activityRef = doc(db, 'daily_activities', activityId);
+      const activityRef = doc(db, 'daily_activities', `${currentUser.email}_${today}`);
       const docSnap = await getDoc(activityRef);
-      const existingData = docSnap.exists() ? docSnap.data() : null;
+      const existingData = docSnap.exists() ? docSnap.data() : {};
 
-      const baseData = {
+      const newData: ActivityData = {
+        ...existingData,
         email: currentUser.email,
         date: today,
-        fajr: existingData?.fajr || 0,
-        dhuhr: existingData?.dhuhr || 0,
-        asr: existingData?.asr || 0,
-        maghrib: existingData?.maghrib || 0,
-        isha: existingData?.isha || 0,
-        taraweeh: existingData?.taraweeh || 0,
-        quran: existingData?.quran || 0,
-        lastUpdated: new Date()
-      };
-
-      const newData = {
-        ...baseData,
         lastUpdated: new Date()
       };
 
       if (selectedType === 'prayer') {
-        selectedPrayerTimes.forEach(prayer => {
-          switch(prayer) {
-            case 'fajr':
-              newData.fajr = 1;
-              break;
-            case 'dhuhr':
-              newData.dhuhr = 1;
-              break;
-            case 'asr':
-              newData.asr = 1;
-              break;
-            case 'maghrib':
-              newData.maghrib = 1;
-              break;
-            case 'isha':
-              newData.isha = 1;
-              break;
-          }
+        selectedPrayerTimes.forEach((prayer) => {
+          newData[prayer as keyof Pick<ActivityData, 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'>] = 1;
         });
-        
-        // Immediately update local state to show completed prayers
-        setChartData(prevData => prevData.map(item => {
-          if (item.rawDate === today) {
-            return {
-              ...item,
-              ...Array.from(selectedPrayerTimes).reduce((acc: Record<string, number>, prayer: string) => ({
-                ...acc,
-                [prayer]: 1
-              }), {})
-            };
-          }
-          return item;
+
+        setPrayedToday(prev => ({
+          ...prev,
+          ...Array.from(selectedPrayerTimes).reduce((acc, prayer) => ({
+            ...acc,
+            [prayer]: true
+          }), {})
         }));
       } else if (selectedType === 'taraweeh') {
         newData.taraweeh = 1;
-        
-        // Update the chart data immediately to show completed taraweeh
-        setChartData(prev => prev.map(item => {
-          if (item.rawDate === today) {
-            return {
-              ...item,
-              taraweeh: 1 // This ensures the taraweeh property is a boolean
-            };
-          }
-          return item;
-        }));
-
-        // Update prayedToday state to reflect taraweeh completion
-        setPrayedToday(prev => ({
-          ...prev,
-          taraweeh: true
-        }));
-
-        // Close modal and reset states
-        setIsModalOpen(false);
-        setSelectedType(null);
-        setInputValue(0);
       } else if (selectedType === 'quran') {
         newData.quran = Math.min(inputValue, 100);
       }
 
       await setDoc(activityRef, newData, { merge: true });
-      console.log('Activity saved successfully');
 
-      setSuccessMessage('Activity saved successfully!');
+      setSuccessMessage('Activity saved successfully');
       setTimeout(() => setSuccessMessage(null), 3000);
 
-      // Close modal and reset states
       setIsModalOpen(false);
       setSelectedType(null);
-      setInputValue(0);
       setSelectedPrayerTimes(new Set());
-      setError(null);
+      setInputValue(0);
 
-      // Refresh data
-      await fetchActivityData();
+      await fetchTodayProgress();
 
     } catch (error) {
-      console.error('Error adding activity:', error);
-      setError('Failed to add activity. Please try again.');
+      console.error('Error saving activity:', error);
+      setError('Failed to save activity');
     }
   };
 
@@ -468,7 +460,7 @@ const GoalsTracker: React.FC = () => {
           )}
           
           <motion.h1 className="goals-title">
-            Welcome, {currentUser?.email?.split('@')[0] || 'User'}
+            Welcome, {currentUser?.email?.split('@')[0] || 'User'} 
           </motion.h1>
 
           <div className="activity-buttons">
@@ -485,7 +477,7 @@ const GoalsTracker: React.FC = () => {
               <span>Daily Prayers</span>
               {Object.values(prayedToday).filter(Boolean).length > 0 && (
                 <div className="completion-badge">
-                  {Object.values(prayedToday).filter(Boolean).length}/5
+                  {Object.values(prayedToday).filter(Boolean).length}/6
                 </div>
               )}
             </motion.button>
@@ -615,16 +607,21 @@ const GoalsTracker: React.FC = () => {
                     verticalAlign="top"
                     height={36}
                   />
-                  {PRAYER_TIMES.map((prayer) => (
-                    <Bar 
-                      key={prayer.id}
-                      dataKey={prayer.id}
-                      name={prayer.label}
-                      stackId="prayers"
-                      fill={`url(#${prayer.id}Gradient)`}
-                      radius={[4, 4, 0, 0]}
-                    />
-                  ))}
+                  {PRAYER_TIMES.map((prayer) => {
+                    const isPrayed = prayedToday[prayer.id as keyof PrayerStatus];
+                    const isSelected = selectedPrayerTimes.has(prayer.id as PrayerTime);
+                    
+                    return (
+                      <Bar 
+                        key={prayer.id}
+                        dataKey={prayer.id}
+                        name={prayer.label}
+                        stackId="prayers"
+                        fill={`url(#${prayer.id}Gradient)`}
+                        radius={[4, 4, 0, 0]}
+                      />
+                    );
+                  })}
                   <Bar 
                     dataKey="taraweeh"
                     name="Taraweeh"
@@ -715,8 +712,8 @@ const GoalsTracker: React.FC = () => {
                     <div className="prayer-times">
                       <div className="prayer-options">
                         {PRAYER_TIMES.map((prayer) => {
-                          const isPrayed = prayedToday[prayer.id];
-                          const isSelected = selectedPrayerTimes.has(prayer.id);
+                          const isPrayed = prayedToday[prayer.id as keyof PrayerStatus];
+                          const isSelected = selectedPrayerTimes.has(prayer.id as PrayerTime);
                           
                           return (
                             <motion.button
@@ -725,16 +722,10 @@ const GoalsTracker: React.FC = () => {
                               onClick={() => handlePrayerTimeToggle(prayer.id as PrayerTime)}
                               disabled={isPrayed}
                               style={isPrayed ? completedStyle : isSelected ? selectedStyle : {}}
-                              whileHover={!isPrayed ? { scale: 1.02 } : {}}
-                              whileTap={!isPrayed ? { scale: 0.98 } : {}}
                             >
                               {prayer.icon}
                               <span>{prayer.label}</span>
-                              {isPrayed ? (
-                                <span className="completed-badge">✓ Completed</span>
-                              ) : isSelected ? (
-                                <span className="selected-badge">Selected</span>
-                              ) : null}
+                              {isPrayed && <span className="completed-badge">✓ Completed</span>}
                             </motion.button>
                           );
                         })}
