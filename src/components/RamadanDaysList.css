@@ -1352,8 +1352,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  width: 80%;
-  height: 80%;
+  width: 272px;  /* 312px - 2 * 20px padding */
+  height: 272px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1454,6 +1454,11 @@
   .countdown-label {
     font-size: 0.9rem;
   }
+
+  .countdown-content {
+    width: 220px;
+    height: 220px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1474,6 +1479,11 @@
   .countdown-label {
     font-size: 0.8rem;
     letter-spacing: 1.5px;
+  }
+
+  .countdown-content {
+    width: 202px;
+    height: 202px;
   }
 }
 

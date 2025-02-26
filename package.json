@@ -67,5 +67,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/date-fns": "^2.5.3",
+    "@types/firebase": "^2.4.32",
+    "@types/recharts": "^1.8.29"
   }
 }

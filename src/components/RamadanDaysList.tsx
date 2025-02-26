@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaPrayingHands, FaMosque, FaQuran } from 'react-icons/fa';
 import { CircularProgressWithLabel } from './CircularProgressWithLabel';
+import { useLanguage } from '../contexts/LanguageContext';
 
 
 interface RamadanDay {

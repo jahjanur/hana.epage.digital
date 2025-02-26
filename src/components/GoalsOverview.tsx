@@ -1,14 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useGoals } from '../contexts/GoalsContext';
 import { FaPrayingHands, FaMosque, FaQuran } from 'react-icons/fa';
 import { CircularProgressWithLabel } from './CircularProgressWithLabel';
 import { useNavigate } from 'react-router-dom';
 
+interface Progress {
+  prayers: {
+    fajr: boolean;
+    dhuhr: boolean;
+    asr: boolean;
+    maghrib: boolean;
+    isha: boolean;
+  };
+  taraweeh: boolean;
+  quran: number;
+}
+
 const GoalsOverview: React.FC = () => {
   const { goals, isAuthenticated, getTodayProgress } = useGoals();
   const navigate = useNavigate();
-  const progress = getTodayProgress();
+  const [progress, setProgress] = useState<Progress>({
+    prayers: {
+      fajr: false,
+      dhuhr: false,
+      asr: false,
+      maghrib: false,
+      isha: false
+    },
+    taraweeh: false,
+    quran: 0
+  });
+
+  useEffect(() => {
+    const fetchProgress = async () => {
+      try {
+        const todayProgress = await getTodayProgress();
+        setProgress(todayProgress);
+      } catch (error) {
+        console.error('Error fetching progress:', error);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchProgress();
+    }
+  }, [isAuthenticated, getTodayProgress]);
 
   if (!isAuthenticated) {
     return (
@@ -49,6 +86,8 @@ const GoalsOverview: React.FC = () => {
     );
   }
 
+  const completedPrayers = Object.values(progress.prayers).filter(Boolean).length;
+
   return (
     <motion.div 
       className="goals-overview"
@@ -58,14 +97,14 @@ const GoalsOverview: React.FC = () => {
       <div className="progress-items">
         <div className="progress-item">
           <CircularProgressWithLabel
-            value={(progress.prayers / 5) * 100}
+            value={(completedPrayers / 5) * 100}
             label="Prayers"
             icon={<FaPrayingHands />}
           />
         </div>
         <div className="progress-item">
           <CircularProgressWithLabel
-            value={(progress.taraweeh / 20) * 100}
+            value={progress.taraweeh ? 100 : 0}
             label="Taraweeh"
             icon={<FaMosque />}
           />

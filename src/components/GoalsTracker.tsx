@@ -48,15 +48,27 @@ const PRAYER_TIMES = [
 type PrayerTime = typeof PRAYER_TIMES[number]['id'];
 
 interface DailyActivity {
-  userId: string;
+  id?: string;
   date: string;
-  prayers: {
-    [K in typeof PRAYER_TIMES[number]['id']]: boolean;
-  };
-  quran_progress: number;
-  taraweeh: boolean;
-  createdAt: any;
-  lastUpdated: any;
+  fajr: number;
+  dhuhr: number;
+  asr: number;
+  maghrib: number;
+  isha: number;
+  taraweeh: number;
+  quran: number;
+}
+
+interface ChartDataPoint {
+  date: string;
+  rawDate: string;
+  fajr: number;
+  dhuhr: number;
+  asr: number;
+  maghrib: number;
+  isha: number;
+  taraweeh: number;
+  quran: number;
 }
 
 const selectedStyle = {
@@ -83,12 +95,34 @@ const GoalsTracker: React.FC = () => {
   const [inputValue, setInputValue] = useState(0);
   const [activeTab, setActiveTab] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   const [prayedToday, setPrayedToday] = useState<Record<string, boolean>>({});
-  const [chartData, setChartData] = useState<any[]>([]);
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [selectedPrayerTimes, setSelectedPrayerTimes] = useState<Set<PrayerTime>>(new Set());
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTodayProgress = async () => {
+      try {
+        const progress = await getTodayProgress();
+        setPrayedToday({
+          fajr: progress.prayers.fajr,
+          dhuhr: progress.prayers.dhuhr,
+          asr: progress.prayers.asr,
+          maghrib: progress.prayers.maghrib,
+          isha: progress.prayers.isha,
+          taraweeh: progress.taraweeh
+        });
+      } catch (error) {
+        console.error('Error fetching today\'s progress:', error);
+      }
+    };
+
+    if (currentUser) {
+      fetchTodayProgress();
+    }
+  }, [currentUser, getTodayProgress]);
 
   const fetchActivityData = useCallback(async () => {
     if (!currentUser) return;
@@ -133,29 +167,30 @@ const GoalsTracker: React.FC = () => {
         return;
       }
 
-      const data = querySnapshot.docs.map(doc => ({
+      const data = querySnapshot.docs.map((doc: any) => ({
         ...doc.data() as DailyActivity,
         id: doc.id
       }));
 
       const processedData = data
-        .sort((a, b) => a.date.localeCompare(b.date))
-        .map(day => ({
+        .sort((a: DailyActivity, b: DailyActivity) => a.date.localeCompare(b.date))
+        .map((day: DailyActivity) => ({
           date: format(new Date(day.date), 
             activeTab === 'daily' ? 'HH:mm' : 
             activeTab === 'weekly' ? 'EEE dd MMM' : 
-            'MMM dd'
+            'dd MMM yyyy'
           ),
-          fajr: day.prayers?.fajr ? 1 : 0,
-          dhuhr: day.prayers?.dhuhr ? 1 : 0,
-          asr: day.prayers?.asr ? 1 : 0,
-          maghrib: day.prayers?.maghrib ? 1 : 0,
-          isha: day.prayers?.isha ? 1 : 0,
-          taraweeh: day.taraweeh ? 1 : 0,
+          fajr: day.fajr,
+          dhuhr: day.dhuhr,
+          asr: day.asr,
+          maghrib: day.maghrib,
+          isha: day.isha,
+          taraweeh: day.taraweeh,
+          quran: day.quran,
           rawDate: day.date
         }));
 
-      const todayData = processedData.find(day => day.date === format(new Date(), 'HH:mm'));
+      const todayData = processedData.find((day: { date: string }) => day.date === format(new Date(), 'HH:mm'));
       const verticalChartData = [
         { name: 'Fajr', value: todayData?.fajr },
         { name: 'Dhuhr', value: todayData?.dhuhr },
@@ -248,17 +283,13 @@ const GoalsTracker: React.FC = () => {
       const baseData = {
         email: currentUser.email,
         date: today,
-        prayers: {
-          ...existingData?.prayers || {
-            fajr: false,
-            dhuhr: false,
-            asr: false,
-            maghrib: false,
-            isha: false
-          }
-        },
-        quran_progress: existingData?.quran_progress || 0,
-        taraweeh: existingData?.taraweeh || false,
+        fajr: existingData?.fajr || 0,
+        dhuhr: existingData?.dhuhr || 0,
+        asr: existingData?.asr || 0,
+        maghrib: existingData?.maghrib || 0,
+        isha: existingData?.isha || 0,
+        taraweeh: existingData?.taraweeh || 0,
+        quran: existingData?.quran || 0,
         lastUpdated: new Date()
       };
 
@@ -269,22 +300,47 @@ const GoalsTracker: React.FC = () => {
 
       if (selectedType === 'prayer') {
         selectedPrayerTimes.forEach(prayer => {
-          newData.prayers[prayer as keyof typeof newData.prayers] = true;
+          switch(prayer) {
+            case 'fajr':
+              newData.fajr = 1;
+              break;
+            case 'dhuhr':
+              newData.dhuhr = 1;
+              break;
+            case 'asr':
+              newData.asr = 1;
+              break;
+            case 'maghrib':
+              newData.maghrib = 1;
+              break;
+            case 'isha':
+              newData.isha = 1;
+              break;
+          }
         });
+        
         // Immediately update local state to show completed prayers
-        setPrayedToday(prev => ({
-          ...prev,
-          ...newData.prayers
+        setChartData(prevData => prevData.map(item => {
+          if (item.rawDate === today) {
+            return {
+              ...item,
+              ...Array.from(selectedPrayerTimes).reduce((acc: Record<string, number>, prayer: string) => ({
+                ...acc,
+                [prayer]: 1
+              }), {})
+            };
+          }
+          return item;
         }));
       } else if (selectedType === 'taraweeh') {
-        newData.taraweeh = true;
+        newData.taraweeh = 1;
         
         // Update the chart data immediately to show completed taraweeh
         setChartData(prev => prev.map(item => {
           if (item.rawDate === today) {
             return {
               ...item,
-              taraweeh: true // This ensures the taraweeh property is a boolean
+              taraweeh: 1 // This ensures the taraweeh property is a boolean
             };
           }
           return item;
@@ -301,7 +357,7 @@ const GoalsTracker: React.FC = () => {
         setSelectedType(null);
         setInputValue(0);
       } else if (selectedType === 'quran') {
-        newData.quran_progress = Math.min(inputValue, 100);
+        newData.quran = Math.min(inputValue, 100);
       }
 
       await setDoc(activityRef, newData, { merge: true });
@@ -539,7 +595,7 @@ const GoalsTracker: React.FC = () => {
                     domain={[0, 6]}
                     tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 12 }}
                     axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
-                    tickFormatter={(value) => Math.floor(value).toString()}
+                    tickFormatter={(value: number) => Math.floor(value).toString()}
                   />
                   <Tooltip 
                     contentStyle={{ 

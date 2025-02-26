@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from 'firebase/auth';
+import { getFirestore, collection, query, where, orderBy, getDocs, doc, getDoc, setDoc } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getMessaging, getToken, Messaging } from 'firebase/messaging';
 
 const firebaseConfig = {
@@ -16,11 +16,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize services
-const auth = getAuth(app);
+// Initialize Firestore
 const db = getFirestore(app);
 
-// Configure Google provider with all necessary scopes
+// Initialize Auth
+const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 provider.addScope('profile');
 provider.addScope('email');
@@ -37,8 +37,9 @@ setPersistence(auth, browserLocalPersistence)
     console.error("Auth persistence error:", error);
   });
 
-// Initialize messaging only if in browser environment
-let messaging: Messaging | undefined;
+// Initialize Messaging
+let messaging: Messaging | null = null;
+
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
   messaging = getMessaging(app);
   
@@ -62,4 +63,4 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     });
 }
 
-export { app, auth, db, provider, messaging };
+export { app, db, auth, provider, messaging };

@@ -16,14 +16,34 @@ interface AppUser {
   displayName?: string;
 }
 
+interface Goal {
+  id: string;
+  type: 'prayer' | 'taraweeh' | 'quran';
+  value: number;
+  date: string;
+  userId: string;
+}
+
+interface DailyProgress {
+  prayers: {
+    fajr: boolean;
+    dhuhr: boolean;
+    asr: boolean;
+    maghrib: boolean;
+    isha: boolean;
+  };
+  taraweeh: boolean;
+  quran: number;
+}
+
 interface GoalsContextType {
   isAuthenticated: boolean;
   currentUser: AppUser | null;
   signInWithEmail: (email: string) => Promise<void>;
   signOut: () => void;
-  goals: any[];
-  addGoal: (goal: any) => void;
-  getTodayProgress: () => any;
+  goals: Goal[];
+  addGoal: (goal: Goal) => void;
+  getTodayProgress: () => Promise<DailyProgress>;
 }
 
 const GoalsContext = createContext<GoalsContextType | undefined>(undefined);
@@ -31,7 +51,7 @@ const GoalsContext = createContext<GoalsContextType | undefined>(undefined);
 export const GoalsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
-  const [goals, setGoals] = useState<any[]>([]);
+  const [goals, setGoals] = useState<Goal[]>([]);
 
   // Check for existing session on mount
   useEffect(() => {
@@ -59,22 +79,52 @@ export const GoalsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setIsAuthenticated(false);
   };
 
-  const getTodayProgress = async () => {
-    if (!currentUser) return {};
-    
+  const getTodayProgress = async (): Promise<DailyProgress> => {
+    if (!currentUser) {
+      return {
+        prayers: {
+          fajr: false,
+          dhuhr: false,
+          asr: false,
+          maghrib: false,
+          isha: false
+        },
+        taraweeh: false,
+        quran: 0
+      };
+    }
+
     try {
       const userDoc = await getDoc(doc(db, 'users', currentUser.id));
-      if (!userDoc.exists()) return {};
-      
+      if (!userDoc.exists()) {
+        throw new Error('User document not found');
+      }
+
       const data = userDoc.data();
       return {
-        prayers: Object.values(data.prayer_log || {}).filter(Boolean).length,
-        taraweeh: data.taraweeh ? 1 : 0,
+        prayers: {
+          fajr: data.prayer_log?.fajr === true,
+          dhuhr: data.prayer_log?.dhuhr === true,
+          asr: data.prayer_log?.asr === true,
+          maghrib: data.prayer_log?.maghrib === true,
+          isha: data.prayer_log?.isha === true
+        },
+        taraweeh: data.taraweeh === true,
         quran: data.quran_progress || 0
       };
     } catch (error) {
-      console.error('Error getting today progress:', error);
-      return {};
+      console.error('Error getting today\'s progress:', error);
+      return {
+        prayers: {
+          fajr: false,
+          dhuhr: false,
+          asr: false,
+          maghrib: false,
+          isha: false
+        },
+        taraweeh: false,
+        quran: 0
+      };
     }
   };
 
@@ -86,7 +136,7 @@ export const GoalsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         signInWithEmail,
         signOut: handleSignOut,
         goals,
-        addGoal: (goal: any) => setGoals(prev => [...prev, goal]),
+        addGoal: (goal: Goal) => setGoals(prev => [...prev, goal]),
         getTodayProgress,
       }}
     >
