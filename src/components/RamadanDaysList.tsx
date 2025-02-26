@@ -1,19 +1,20 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './RamadanDaysList.css';
-import { ramadanTimes, getCityPrayerTimes } from '../data/prayerTimes';
+import { ramadanTimes, getCityPrayerTimes, normalizeWeekday } from '../data/prayerTimes';
 import { IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
 import { BsSunset } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import confetti from 'canvas-confetti';
+import { useLanguage } from '../contexts/LanguageContext';
 
 
 interface RamadanDay {
   dayNumber: number;
   date: string;
-  weekday: string;
+  weekday: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
   syfyr: string;
   iftar: string;
-  special?: string;
+  special?: 'laylatulQadr' | null;
 }
 
 interface RamadanDaysListProps {
@@ -21,6 +22,7 @@ interface RamadanDaysListProps {
 }
 
 const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
+  const { t } = useLanguage();
   const [visibleDays, setVisibleDays] = useState<RamadanDay[]>([]);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const currentDayRef = useRef<HTMLDivElement>(null);
@@ -36,16 +38,16 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   
   const duas = {
     syfyr: {
-      title: "Nijeti",
+      title: t('nijetTitle'),
       arabic: "نَوَيْتُ صَوْمَ غَدٍ عَنْ أَدَاءِ فَرْضِ شَهْرِ رَمَضَانَ هٰذِهِ السَّنَةِ لِلّٰهِ تَعَالَى",
-      transliteration: "Nevejtus savme gadin min šehri Ramadane",
-      translation: "Kam për qëllim të agjëroj nesër në muajin e Ramazanit për hir të Allahut të Madhëruar."
+      transliteration: t('nijetTransliteration'),
+      translation: t('nijetTranslation')
     },
     iftar: {
-      title: "Duaja e Iftarit",
+      title: t('iftarDuaTitle'),
       arabic: "اَللّٰهُمَّ لَكَ صُمْتُ وَبِكَ آمَنْتُ وَعَلَى رِزْقِكَ أَفْطَرْتُ وَعَلَيْكَ تَوَكَّلْتُ",
-      transliteration: "Allahumme leke sumtu ve bike amentu ve ala rizkike eftertu ve alejke tevekkeltu",
-      translation: "O Allah, për Ty agjërova, në Ty besova, me furnizimin Tënd e prisha agjërimin dhe në Ty u mbështeta."
+      transliteration: t('iftarDuaTransliteration'),
+      translation: t('iftarDuaTranslation')
     }
   };
 
@@ -55,10 +57,10 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
       return {
         dayNumber: index + 1,
         date: day.date,
-        weekday: day.weekday,
+        weekday: normalizeWeekday(day.weekday),
         syfyr: cityTimes?.fajr || day.fajr,
         iftar: cityTimes?.maghrib || day.maghrib,
-        special: day.special
+        special: day.special as 'laylatulQadr' | null
       };
     });
     setVisibleDays(allDays);
@@ -247,13 +249,13 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
                   ))}
                 </div>
                 <div className="countdown-label">
-                  {currentPeriod === 'fasting' ? 'until Iftar' : 'until Syfyr'}
+                  {currentPeriod === 'fasting' ? t('untilIftar') : t('untilSyfyr')}
                 </div>
               </div>
             </>
           ) : (
             <div className="celebration-message">
-              Zoti jua pranoftë agjërimin!
+              {t('acceptancePrayer')}
             </div>
           )}
         </div>
@@ -265,14 +267,14 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
           onClick={() => setExpandedDua(expandedDua === 'syfyr' ? null : 'syfyr')}
         >
           <IoMoonOutline className="dua-button-icon" />
-          <span className="dua-button-text">Nijeti</span>
+          <span className="dua-button-text">{t('nijetTitle')}</span>
         </button>
         <button 
           className="dua-button"
           onClick={() => setExpandedDua(expandedDua === 'iftar' ? null : 'iftar')}
         >
           <IoSunnyOutline className="dua-button-icon" />
-          <span className="dua-button-text">Duaja e Iftarit</span>
+          <span className="dua-button-text">{t('iftarDuaTitle')}</span>
         </button>
       </div>
 
@@ -305,12 +307,12 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
               onClick={() => setSelectedDay(day.dayNumber)}
               style={{ '--index': index } as React.CSSProperties}
             >
-              {day.dayNumber === currentDay && !day.special && <span className="today-badge">SOT</span>}
+              {day.dayNumber === currentDay && !day.special && <span className="today-badge">{t('today')}</span>}
               <div className="item-left">
                 <div className="day-number">{day.dayNumber}</div>
                 <div className="day-text">
-                  {day.weekday}
-                  {day.special && <span className="special-night">{day.special}</span>}
+                  {t(day.weekday)}
+                  {day.special && <span className="special-night">{t('laylatulQadr')}</span>}
                 </div>
               </div>
               <div className="item-right">
@@ -333,7 +335,7 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
       </div>
 
       <div className="powered-by">
-        Powered by <a href="https://epage.digital" target="_blank" rel="noopener noreferrer">epage.digital</a>
+        {t('poweredBy')} <a href="https://epage.digital" target="_blank" rel="noopener noreferrer">epage.digital</a>
       </div>
     </div>
   );
