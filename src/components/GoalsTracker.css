@@ -2,10 +2,12 @@
   min-height: 100vh;
   background: #1a1a1a url('../assets/BG.svg') no-repeat center center;
   background-size: cover;
-  padding: 16px;
+  padding: 0;
   color: white;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .goals-container::before {
@@ -13,9 +15,12 @@
 }
 
 .goals-content {
-  max-width: 800px;
-  margin: 0 auto;
+  flex: 1;
   padding: 16px;
+  padding-top: 80px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   position: relative;
   backdrop-filter: blur(10px);
   border-radius: 12px;

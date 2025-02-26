@@ -21,19 +21,20 @@ import {
   getDoc
 } from 'firebase/firestore';
 import { format } from 'date-fns';
-import { 
+import {
   AreaChart, 
   Area, 
   XAxis, 
   YAxis, 
   CartesianGrid, 
-  Tooltip, 
+  Tooltip,
   ResponsiveContainer,
   BarChart,
   Bar,
   Cell,
   Legend
 } from 'recharts';
+import AppHeader from './AppHeader';
 
 type NameType = string | number;
 
@@ -130,6 +131,7 @@ const GoalsTracker: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [selectedCity, setSelectedCity] = useState('gostivar');
 
   const fetchTodayProgress = useCallback(async () => {
     if (!currentUser) return;
@@ -390,73 +392,80 @@ const GoalsTracker: React.FC = () => {
   };
 
   return (
-    <motion.div className="goals-container">
+    <div className="goals-container">
+      <AppHeader 
+        selectedCity={selectedCity}
+        onCityChange={setSelectedCity}
+      />
+      
       {!isAuthenticated ? (
-        <motion.div 
-          className="auth-modal-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <motion.div 
-            className="auth-modal"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
+        <AnimatePresence>
+          <motion.div
+            className="auth-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <div className="auth-modal-content">
-              <h2>Track Your Ramadan Journey</h2>
-              <p>Enter your email to start tracking your daily prayers, Taraweeh, and Quran reading progress</p>
-              
-              <form onSubmit={handleSignIn} className="auth-form">
-                <div className="input-group">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="auth-input"
-                    required
-                  />
-                </div>
+            <motion.div 
+              className="auth-modal"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+            >
+              <div className="auth-modal-content">
+                <h2>Track Your Ramadan Journey</h2>
+                <p>Enter your email to start tracking your daily prayers, Taraweeh, and Quran reading progress</p>
                 
-                <motion.button
-                  type="submit"
-                  className="auth-submit-btn"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <div className="loading-spinner-container">
-                      <div className="loading-spinner"></div>
-                      <span>Starting...</span>
-                    </div>
-                  ) : (
-                    'Start Tracking'
-                  )}
-                </motion.button>
-              </form>
-              
-              {error && (
-                <motion.div 
-                  className="auth-error"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
-                  {error}
-                </motion.div>
-              )}
-            </div>
+                <form onSubmit={handleSignIn} className="auth-form">
+                  <div className="input-group">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      className="auth-input"
+                      required
+                    />
+                  </div>
+                  
+                  <motion.button
+                    type="submit"
+                    className="auth-submit-btn"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <div className="loading-spinner-container">
+                        <div className="loading-spinner"></div>
+                        <span>Starting...</span>
+                      </div>
+                    ) : (
+                      'Start Tracking'
+                    )}
+                  </motion.button>
+                </form>
+                
+                {error && (
+                  <motion.div 
+                    className="auth-error"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    {error}
+                  </motion.div>
+                )}
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
+        </AnimatePresence>
       ) : (
         <div className="goals-content">
           {error && (
             <div className="error-message">
               {error}
               <button onClick={() => fetchActivityData()}>Retry</button>
-            </div>
+              </div>
           )}
           
           <motion.h1 className="goals-title">
@@ -508,7 +517,7 @@ const GoalsTracker: React.FC = () => {
               <FaQuran />
               <span>Quran</span>
             </motion.button>
-          </div>
+                </div>
 
           <div className="time-filter">
             <motion.button
@@ -674,10 +683,10 @@ const GoalsTracker: React.FC = () => {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-          </div>
+      </div>
 
           <AnimatePresence>
-            {isModalOpen && (
+      {isModalOpen && (
               <motion.div 
                 className="modal-overlay"
                 initial={{ opacity: 0 }}
@@ -690,7 +699,7 @@ const GoalsTracker: React.FC = () => {
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.9, opacity: 0 }}
                 >
-                  <div className="modal-header">
+            <div className="modal-header">
                     <h2>
                       {selectedType === 'prayer' ? 'Daily Prayers' :
                        selectedType === 'taraweeh' ? 'Taraweeh Prayer' :
@@ -705,9 +714,9 @@ const GoalsTracker: React.FC = () => {
                       }}
                     >
                       <IoClose size={24} />
-                    </button>
-                  </div>
-
+              </button>
+            </div>
+            
                   {selectedType === 'prayer' && (
                     <div className="prayer-times">
                       <div className="prayer-options">
@@ -785,8 +794,8 @@ const GoalsTracker: React.FC = () => {
                         >
                           Submit Taraweeh Prayer
                         </motion.button>
-                      )}
-                    </div>
+              )}
+            </div>
                   )}
 
                   {selectedType === 'quran' && (
@@ -860,8 +869,8 @@ const GoalsTracker: React.FC = () => {
           )}
         </div>
       )}
-    </motion.div>
+    </div>
   );
 };
 
-export default GoalsTracker;
+export default GoalsTracker; 
