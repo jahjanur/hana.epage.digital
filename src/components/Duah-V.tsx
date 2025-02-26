@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './Duah-V.css';
 import { Dua } from '../types/duas';
 import { getDuas } from '../services/duaService';
-import searchIcon from '../assets/search.png';
+import AppHeader from './AppHeader';
+import Footer from './Footer';
 
 const DuahV: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [selectedDua, setSelectedDua] = useState<Dua | null>(null);
   const [duas, setDuas] = useState<Dua[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCity, setSelectedCity] = useState('gostivar');
 
   useEffect(() => {
     const fetchDuas = async () => {
@@ -27,12 +28,6 @@ const DuahV: React.FC = () => {
     fetchDuas();
   }, []);
 
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
-
-  const filteredDuas = duas.filter(dua => 
-    dua.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   const handleDuaClick = (dua: Dua) => {
     setSelectedDua(dua);
   };
@@ -44,6 +39,7 @@ const DuahV: React.FC = () => {
           <div className="spinner"></div>
           <span>Loading duas...</span>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -56,6 +52,7 @@ const DuahV: React.FC = () => {
           <p>{error}</p>
           <button onClick={() => window.location.reload()}>Try Again</button>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -63,14 +60,32 @@ const DuahV: React.FC = () => {
   if (selectedDua) {
     return (
       <div className="duah-v-container">
-        <button className="back-button" onClick={() => setSelectedDua(null)}>
-          <span className="back-icon">←</span>
-          <span className="back-text"></span>
-        </button>
+        <AppHeader selectedCity={selectedCity} onCityChange={setSelectedCity} />
         <div className="duah-header">
           <h1>{selectedDua.title}</h1>
         </div>
         <div className="dua-detail">
+          <button 
+            className="dua-close-button" 
+            onClick={() => setSelectedDua(null)}
+            aria-label="Close dua"
+          >
+            <svg 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M18 6L6 18M6 6l12 12" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
           {selectedDua.contents?.map((content, index) => (
             <div key={index} className="dua-content">
               <div className="arabic-text">{content.arabic}</div>
@@ -79,36 +94,28 @@ const DuahV: React.FC = () => {
             </div>
           ))}
         </div>
+        <Footer />
       </div>
     );
   }
 
   return (
     <div className="duah-v-container">
-      <div className="duah-header main-header">
-        <h1>Duas Collection</h1>
-        <button 
-          className="search-toggle" 
-          onClick={() => setIsSearchVisible(!isSearchVisible)}
-          aria-label="Toggle search"
-        >
-          <img src={searchIcon} alt="" />
-        </button>
-      </div>
-      
-      <div className={`search-wrapper ${isSearchVisible ? 'visible' : ''}`}>
-        <input
-          type="text"
-          placeholder="Search duas..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-input"
-          autoFocus
-        />
+      <AppHeader selectedCity={selectedCity} onCityChange={setSelectedCity} />
+      <div className="duah-header">
+        <div className="book-title-wrapper">
+          <div className="title-decoration left"></div>
+          <div className="title-content">
+            <h1 className="book-title">Koleksioni i Duave</h1>
+            <p className="book-subtitle">Lutjet e Profetit Muhamed ﷺ</p>
+            <div className="title-accent"></div>
+          </div>
+          <div className="title-decoration right"></div>
+        </div>
       </div>
 
       <div className="duas-grid">
-        {filteredDuas.map((dua) => (
+        {duas.map((dua) => (
           <div 
             key={dua.id} 
             className="dua-card" 
@@ -124,6 +131,7 @@ const DuahV: React.FC = () => {
           </div>
         ))}
       </div>
+      <Footer />
     </div>
   );
 };

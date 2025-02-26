@@ -1,0 +1,49 @@
+/* Footer styles */
+.footer {
+  width: 100%;
+  padding: 2rem 1rem;
+  margin-bottom: 5rem; /* Space for bottom navigation */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.footer-link {
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.footer-link:hover {
+  opacity: 0.8;
+}
+
+.footer-logo {
+  height: auto;
+  width: 200px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .footer {
+    padding: 1.5rem 1rem;
+    margin-bottom: 6rem; /* Increased space for bottom navigation on tablets */
+  }
+  
+  .footer-logo {
+    width: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 1rem;
+    margin-bottom: 7rem; /* Maximum space for bottom navigation on mobile */
+  }
+  
+  .footer-logo {
+    width: 160px;
+  }
+} 
