@@ -94,6 +94,9 @@ export type TranslationType = {
   today: string;
   poweredBy: string;
   laylatulQadr: string;
+  
+  // Add to TranslationType
+  germany: string;
 };
 
 export type TranslationKey = keyof TranslationType;
