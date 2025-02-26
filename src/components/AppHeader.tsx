@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactComponent as HanaLogo } from '../assets/hanaMainLogoWhite.svg';
 import CitySelector from './CitySelector';
-import { LanguageSelector } from './LanguageSelector';
+import LanguageSelector from './LanguageSelector';
 import './AppHeader.css';
 
 interface AppHeaderProps {

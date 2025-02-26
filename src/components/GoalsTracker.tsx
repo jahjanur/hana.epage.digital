@@ -35,6 +35,7 @@ import {
   Legend
 } from 'recharts';
 import AppHeader from './AppHeader';
+import { useLanguage } from '../contexts/LanguageContext';
 
 type NameType = string | number;
 
@@ -113,6 +114,7 @@ const GoalsTracker: React.FC = () => {
     currentUser,
     signInWithEmail
   } = useGoals();
+  const { t } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<'prayer' | 'taraweeh' | 'quran' | null>(null);
   const [inputValue, setInputValue] = useState(0);
@@ -483,7 +485,7 @@ const GoalsTracker: React.FC = () => {
               whileTap={{ scale: 0.98 }}
             >
               <FaPrayingHands />
-              <span>Daily Prayers</span>
+              <span>{t('dailyPrayers')}</span>
               {Object.values(prayedToday).filter(Boolean).length > 0 && (
                 <div className="completion-badge">
                   {Object.values(prayedToday).filter(Boolean).length}/6
@@ -502,7 +504,7 @@ const GoalsTracker: React.FC = () => {
               disabled={chartData.find(d => d.rawDate === format(new Date(), 'yyyy-MM-dd'))?.taraweeh}
             >
               <FaMosque />
-              <span>Taraweeh</span>
+              <span>{t('taraweehPrayer')}</span>
               {chartData.find(d => d.rawDate === format(new Date(), 'yyyy-MM-dd'))?.taraweeh && (
                 <div className="completion-badge">✓</div>
               )}
@@ -515,7 +517,7 @@ const GoalsTracker: React.FC = () => {
               whileTap={{ scale: 0.98 }}
             >
               <FaQuran />
-              <span>Quran</span>
+              <span>{t('quranReading')}</span>
             </motion.button>
                 </div>
 
@@ -624,7 +626,7 @@ const GoalsTracker: React.FC = () => {
                       <Bar 
                         key={prayer.id}
                         dataKey={prayer.id}
-                        name={prayer.label}
+                        name={t(prayer.id)}
                         stackId="prayers"
                         fill={`url(#${prayer.id}Gradient)`}
                         radius={[4, 4, 0, 0]}
@@ -633,7 +635,7 @@ const GoalsTracker: React.FC = () => {
                   })}
                   <Bar 
                     dataKey="taraweeh"
-                    name="Taraweeh"
+                    name={t('taraweehPrayer')}
                     stackId="prayers"
                     fill="url(#taraweehGradient)"
                     radius={[4, 4, 0, 0]}
@@ -733,8 +735,8 @@ const GoalsTracker: React.FC = () => {
                               style={isPrayed ? completedStyle : isSelected ? selectedStyle : {}}
                             >
                               {prayer.icon}
-                              <span>{prayer.label}</span>
-                              {isPrayed && <span className="completed-badge">✓ Completed</span>}
+                              <span>{t(prayer.id)}</span>
+                              {isPrayed && <span className="completed-badge">✓ {t('completed')}</span>}
                             </motion.button>
                           );
                         })}
@@ -746,7 +748,7 @@ const GoalsTracker: React.FC = () => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        Submit Selected Prayers
+                        {t('submitSelectedPrayers')}
                       </motion.button>
                     </div>
                   )}
@@ -777,11 +779,11 @@ const GoalsTracker: React.FC = () => {
                           disabled={chartData.find(d => d.rawDate === format(new Date(), 'yyyy-MM-dd'))?.taraweeh}
                         >
                           <FaMosque size={24} />
-                          <span>I prayed Taraweeh today</span>
+                          <span>{t('iPrayedTaraweeh')}</span>
                           {chartData.find(d => d.rawDate === format(new Date(), 'yyyy-MM-dd'))?.taraweeh ? (
-                            <span className="completed-badge">✓ Completed</span>
+                            <span className="completed-badge">✓ {t('completed')}</span>
                           ) : inputValue === 1 ? (
-                            <span className="selected-badge">Selected</span>
+                            <span className="selected-badge">{t('selected')}</span>
                           ) : null}
                         </motion.button>
                       </div>
@@ -792,7 +794,7 @@ const GoalsTracker: React.FC = () => {
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
-                          Submit Taraweeh Prayer
+                          {t('submitTaraweehPrayer')}
                         </motion.button>
               )}
             </div>
@@ -839,7 +841,7 @@ const GoalsTracker: React.FC = () => {
                             </motion.button>
                           </div>
                         </div>
-                        <span className="quran-input-label">Pages Read Today (Max: 100)</span>
+                        <span className="quran-input-label">{t('pagesReadToday')}</span>
                       </div>
                       <motion.button
                         className="submit-btn"
@@ -848,7 +850,7 @@ const GoalsTracker: React.FC = () => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        Submit Quran Reading
+                        {t('submitQuranReading')}
                       </motion.button>
                     </div>
                   )}
