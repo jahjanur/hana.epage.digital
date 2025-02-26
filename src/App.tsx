@@ -8,6 +8,7 @@ import { BottomNavigation } from './components/BottomNavigation';
 import Book from './components/book/Book-v';
 import { GoalsProvider } from './contexts/GoalsContext';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const App: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState('gostivar');
@@ -22,24 +23,26 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <GoalsProvider>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={
-            <RamadanCountdown 
-              selectedCity={selectedCity} 
-              onCityChange={setSelectedCity}
-              selectedLanguage={selectedLanguage}
-              onLanguageChange={setSelectedLanguage}
-            />
-          } />
-          <Route path="/duah-v" element={<DuahV />} />
-          <Route path="/goals" element={<GoalsTracker />} />
-          <Route path="/book-v" element={<Book />} />
-        </Routes>
-        <BottomNavigation />
-      </div>
-    </GoalsProvider>
+    <ErrorBoundary>
+      <GoalsProvider>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={
+              <RamadanCountdown 
+                selectedCity={selectedCity} 
+                onCityChange={setSelectedCity}
+                selectedLanguage={selectedLanguage}
+                onLanguageChange={setSelectedLanguage}
+              />
+            } />
+            <Route path="/duah-v" element={<DuahV />} />
+            <Route path="/goals" element={<GoalsTracker />} />
+            <Route path="/book-v" element={<Book />} />
+          </Routes>
+          <BottomNavigation />
+        </div>
+      </GoalsProvider>
+    </ErrorBoundary>
   );
 };
 

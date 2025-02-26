@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './GoalsTracker.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaPrayingHands, FaMosque, FaQuran } from 'react-icons/fa';
-import { IoAddOutline, IoClose } from 'react-icons/io5';
-import { CircularProgressWithLabel } from './CircularProgressWithLabel';
+import { IoClose } from 'react-icons/io5';
 import { useGoals } from '../contexts/GoalsContext';
 import { db } from '../firebase/config';
 import { 
@@ -12,15 +11,14 @@ import {
   serverTimestamp, 
   query, 
   where, 
-  getDocs, 
-  getDoc,
+  getDocs,
   setDoc,
   DocumentReference,
   DocumentData,
   orderBy,
   limit
 } from 'firebase/firestore';
-import { format, subDays } from 'date-fns';
+import { format } from 'date-fns';
 import { 
   AreaChart, 
   Area, 
@@ -71,61 +69,101 @@ const GoalsTracker: React.FC = () => {
   const [prayedToday, setPrayedToday] = useState<Record<string, boolean>>({});
   const [chartData, setChartData] = useState<any[]>([]);
 
+  // Add state for tracking daily progress
+  const [dailyProgress, setDailyProgress] = useState({
+    prayers: 0,
+    taraweeh: 0,
+    quran: 0
+  });
+
+  const [selectedPrayerTimes, setSelectedPrayerTimes] = useState<Set<string>>(new Set());
+
   const progress = getTodayProgress();
   
-  // Fetch data based on active tab
-  useEffect(() => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Add type for drag event info
+  type DragInfo = {
+    point: {
+      y: number;
+    };
+  };
+
+  const fetchActivityData = async () => {
     if (!currentUser) return;
 
-    const fetchActivityData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const activitiesRef = collection(db, 'daily_activities');
+      const today = format(new Date(), 'yyyy-MM-dd');
+      
+      // First try to fetch today's activity
       try {
-        const activitiesRef = collection(db, 'daily_activities');
-        let q = query(
+        const todayQuery = query(
           activitiesRef,
           where('userId', '==', currentUser.uid),
-          orderBy('date', 'desc'), // Changed to DESC order
-          limit(30)
+          where('date', '==', today)
         );
 
-        const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map(doc => ({
-          ...doc.data(),
-          id: doc.id
-        })) as (DailyActivity & { id: string })[];
+        const todaySnapshot = await getDocs(todayQuery);
+        const todayDoc = todaySnapshot.docs[0]?.data() as DailyActivity | undefined;
 
-        // Filter and sort the data
-        const today = new Date();
-        const startDate = format(
-          activeTab === 'daily' ? today :
-          activeTab === 'weekly' ? subDays(today, 7) :
-          subDays(today, 30),
-          'yyyy-MM-dd'
-        );
+        if (todayDoc) {
+          setPrayedToday(todayDoc.prayers);
+        }
+      } catch (error) {
+        console.error('Error fetching today\'s activity:', error);
+      }
 
-        const filteredData = data
-          .filter(item => 
-            item.date >= startDate && 
-            item.date <= format(today, 'yyyy-MM-dd')
-          )
-          .sort((a, b) => a.date.localeCompare(b.date)); // Sort by date ascending
+      // Then try to fetch historical data
+      const historicalQuery = query(
+        activitiesRef,
+        where('userId', '==', currentUser.uid),
+        orderBy('date', 'desc'),
+        limit(30)
+      );
 
-        // Process data for charts with unique keys
-        const processedData = filteredData.map(day => ({
-          id: day.id, // Add unique ID for React keys
+      const querySnapshot = await getDocs(historicalQuery);
+      const data = querySnapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id
+      })) as (DailyActivity & { id: string })[];
+
+      const processedData = data
+        .sort((a, b) => a.date.localeCompare(b.date))
+        .map(day => ({
+          id: day.id,
           date: format(new Date(day.date), 'MMM dd'),
           prayers: Object.values(day.prayers).filter(Boolean).length,
           taraweeh: day.taraweeh ? 1 : 0,
-          quran: day.quran_progress || 0
+          quran: day.quran_progress || 0,
+          fajr: day.prayers.fajr ? 1 : 0,
+          dhuhr: day.prayers.dhuhr ? 1 : 0,
+          asr: day.prayers.asr ? 1 : 0,
+          maghrib: day.prayers.maghrib ? 1 : 0,
+          isha: day.prayers.isha ? 1 : 0
         }));
 
-        setChartData(processedData);
-      } catch (error) {
-        console.error('Error fetching activity data:', error);
-      }
-    };
+      setChartData(processedData);
+    } catch (error) {
+      console.error('Error fetching activity data:', error);
+      setError('Failed to fetch data. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    fetchActivityData();
-  }, [activeTab, currentUser]);
+  // Add fetchActivityData to useEffect dependencies with useCallback
+  const memoizedFetchActivityData = React.useCallback(fetchActivityData, [currentUser]);
+
+  useEffect(() => {
+    if (currentUser) {
+      memoizedFetchActivityData();
+    }
+  }, [currentUser, activeTab, memoizedFetchActivityData]);
 
   const handleSignIn = async () => {
     try {
@@ -134,6 +172,20 @@ const GoalsTracker: React.FC = () => {
     } catch (error) {
       console.error('Error signing in:', error);
     }
+  };
+
+  const handlePrayerTimeToggle = (prayerId: string) => {
+    if (prayedToday[prayerId]) return; // Already prayed, can't modify
+
+    setSelectedPrayerTimes(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(prayerId)) {
+        newSet.delete(prayerId);
+      } else {
+        newSet.add(prayerId);
+      }
+      return newSet;
+    });
   };
 
   const handleAddActivity = async () => {
@@ -150,10 +202,10 @@ const GoalsTracker: React.FC = () => {
 
       const querySnapshot = await getDocs(q);
       let dailyDocRef: DocumentReference<DocumentData>;
-      let dailyDocData: DocumentData | undefined;
+      let dailyDocData: DailyActivity | undefined;
       
       if (querySnapshot.empty) {
-        // Create new daily document with ordered prayers
+        // Create new daily document
         const newDailyActivity: DailyActivity = {
           userId: currentUser.uid,
           date: today,
@@ -164,49 +216,29 @@ const GoalsTracker: React.FC = () => {
             maghrib: false,
             isha: false
           },
-          quran_progress: 0,
+          quran_progress: selectedType === 'quran' ? Math.min(inputValue, 50) : 0,
           taraweeh: false,
           createdAt: serverTimestamp(),
           lastUpdated: serverTimestamp()
         };
         
-        dailyDocRef = await addDoc(activitiesRef, newDailyActivity);
+        const docRef = await addDoc(activitiesRef, newDailyActivity);
+        dailyDocRef = docRef;
         dailyDocData = newDailyActivity;
       } else {
         dailyDocRef = querySnapshot.docs[0].ref;
-        dailyDocData = querySnapshot.docs[0].data();
+        dailyDocData = querySnapshot.docs[0].data() as DailyActivity;
       }
 
-      // Update the document based on activity type
-      if (selectedType === 'prayer' && selectedPrayerTime) {
-        // Create an ordered prayers object
-        const currentPrayers = dailyDocData?.prayers || {
-          fajr: false,
-          dhuhr: false,
-          asr: false,
-          maghrib: false,
-          isha: false
-        };
+      // Update based on activity type
+      if (selectedType === 'prayer') {
+        const updatedPrayers = { ...dailyDocData?.prayers };
+        selectedPrayerTimes.forEach(prayerId => {
+          updatedPrayers[prayerId as keyof typeof updatedPrayers] = true;
+        });
 
         await setDoc(dailyDocRef, {
-          prayers: {
-            fajr: currentPrayers.fajr,
-            dhuhr: currentPrayers.dhuhr,
-            asr: currentPrayers.asr,
-            maghrib: currentPrayers.maghrib,
-            isha: currentPrayers.isha,
-            [selectedPrayerTime]: true // This will maintain the order while updating the selected prayer
-          },
-          lastUpdated: serverTimestamp()
-        }, { merge: true });
-
-        setPrayedToday(prev => ({
-          ...prev,
-          [selectedPrayerTime]: true
-        }));
-      } else if (selectedType === 'quran') {
-        await setDoc(dailyDocRef, {
-          quran_progress: inputValue,
+          prayers: updatedPrayers,
           lastUpdated: serverTimestamp()
         }, { merge: true });
       } else if (selectedType === 'taraweeh') {
@@ -214,15 +246,23 @@ const GoalsTracker: React.FC = () => {
           taraweeh: inputValue === 1,
           lastUpdated: serverTimestamp()
         }, { merge: true });
+      } else if (selectedType === 'quran') {
+        await setDoc(dailyDocRef, {
+          quran_progress: Math.min(inputValue, 50),
+          lastUpdated: serverTimestamp()
+        }, { merge: true });
       }
 
-      // Reset form and close modal
-      setSelectedType(null);
-      setSelectedPrayerTime(null);
-      setInputValue(0);
+      await fetchActivityData();
+
+      // Reset form
       setIsModalOpen(false);
+      setSelectedType(null);
+      setSelectedPrayerTimes(new Set());
+      setInputValue(0);
     } catch (error) {
       console.error('Error adding activity:', error);
+      setError('Failed to update activity. Please try again.');
     }
   };
 
@@ -320,246 +360,303 @@ const GoalsTracker: React.FC = () => {
         </motion.div>
       ) : (
         <div className="goals-content">
-          <motion.h1 className="goals-title">
-            Welcome, {currentUser?.displayName || 'User'}
-          </motion.h1>
-
-          <div className="time-filter">
-            {['daily', 'weekly', 'monthly'].map((tab) => (
-              <button
-                key={tab}
-                className={`filter-btn ${activeTab === tab ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab as any)}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
-          </div>
-
-          <div className="activity-buttons">
-            <motion.button
-              className="activity-button prayer"
-              onClick={handlePrayerClick}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <FaPrayingHands />
-              <span>Prayers</span>
-            </motion.button>
-
-            <motion.button
-              className="activity-button taraweeh"
-              onClick={handleTaraweehClick}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <FaMosque />
-              <span>Taraweeh</span>
-            </motion.button>
-
-            <motion.button
-              className="activity-button quran"
-              onClick={handleQuranClick}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <FaQuran />
-              <span>Quran</span>
-            </motion.button>
-          </div>
-
-          <div className="charts-container">
-            {/* Prayer Progress Chart */}
-            <div className="chart-card">
-              <h3>Prayer Progress</h3>
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis domain={[0, 5]} />
-                  <Tooltip />
-                  <Bar 
-                    dataKey="prayers" 
-                    fill="#00ff87" 
-                    name="Prayers"
-                    isAnimationActive={false} // Disable animation to prevent key warnings
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+          {error && (
+            <div className="error-message">
+              {error}
+              <button onClick={() => fetchActivityData()}>Retry</button>
             </div>
+          )}
+          
+          {isLoading ? (
+            <div className="loading-spinner">Loading...</div>
+          ) : (
+            <>
+              <motion.h1 className="goals-title">
+                Welcome, {currentUser?.displayName || 'User'}
+              </motion.h1>
 
-            {/* Quran Progress Chart */}
-            <div className="chart-card">
-              <h3>Quran Pages Read</h3>
-              <ResponsiveContainer width="100%" height={200}>
-                <AreaChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Area 
-                    type="monotone" 
-                    dataKey="quran" 
-                    stroke="#ff4a4a" 
-                    fill="#ff4a4a" 
-                    fillOpacity={0.3}
-                    name="Pages"
-                    isAnimationActive={false}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
+              <div className="time-filter">
+                {['daily', 'weekly', 'monthly'].map((tab) => (
+                  <button
+                    key={tab}
+                    className={`filter-btn ${activeTab === tab ? 'active' : ''}`}
+                    onClick={() => setActiveTab(tab as any)}
+                  >
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </button>
+                ))}
+              </div>
 
-            {/* Taraweeh Progress Chart */}
-            <div className="chart-card">
-              <h3>Taraweeh Completion</h3>
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis domain={[0, 1]} />
-                  <Tooltip />
-                  <Bar 
-                    dataKey="taraweeh" 
-                    fill="#4a4aff" 
-                    name="Completed"
-                    radius={[4, 4, 0, 0]}
-                    isAnimationActive={false}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          <AnimatePresence>
-            {isModalOpen && (
-              <motion.div 
-                className="modal-overlay"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <motion.div 
-                  className="activity-modal"
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.9, opacity: 0 }}
+              <div className="activity-buttons">
+                <motion.button
+                  className="activity-button prayer"
+                  onClick={handlePrayerClick}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <div className="modal-header">
-                    <h2>
-                      {selectedType === 'prayer' ? 'Daily Prayers' :
-                       selectedType === 'taraweeh' ? 'Taraweeh Prayer' :
-                       'Quran Reading'}
-                    </h2>
-                    <button 
-                      className="close-btn"
-                      onClick={() => {
-                        setIsModalOpen(false);
-                        setSelectedType(null);
-                        setSelectedPrayerTime(null);
-                        setInputValue(0);
-                      }}
-                    >
-                      <IoClose size={24} />
-                    </button>
-                  </div>
+                  <FaPrayingHands />
+                  <span>Prayers</span>
+                </motion.button>
 
-                  {selectedType === 'prayer' && (
-                    <div className="prayer-times">
-                      <div className="prayer-options">
-                        {PRAYER_TIMES.map((prayer) => (
+                <motion.button
+                  className="activity-button taraweeh"
+                  onClick={handleTaraweehClick}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <FaMosque />
+                  <span>Taraweeh</span>
+                </motion.button>
+
+                <motion.button
+                  className="activity-button quran"
+                  onClick={handleQuranClick}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <FaQuran />
+                  <span>Quran</span>
+                </motion.button>
+              </div>
+
+              <div className="charts-container">
+                {/* Prayer Progress Chart */}
+                <div className="chart-card">
+                  <h3>Prayer Progress</h3>
+                  <ResponsiveContainer width="100%" height={200}>
+                    <BarChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" />
+                      <YAxis domain={[0, 5]} />
+                      <Tooltip />
+                      <Bar dataKey="fajr" stackId="prayers" fill="#ff4a4a" name="Fajr" />
+                      <Bar dataKey="dhuhr" stackId="prayers" fill="#4a4aff" name="Dhuhr" />
+                      <Bar dataKey="asr" stackId="prayers" fill="#00ff87" name="Asr" />
+                      <Bar dataKey="maghrib" stackId="prayers" fill="#ffa500" name="Maghrib" />
+                      <Bar dataKey="isha" stackId="prayers" fill="#9c27b0" name="Isha" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Quran Progress Chart */}
+                <div className="chart-card">
+                  <h3>Quran Pages Read</h3>
+                  <ResponsiveContainer width="100%" height={200}>
+                    <AreaChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" />
+                      <YAxis />
+                      <Tooltip />
+                      <Area 
+                        type="monotone" 
+                        dataKey="quran" 
+                        stroke="#ff4a4a" 
+                        fill="#ff4a4a" 
+                        fillOpacity={0.3}
+                        name="Pages"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Taraweeh Progress Chart */}
+                <div className="chart-card">
+                  <h3>Taraweeh Completion</h3>
+                  <ResponsiveContainer width="100%" height={200}>
+                    <BarChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" />
+                      <YAxis domain={[0, 1]} />
+                      <Tooltip />
+                      <Bar 
+                        dataKey="taraweeh" 
+                        fill="#4a4aff" 
+                        name="Completed"
+                        radius={[4, 4, 0, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <AnimatePresence>
+                {isModalOpen && (
+                  <motion.div 
+                    className="modal-overlay"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <motion.div 
+                      className="activity-modal"
+                      initial={{ scale: 0.9, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.9, opacity: 0 }}
+                    >
+                      <div className="modal-header">
+                        <h2>
+                          {selectedType === 'prayer' ? 'Daily Prayers' :
+                           selectedType === 'taraweeh' ? 'Taraweeh Prayer' :
+                           'Quran Reading'}
+                        </h2>
+                        <button 
+                          className="close-btn"
+                          onClick={() => {
+                            setIsModalOpen(false);
+                            setSelectedType(null);
+                            setSelectedPrayerTime(null);
+                            setInputValue(0);
+                          }}
+                        >
+                          <IoClose size={24} />
+                        </button>
+                      </div>
+
+                      {selectedType === 'prayer' && (
+                        <div className="prayer-times">
+                          <div className="prayer-options">
+                            {PRAYER_TIMES.map((prayer) => (
+                              <motion.button
+                                key={prayer.id}
+                                className={`prayer-option ${
+                                  selectedPrayerTimes.has(prayer.id) ? 'selected' : ''
+                                } ${prayedToday[prayer.id] ? 'prayed' : ''}`}
+                                onClick={() => handlePrayerTimeToggle(prayer.id)}
+                                disabled={prayedToday[prayer.id]}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                              >
+                                {prayer.icon}
+                                <span>{prayer.label}</span>
+                                {prayedToday[prayer.id] && (
+                                  <span className="prayed-badge">✓</span>
+                                )}
+                              </motion.button>
+                            ))}
+                          </div>
                           <motion.button
-                            key={prayer.id}
-                            className={`prayer-option ${selectedPrayerTime === prayer.id ? 'selected' : ''} ${
-                              prayedToday[prayer.id] ? 'prayed' : ''
-                            }`}
-                            onClick={() => !prayedToday[prayer.id] && setSelectedPrayerTime(prayer.id)}
-                            disabled={prayedToday[prayer.id]}
+                            className="submit-btn"
+                            onClick={handleAddActivity}
+                            disabled={selectedPrayerTimes.size === 0}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                           >
-                            {prayer.icon}
-                            <span>{prayer.label}</span>
-                            {prayedToday[prayer.id] && (
-                              <span className="prayed-badge">✓</span>
-                            )}
+                            Submit Selected Prayers
                           </motion.button>
-                        ))}
-                      </div>
-                      <motion.button
-                        className="submit-btn"
-                        onClick={handleAddActivity}
-                        disabled={!selectedPrayerTime}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        Submit Prayer
-                      </motion.button>
-                    </div>
-                  )}
+                        </div>
+                      )}
 
-                  {selectedType === 'taraweeh' && (
-                    <div className="taraweeh-options">
-                      <div className="radio-group">
-                        <label className="radio-option">
-                          <input
-                            type="radio"
-                            name="taraweeh"
-                            value="1"
-                            checked={inputValue === 1}
-                            onChange={() => setInputValue(1)}
-                          />
-                          <span>Prayed</span>
-                        </label>
-                        <label className="radio-option">
-                          <input
-                            type="radio"
-                            name="taraweeh"
-                            value="0"
-                            checked={inputValue === 0}
-                            onChange={() => setInputValue(0)}
-                          />
-                          <span>Not Prayed</span>
-                        </label>
-                      </div>
-                      <motion.button
-                        className="submit-btn"
-                        onClick={handleAddActivity}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        Submit
-                      </motion.button>
-                    </div>
-                  )}
+                      {selectedType === 'taraweeh' && (
+                        <div className="taraweeh-options">
+                          <div className="radio-group">
+                            <motion.button
+                              className={`taraweeh-option ${inputValue === 1 ? 'selected' : ''}`}
+                              onClick={() => setInputValue(1)}
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              <FaMosque size={24} />
+                              <span>I prayed Taraweeh today</span>
+                              {inputValue === 1 && <span className="check-mark">✓</span>}
+                            </motion.button>
+                            <motion.button
+                              className={`taraweeh-option ${inputValue === 0 ? 'selected' : ''}`}
+                              onClick={() => setInputValue(0)}
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              <FaMosque size={24} opacity={0.5} />
+                              <span>I haven't prayed yet</span>
+                              {inputValue === 0 && <span className="check-mark">✓</span>}
+                            </motion.button>
+                          </div>
+                          <motion.button
+                            className="submit-btn"
+                            onClick={handleAddActivity}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            Submit
+                          </motion.button>
+                        </div>
+                      )}
 
-                  {selectedType === 'quran' && (
-                    <div className="quran-input">
-                      <div className="number-scroll">
-                        <input
-                          type="number"
-                          value={inputValue}
-                          onChange={(e) => setInputValue(Math.max(0, parseInt(e.target.value) || 0))}
-                          min="0"
-                          max="604"
-                        />
-                        <span className="unit">pages</span>
-                      </div>
-                      <motion.button
-                        className="submit-btn"
-                        onClick={handleAddActivity}
-                        disabled={!inputValue}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        Submit
-                      </motion.button>
-                    </div>
-                  )}
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                      {selectedType === 'quran' && (
+                        <div className="quran-input">
+                          <div className="quran-input-container">
+                            <div className="quran-input-header">
+                              <FaQuran size={32} />
+                              <h3>How many pages did you read today?</h3>
+                            </div>
+                            
+                            <div className="page-input-section">
+                              <div className="page-counter">
+                                <motion.button
+                                  className="counter-btn"
+                                  onClick={() => setInputValue(Math.max(0, inputValue - 1))}
+                                  whileHover={{ scale: 1.1 }}
+                                  whileTap={{ scale: 0.9 }}
+                                  disabled={inputValue <= 0}
+                                >
+                                  -
+                                </motion.button>
+                                
+                                <div className="page-display">
+                                  <span className="page-number">{inputValue}</span>
+                                  <span className="page-label">pages</span>
+                                </div>
+                                
+                                <motion.button
+                                  className="counter-btn"
+                                  onClick={() => setInputValue(Math.min(50, inputValue + 1))}
+                                  whileHover={{ scale: 1.1 }}
+                                  whileTap={{ scale: 0.9 }}
+                                  disabled={inputValue >= 50}
+                                >
+                                  +
+                                </motion.button>
+                              </div>
+                              
+                              <div className="page-slider">
+                                <input
+                                  type="range"
+                                  min="0"
+                                  max="50"
+                                  value={inputValue}
+                                  onChange={(e) => setInputValue(Number(e.target.value))}
+                                  className="slider"
+                                />
+                                <div className="slider-labels">
+                                  <span>0</span>
+                                  <span>25</span>
+                                  <span>50</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="quran-progress-info">
+                              <span>{inputValue} pages selected</span>
+                              <span>{50 - inputValue} pages until max</span>
+                            </div>
+
+                            <motion.button
+                              className="submit-btn"
+                              onClick={handleAddActivity}
+                              disabled={inputValue === 0}
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              Submit
+                            </motion.button>
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </>
+          )}
         </div>
       )}
     </motion.div>

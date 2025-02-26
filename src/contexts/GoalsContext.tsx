@@ -10,6 +10,7 @@ import {
   Timestamp, 
   serverTimestamp
 } from 'firebase/firestore';
+import { format } from 'date-fns';
 
 interface Goal {
   id: string;
@@ -105,6 +106,22 @@ export const GoalsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  const getTodayProgress = () => {
+    if (!currentUser) return { prayers: 0, taraweeh: 0, quran: 0 };
+    
+    // Find today's activities
+    const today = format(new Date(), 'yyyy-MM-dd');
+    const todayActivities = goals.filter(goal => 
+      format(goal.date, 'yyyy-MM-dd') === today
+    );
+
+    return {
+      prayers: todayActivities.filter(g => g.type === 'prayer').reduce((sum, g) => sum + g.value, 0),
+      taraweeh: todayActivities.filter(g => g.type === 'taraweeh').reduce((sum, g) => sum + g.value, 0),
+      quran: todayActivities.filter(g => g.type === 'quran').reduce((sum, g) => sum + g.value, 0)
+    };
+  };
+
   return (
     <GoalsContext.Provider value={{
       goals,
@@ -112,11 +129,7 @@ export const GoalsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       isAuthenticated,
       currentUser,
       addGoal,
-      getTodayProgress: () => ({
-        prayers: 0,
-        taraweeh: 0,
-        quran: 0
-      }),
+      getTodayProgress,
       signInWithGoogle,
       signOut
     }}>

@@ -583,24 +583,23 @@
 
 .prayer-options {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px;
-  margin-top: 12px;
+  margin-bottom: 24px;
 }
 
 .prayer-option {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   padding: 16px;
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid transparent;
   border-radius: 12px;
   color: white;
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
+  transition: all 0.2s ease;
 }
 
 .prayer-option.selected {
@@ -609,24 +608,108 @@
 }
 
 .prayer-option.prayed {
-  opacity: 0.5;
+  background: rgba(0, 255, 135, 0.1);
+  border-color: #00ff87;
   cursor: not-allowed;
+  opacity: 0.8;
 }
 
 .prayed-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+  margin-left: auto;
   background: #00ff87;
-  color: #333;
-  width: 20px;
-  height: 20px;
+  color: black;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 14px;
+}
+
+.number-wheel {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  touch-action: none;
+}
+
+.number-wheel-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.number-wheel-container::before,
+.number-wheel-container::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 80px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.number-wheel-container::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(26, 26, 26, 1), transparent);
+}
+
+.number-wheel-container::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(26, 26, 26, 1), transparent);
+}
+
+.number-wheel-track {
+  cursor: grab;
+  padding: 80px 0;
+  touch-action: none;
+  transform: translateY(80px);
+}
+
+.number-wheel-track:active {
+  cursor: grabbing;
+}
+
+.number-wheel-item {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.number-wheel-item.selected {
+  color: white;
+  font-size: 32px;
+  font-weight: 500;
+}
+
+.quran-progress-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+}
+
+.unit {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
 }
 
 /* Add these new styles */
@@ -760,4 +843,194 @@
   margin: 0 0 16px;
   font-size: 18px;
   color: rgba(255, 255, 255, 0.9);
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: white;
+}
+
+.error-message {
+  background: rgba(255, 74, 74, 0.1);
+  border: 1px solid #ff4a4a;
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.error-message button {
+  background: #ff4a4a;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.error-message button:hover {
+  background: #ff6b6b;
+}
+
+.taraweeh-options {
+  padding: 20px 0;
+}
+
+.taraweeh-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.taraweeh-option.selected {
+  background: rgba(74, 74, 255, 0.1);
+  border-color: #4a4aff;
+}
+
+.taraweeh-option .check-mark {
+  margin-left: auto;
+  background: #4a4aff;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+/* Remove the old number wheel styles and add these new styles */
+.quran-input-container {
+  padding: 20px 0;
+}
+
+.quran-input-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  color: #ff4a4a;
+}
+
+.quran-input-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 18px;
+  text-align: center;
+}
+
+.page-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.counter-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.counter-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-display {
+  width: 120px;
+  text-align: center;
+}
+
+.page-number {
+  font-size: 48px;
+  font-weight: 600;
+  color: #ff4a4a;
+}
+
+.page-label {
+  display: block;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 4px;
+}
+
+.page-slider {
+  padding: 0 12px;
+}
+
+.slider {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  outline: none;
+  margin: 20px 0;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ff4a4a;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+}
+
+.quran-progress-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  margin-top: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
 }
