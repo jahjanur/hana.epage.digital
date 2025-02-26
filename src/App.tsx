@@ -7,10 +7,10 @@ import { Routes, Route } from 'react-router-dom';
 import { BottomNavigation } from './components/BottomNavigation';
 import Book from './components/book/Book-v';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const App: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState('gostivar');
-  const [selectedLanguage, setSelectedLanguage] = useState('sq');
 
   React.useEffect(() => {
     // Force scroll to top and prevent default scroll restoration
@@ -21,24 +21,24 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={
-          <>
-            <RamadanCountdown 
-              selectedCity={selectedCity} 
-              onCityChange={setSelectedCity}
-              selectedLanguage={selectedLanguage}
-              onLanguageChange={setSelectedLanguage}
-            />
-          </>
-        } />
-        <Route path="/duah-v" element={<DuahV />} />
-        <Route path="/goals" element={<GoalsTracker />} />
-        <Route path="/book-v" element={<Book />} />
-      </Routes>
-      <BottomNavigation />
-    </div>
+    <LanguageProvider>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={
+            <>
+              <RamadanCountdown 
+                selectedCity={selectedCity} 
+                onCityChange={setSelectedCity}
+              />
+            </>
+          } />
+          <Route path="/duah-v" element={<DuahV />} />
+          <Route path="/goals" element={<GoalsTracker />} />
+          <Route path="/book-v" element={<Book />} />
+        </Routes>
+        <BottomNavigation />
+      </div>
+    </LanguageProvider>
   );
 };
 

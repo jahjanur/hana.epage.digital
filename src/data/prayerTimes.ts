@@ -885,3 +885,56 @@ export const bregenzRamadanTimes = [
   { "date": "2025-03-28", "weekday": "e premte", "fajr": "04:22", "dhuhr": "12:31", "asr": "16:00", "maghrib": "18:51", "isha": "20:17" },
   { "date": "2025-03-29", "weekday": "e shtunë", "fajr": "04:20", "dhuhr": "12:31", "asr": "16:01", "maghrib": "18:53", "isha": "20:19" }
 ];
+
+// Add a function to normalize weekday names to match translation keys
+export const normalizeWeekday = (weekday: string): 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday' => {
+  // Convert to lowercase for consistent matching
+  const normalizedInput = weekday.toLowerCase().trim();
+  
+  const weekdayMap: { [key: string]: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday' } = {
+    // Albanian formats
+    'e hënë': 'monday',
+    'hënë': 'monday',
+    'e martë': 'tuesday',
+    'martë': 'tuesday',
+    'e mërkurë': 'wednesday',
+    'mërkurë': 'wednesday',
+    'e enjte': 'thursday',
+    'enjte': 'thursday',
+    'e premte': 'friday',
+    'premte': 'friday',
+    'e shtunë': 'saturday',
+    'shtunë': 'saturday',
+    'e diel': 'sunday',
+    'diel': 'sunday',
+
+    // English formats
+    'monday': 'monday',
+    'tuesday': 'tuesday',
+    'wednesday': 'wednesday',
+    'thursday': 'thursday',
+    'friday': 'friday',
+    'saturday': 'saturday',
+    'sunday': 'sunday',
+
+    // German formats
+    'montag': 'monday',
+    'dienstag': 'tuesday',
+    'mittwoch': 'wednesday',
+    'donnerstag': 'thursday',
+    'freitag': 'friday',
+    'samstag': 'saturday',
+    'sonntag': 'sunday',
+
+    // Turkish formats
+    'pazartesi': 'monday',
+    'salı': 'tuesday',
+    'çarşamba': 'wednesday',
+    'perşembe': 'thursday',
+    'cuma': 'friday',
+    'cumartesi': 'saturday',
+    'pazar': 'sunday'
+  };
+
+  return weekdayMap[normalizedInput] || 'monday';
+};

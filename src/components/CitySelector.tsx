@@ -3,6 +3,7 @@ import './CitySelector.css';
 import { IoLocationOutline } from "react-icons/io5";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { cityAdjustments, kosovoCityAdjustments, austriaCityAdjustments, swissCityAdjustments } from '../data/prayerTimes';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface CitySelectorProps {
   selectedCity: string;
@@ -10,6 +11,7 @@ interface CitySelectorProps {
 }
 
 const CitySelector: React.FC<CitySelectorProps> = ({ selectedCity, onCityChange }) => {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<'macedonia' | 'kosovo' | 'austria' | 'switzerland'>(() => {
     // Initialize from localStorage or default to 'macedonia'
@@ -34,7 +36,10 @@ const CitySelector: React.FC<CitySelectorProps> = ({ selectedCity, onCityChange 
     const kosovoCities = kosovoCityAdjustments[cityId];
     const austrianCities = austriaCityAdjustments[cityId];
     const swissCities = swissCityAdjustments[cityId];
-    return (macedoniaCities || kosovoCities || austrianCities || swissCities)?.nameAlb || cityId;
+    
+    // Return the city name based on the current language
+    const cityData = macedoniaCities || kosovoCities || austrianCities || swissCities;
+    return cityData?.nameAlb || cityId;
   };
 
   const handleCountryChange = (country: 'macedonia' | 'kosovo' | 'austria' | 'switzerland') => {
@@ -105,25 +110,25 @@ const CitySelector: React.FC<CitySelectorProps> = ({ selectedCity, onCityChange 
               className={`country-option ${selectedCountry === 'macedonia' ? 'active' : ''}`}
               onClick={() => handleCountryChange('macedonia')}
             >
-              Maqedonia
+              {t('macedonia')}
             </button>
             <button
               className={`country-option ${selectedCountry === 'kosovo' ? 'active' : ''}`}
               onClick={() => handleCountryChange('kosovo')}
             >
-              Kosova
+              {t('kosovo')}
             </button>
             <button
               className={`country-option ${selectedCountry === 'austria' ? 'active' : ''}`}
               onClick={() => handleCountryChange('austria')}
             >
-              Austria
+              {t('austria')}
             </button>
             <button
               className={`country-option ${selectedCountry === 'switzerland' ? 'active' : ''}`}
               onClick={() => handleCountryChange('switzerland')}
             >
-              Zvicra
+              {t('switzerland')}
             </button>
           </div>
           <div className="cities-list">
@@ -133,7 +138,7 @@ const CitySelector: React.FC<CitySelectorProps> = ({ selectedCity, onCityChange 
                 className={`city-option ${selectedCity === cityId ? 'active' : ''}`}
                 onClick={() => handleCityChange(cityId)}
               >
-                {city.nameAlb}
+                {getCityName(cityId)}
               </button>
             ))}
           </div>
