@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    match /goals/{goalId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    
+    match /daily_activities/{activityId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && 
+                   request.auth.uid == request.resource.data.userId;
+      allow update: if request.auth != null && 
+                   request.auth.uid == resource.data.userId &&
+                   request.resource.data.date == resource.data.date; // Can't change the date
+    }
+  }
+} 
