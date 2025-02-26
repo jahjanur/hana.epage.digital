@@ -5,6 +5,8 @@ import { IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
 import { BsSunset } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import confetti from 'canvas-confetti';
+import { BiCalendarCheck } from 'react-icons/bi';
+import Calendar from './Calendar.js';
 
 
 interface RamadanDay {
@@ -30,6 +32,7 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   const [currentPeriod, setCurrentPeriod] = useState<'fasting' | 'eating'>('fasting');
   const [isIftarTime, setIsIftarTime] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   
   // Current day for highlighting
   const currentDay: number = 29;
@@ -331,6 +334,21 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
           ))}
         </div>
       </div>
+
+      <button 
+        className="calendar-button"
+        onClick={() => setIsCalendarVisible(true)}
+      >
+        <BiCalendarCheck className="dua-button-icon" />
+        <span className="dua-button-text">Hap kalendarin</span>
+      </button>
+
+      {isCalendarVisible && (
+        <Calendar 
+          onClose={() => setIsCalendarVisible(false)} 
+          selectedCity={selectedCity}
+        />
+      )}
 
       <div className="powered-by">
         Powered by <a href="https://epage.digital" target="_blank" rel="noopener noreferrer">epage.digital</a>

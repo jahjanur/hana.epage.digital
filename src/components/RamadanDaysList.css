@@ -1569,3 +1569,30 @@
 .powered-by a:hover {
   color: white;
 }
+
+.calendar-button {
+  background: #c5c4c4;
+  border: none;
+  cursor: pointer;
+  font-size: 30px;
+  color: white;
+  padding: 3px 12px 9px 13px;
+  margin-top: -17px;
+  font-weight: 500;
+  border-radius: 20px;
+  margin-bottom: 39px;
+}
+
+.calendar-button-text{
+  color: black;
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 10px;
+  margin-left: 10px;
+
+}
+
+.dua-button-icon {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.9);
+}

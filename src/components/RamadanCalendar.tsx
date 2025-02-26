@@ -35,6 +35,11 @@ const ramadanSchedule: DaySchedule[] = [
 ];
 
 const RamadanCalendar: React.FC = () => {
+  const openCalendar = () => {
+    // Logic to open the calendar with its data
+    console.log("Calendar opened"); // Debugging line
+  };
+
   return (
     <div className="ramadan-calendar">
       <div className="calendar-header">
@@ -71,6 +76,9 @@ const RamadanCalendar: React.FC = () => {
             )}
           </div>
         ))}
+      </div>
+      <div className="calendar-button-container">
+        <button onClick={openCalendar}>Open Calendar</button>
       </div>
     </div>
   );

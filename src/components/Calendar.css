@@ -1,0 +1,382 @@
+/* Basic calendar styles */
+.calendar-container {
+  position: fixed;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(6, 6, 6);
+  padding: 24px;
+  border-radius: 10px;
+  z-index: 1000;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  color: #e6e1e1;
+  font-size: 2.2rem;
+}
+
+.calendar-header h2 .year {
+  font-weight: 700;
+  color:rgb(185, 76, 76);
+  font-size: 2.6rem;
+}
+
+.close-button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ff4444;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 68, 68, 0.3);
+}
+
+.close-button:hover {
+  background: #ff1744;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+}
+
+.close-button:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.back-button {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1a1a4b;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(26, 26, 75, 0.3);
+}
+
+.back-button:hover {
+  background: #2a2a6b;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 12px rgba(26, 26, 75, 0.4);
+}
+
+.back-button:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.calendar-grid {
+  width: 100%;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.weekday {
+  text-align: center;
+  font-weight: 600;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.day {
+  padding: 8px;
+  text-align: center;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.current {
+  background: #1fa45b;
+  color: white;
+}
+
+.empty {
+  background: none;
+}
+
+.prayer-times-table {
+  background-color: whitesmoke;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-header, .table-row {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.table-header {
+  background: #f5f5f5;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+}
+
+.header-cell, .cell {
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 14px;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.header-cell:last-child, .cell:last-child {
+  border-right: none;
+}
+
+.header-cell {
+  color: #333;
+}
+
+.cell {
+  color: #666;
+}
+
+/* Add these new styles */
+.cell.important-time {
+  color: #ff4444;
+  font-weight: 600;
+  position: relative;
+  background: linear-gradient(rgba(255, 68, 68, 0.05), rgba(255, 68, 68, 0.1));
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.cell.important-time::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid rgba(255, 68, 68, 0.2);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.cell.important-time:hover {
+  background: linear-gradient(rgba(255, 68, 68, 0.1), rgba(255, 68, 68, 0.15));
+  transform: scale(1.02);
+}
+
+.table-row.laylatul-qadr {
+  background: linear-gradient(to right, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.2));
+  position: relative;
+}
+
+.table-row.laylatul-qadr .cell {
+  color: #000;
+  font-weight: 500;
+}
+
+.qadr-label {
+  display: block;
+  font-size: 12px;
+  color: #ff4444;
+  font-weight: bold;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table-row.laylatul-qadr::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  pointer-events: none;
+}
+
+.fasting-cell {
+  padding: 6px 4px !important;
+}
+
+.fasting-buttons {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.fasting-btn {
+  padding: 2px 8px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  transform: scale(1);
+}
+
+.fasting-btn:active {
+  transform: scale(0.95);
+}
+
+.fasting-btn.yes {
+  background: #00c853;
+  color: white;
+  font-weight: 600;
+}
+
+.fasting-btn.yes:hover {
+  background: #00e676;
+}
+
+.fasting-btn.no {
+  background: #d50000;
+  color: white;
+  font-weight: 600;
+}
+
+.fasting-btn.no:hover {
+  background: #ff1744;
+}
+
+.fasting-status {
+  font-size: 18px;
+  font-weight: bold;
+  animation: none;
+}
+
+.fasting-status:has(✓) {
+  color: #00c853;
+  animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.fasting-status:has(✕) {
+  color: #d50000;
+}
+
+.calendar-footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.close-calendar-btn {
+  background: #1a1a4b;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close-calendar-btn:hover {
+  background: #2a2a6b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.close-calendar-btn:active {
+  transform: translateY(0);
+}
+
+/* Optional: Add hover effect to make lines more visible */
+.table-row:hover {
+  background: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.footer-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.download-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.download-btn::before {
+  content: '📄';  /* PDF icon */
+  font-size: 20px;
+}
+
+.download-btn:hover {
+  background: #43A047;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+} 
