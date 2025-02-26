@@ -54,6 +54,7 @@ export const en: TranslationType = {
   kosovo: "Kosovo",
   austria: "Austria",
   switzerland: "Switzerland",
+  germany: "Germany",
   
   // Days of the week
   monday: "Monday",
