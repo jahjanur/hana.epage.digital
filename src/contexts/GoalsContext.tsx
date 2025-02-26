@@ -1,138 +1,95 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth, db } from '../firebase/config';
-import { GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { db } from '../firebase/config';
 import { 
   collection, 
   query, 
   where, 
-  getDocs, 
-  addDoc,
-  Timestamp, 
-  serverTimestamp
+  getDocs,
+  doc,
+  getDoc 
 } from 'firebase/firestore';
-import { format } from 'date-fns';
+import { signInOrCreateUser, getUserFromStorage, signOut } from '../firebase/auth-utils';
 
-interface Goal {
+interface AppUser {
+  email: string;
   id: string;
-  userId: string;
-  type: 'prayer' | 'taraweeh' | 'quran';
-  date: Date;
-  value: number;
+  displayName?: string;
 }
 
 interface GoalsContextType {
-  goals: Goal[];
-  loading: boolean;
   isAuthenticated: boolean;
-  currentUser: User | null;
-  addGoal: (type: Goal['type'], value: number) => Promise<void>;
-  getTodayProgress: () => { prayers: number; taraweeh: number; quran: number; };
-  signInWithGoogle: () => Promise<void>;
-  signOut: () => Promise<void>;
+  currentUser: AppUser | null;
+  signInWithEmail: (email: string) => Promise<void>;
+  signOut: () => void;
+  goals: any[];
+  addGoal: (goal: any) => void;
+  getTodayProgress: () => any;
 }
 
-const GoalsContext = createContext<GoalsContextType | null>(null);
+const GoalsContext = createContext<GoalsContextType | undefined>(undefined);
 
-export const GoalsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [goals, setGoals] = useState<Goal[]>([]);
-  const [loading, setLoading] = useState(true);
+export const GoalsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
+  const [goals, setGoals] = useState<any[]>([]);
 
+  // Check for existing session on mount
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user: User | null) => {
-      setIsAuthenticated(!!user);
-      setCurrentUser(user);
-      if (user) {
-        fetchGoals(user.uid);
-      } else {
-        setGoals([]);
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+    const storedUser = getUserFromStorage();
+    if (storedUser) {
+      setCurrentUser(storedUser);
+      setIsAuthenticated(true);
+    }
   }, []);
 
-  const fetchGoals = async (userId: string) => {
+  const signInWithEmail = async (email: string) => {
     try {
-      const goalsRef = collection(db, 'goals');
-      const q = query(goalsRef, where('userId', '==', userId));
-      const querySnapshot = await getDocs(q);
-      const fetchedGoals = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Goal[];
-      setGoals(fetchedGoals);
+      const user = await signInOrCreateUser(email);
+      setCurrentUser(user);
+      setIsAuthenticated(true);
     } catch (error) {
-      console.error('Error fetching goals:', error);
+      console.error('Error signing in:', error);
+      throw error;
     }
   };
 
-  const addGoal = async (type: Goal['type'], value: number) => {
-    if (!currentUser) return;
+  const handleSignOut = () => {
+    signOut();
+    setCurrentUser(null);
+    setIsAuthenticated(false);
+  };
+
+  const getTodayProgress = async () => {
+    if (!currentUser) return {};
     
     try {
-      const newGoal = {
-        userId: currentUser.uid,
-        type,
-        value,
-        date: new Date(),
-        createdAt: serverTimestamp()
-      };
+      const userDoc = await getDoc(doc(db, 'users', currentUser.id));
+      if (!userDoc.exists()) return {};
       
-      const docRef = await addDoc(collection(db, 'goals'), newGoal);
-      const newGoalWithId = { ...newGoal, id: docRef.id };
-      setGoals(prev => [...prev, newGoalWithId]);
+      const data = userDoc.data();
+      return {
+        prayers: Object.values(data.prayer_log || {}).filter(Boolean).length,
+        taraweeh: data.taraweeh ? 1 : 0,
+        quran: data.quran_progress || 0
+      };
     } catch (error) {
-      console.error('Error adding goal:', error);
+      console.error('Error getting today progress:', error);
+      return {};
     }
-  };
-
-  const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error('Error signing in with Google:', error);
-    }
-  };
-
-  const signOut = async () => {
-    try {
-      await auth.signOut();
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-  };
-
-  const getTodayProgress = () => {
-    if (!currentUser) return { prayers: 0, taraweeh: 0, quran: 0 };
-    
-    // Find today's activities
-    const today = format(new Date(), 'yyyy-MM-dd');
-    const todayActivities = goals.filter(goal => 
-      format(goal.date, 'yyyy-MM-dd') === today
-    );
-
-    return {
-      prayers: todayActivities.filter(g => g.type === 'prayer').reduce((sum, g) => sum + g.value, 0),
-      taraweeh: todayActivities.filter(g => g.type === 'taraweeh').reduce((sum, g) => sum + g.value, 0),
-      quran: todayActivities.filter(g => g.type === 'quran').reduce((sum, g) => sum + g.value, 0)
-    };
   };
 
   return (
-    <GoalsContext.Provider value={{
-      goals,
-      loading,
-      isAuthenticated,
-      currentUser,
-      addGoal,
-      getTodayProgress,
-      signInWithGoogle,
-      signOut
-    }}>
+    <GoalsContext.Provider
+      value={{
+        isAuthenticated,
+        currentUser,
+        signInWithEmail,
+        signOut: handleSignOut,
+        goals,
+        addGoal: (goal: any) => setGoals(prev => [...prev, goal]),
+        getTodayProgress,
+      }}
+    >
       {children}
     </GoalsContext.Provider>
   );
@@ -140,6 +97,8 @@ export const GoalsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 export const useGoals = () => {
   const context = useContext(GoalsContext);
-  if (!context) throw new Error('useGoals must be used within GoalsProvider');
+  if (context === undefined) {
+    throw new Error('useGoals must be used within a GoalsProvider');
+  }
   return context;
 }; 

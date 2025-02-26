@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getMessaging, getToken, Messaging } from 'firebase/messaging';
 
 const firebaseConfig = {
@@ -14,11 +14,28 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 // Initialize services
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Configure Google provider with all necessary scopes
+const provider = new GoogleAuthProvider();
+provider.addScope('profile');
+provider.addScope('email');
+provider.setCustomParameters({
+  prompt: 'select_account',
+  // Add these parameters for better mobile handling
+  mobile: 'true',
+  iosBundle: 'com.yourapp.id', // Replace with your app's bundle ID if you have one
+});
+
+// Set persistence to LOCAL
+setPersistence(auth, browserLocalPersistence)
+  .catch((error) => {
+    console.error("Auth persistence error:", error);
+  });
 
 // Initialize messaging only if in browser environment
 let messaging: Messaging | undefined;
@@ -45,4 +62,4 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     });
 }
 
-export { messaging };
+export { app, auth, db, provider, messaging };
