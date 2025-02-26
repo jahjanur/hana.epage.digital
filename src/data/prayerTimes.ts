@@ -235,27 +235,186 @@ const adjustTime = (time: string, minutes: number): string => {
 
 // Function to get prayer times for a specific city
 export const getCityPrayerTimes = (cityId: string, date: string): PrayerTime | null => {
-  let baseTime;
+  
+   // Check which country's data to use
+   const isKosovoCity = Object.keys(kosovoCityAdjustments).includes(cityId);
+const isSwissCity = Object.keys(swissCityAdjustments).includes(cityId);
+const isAustrianCity = Object.keys(austriaCityAdjustments).includes(cityId); // Check for Austrian cities
+const isGermanCity = Object.keys(germanCityAdjustments).includes(cityId); // Check for German cities
 
-  if (cityId === 'berlin') {
-    baseTime = berlinRamadanTimes.find(day => day.date === date);
-  } else if (cityId === 'hamburg') {
-    baseTime = hamburgRamadanTimes.find(day => day.date === date);
-  } else if (cityId === 'frankfurt') {
-    baseTime = frankfurtRamadanTimes.find(day => day.date === date);
-  }
-  // Add more conditions for other cities...
+// Get base times from the capital city for Austria and Germany
+let baseTime;
 
-  if (!baseTime) return null;
+if (isAustrianCity) {
+// Use Vienna's times for all Austrian cities
+baseTime = austriaRamadanTimes.find(day => day.date === date);
+} else if (isGermanCity) {
+// Use Berlin's times for all German cities
+baseTime = germanRamadanTimes.find(day => day.date === date);
+} else if (isKosovoCity) {
+baseTime = kosovoRamadanTimes.find(day => day.date === date);
+} else if (isSwissCity) {
+baseTime = swissRamadanTimes.find(day => day.date === date);
+} else {
+baseTime = ramadanTimes.find(day => day.date === date);
+}
 
-  return {
-    fajr: baseTime.fajr,
-    dhuhr: baseTime.dhuhr,
-    asr: baseTime.asr,
-    maghrib: baseTime.maghrib,
-    isha: baseTime.isha,
-  };
+if (!baseTime) return null;
+
+// Return the base times directly for Austrian and German cities
+if (isAustrianCity || isGermanCity) {
+  let cityTimes;
+
+    switch (cityId) {
+        case 'hamburg':
+            cityTimes = hamburgRamadanTimes;
+            break;
+        case 'berlin':
+            cityTimes = berlinRamadanTimes;
+            break;   
+        case 'dusseldorf':
+            cityTimes = duesseldorfRamadanTimes;
+            break;
+        case 'bremen':
+            cityTimes = bremenRamadanTimes;
+            break;
+        case 'frankfurt':
+            cityTimes = frankfurtRamadanTimes;
+            break;
+        case 'hannover':
+            cityTimes = hannoverRamadanTimes;
+            break;
+        case 'munich':
+            cityTimes = muenchenRamadanTimes;
+            break;
+        case 'stuttgart':
+            cityTimes = stuttgartRamadanTimes;
+            break;
+        case 'koeln':
+            cityTimes = koelnRamadanTimes;
+            break;
+        case 'stuttgart':
+            cityTimes = stuttgartRamadanTimes;
+            break;
+        case 'wuppertal':
+            cityTimes = wuppertalRamadanTimes;
+            break;
+        case 'bochum':
+            cityTimes = bochumRamadanTimes;
+            break;
+        case 'bonn':
+            cityTimes = bonnRamadanTimes;
+            break;
+        case 'munster':
+            cityTimes = muensterRamadanTimes;
+            break;
+        case 'duisburg':
+            cityTimes = duisburgRamadanTimes;
+            break;
+        case 'nurenberg':
+            cityTimes = nuernbergRamadanTimes;
+            break;
+        case 'hamburg':
+            cityTimes = hamburgRamadanTimes;
+            break;
+        case 'wiesbaden':
+            cityTimes = wiesbadenRamadanTimes;
+            break;
+        
+        case 'hannover':
+            cityTimes = hannoverRamadanTimes;
+            break;
+          case 'essen':
+              cityTimes = essenRamadanTimes;
+              break;
+        case 'moenchengladbach':
+            cityTimes = moenchengladbachRamadanTimes;
+            break;
+        case 'dortmund':
+            cityTimes = dortmundRamadanTimes;
+            break;
+        
+        
+            
+            
+
+
+
+
+
+
+
+
+
+
+
+
+        case 'vienna':
+            cityTimes = austriaRamadanTimes;
+            break;
+        case 'wolfsberg':
+            cityTimes = wolfsbergRamadanTimes;
+            break;    
+        case 'graz':
+            cityTimes = grazRamadanTimes;
+            break;
+        case 'linz':
+            cityTimes = linzRamadanTimes;
+            break;
+        case 'salzburg':
+            cityTimes = salzburgRamadanTimes;
+            break;
+        case 'innsbruck':
+            cityTimes = innsbruckRamadanTimes;
+            break;
+        case 'villach':
+            cityTimes = villachRamadanTimes;
+            break;
+        case 'bregenz':
+            cityTimes = bregenzRamadanTimes;
+            break;
+       
+      
+          
+        
+            
+        // Add more cases for other cities
+        default:
+            return null; // Or handle other cities/countries
+    }
+
+    const baseTime = cityTimes.find(day => day.date === date);
+    if (!baseTime) return null;
+  
+return {
+fajr: baseTime.fajr,
+dhuhr: baseTime.dhuhr,
+asr: baseTime.asr,
+maghrib: baseTime.maghrib,
+isha: baseTime.isha,
 };
+}
+
+// For cities that still use adjustments
+const cityAdj = isKosovoCity ? kosovoCityAdjustments[cityId] :
+isSwissCity ? swissCityAdjustments[cityId] :
+cityAdjustments[cityId];
+
+if (!cityAdj) return null;
+
+return {
+fajr: adjustTime(baseTime.fajr, cityAdj.adjustment.fajr),
+dhuhr: adjustTime(baseTime.dhuhr, cityAdj.adjustment.dhuhr),
+asr: adjustTime(baseTime.asr, cityAdj.adjustment.asr),
+maghrib: adjustTime(baseTime.maghrib, cityAdj.adjustment.maghrib),
+isha: adjustTime(baseTime.isha, cityAdj.adjustment.isha),
+};
+}
+   
+
+
+
+ 
 
 // Base times for Austria (Vienna as reference)
 export const austriaRamadanTimes = [
@@ -926,6 +1085,37 @@ export const bregenzRamadanTimes = [
 
 
 
+export const germanRamadanTimes = [
+  { "date": "2025-03-01", "weekday": "e shtunë", "fajr": "05:00", "dhuhr": "12:24", "asr": "15:11", "maghrib": "17:52", "isha": "19:25" },
+  { "date": "2025-03-02", "weekday": "e diel", "fajr": "04:57", "dhuhr": "12:24", "asr": "15:13", "maghrib": "17:53", "isha": "19:27" },
+  { "date": "2025-03-03", "weekday": "e hënë", "fajr": "04:55", "dhuhr": "12:23", "asr": "15:14", "maghrib": "17:55", "isha": "19:28" },
+  { "date": "2025-03-04", "weekday": "e martë", "fajr": "04:53", "dhuhr": "12:23", "asr": "15:15", "maghrib": "17:57", "isha": "19:30" },
+  { "date": "2025-03-05", "weekday": "e mërkurë", "fajr": "04:50", "dhuhr": "12:23", "asr": "15:16", "maghrib": "17:59", "isha": "19:32" },
+  { "date": "2025-03-06", "weekday": "e enjte", "fajr": "04:48", "dhuhr": "12:23", "asr": "15:18", "maghrib": "18:01", "isha": "19:34" },
+  { "date": "2025-03-07", "weekday": "e premte", "fajr": "04:46", "dhuhr": "12:23", "asr": "15:19", "maghrib": "18:03", "isha": "19:36" },
+  { "date": "2025-03-08", "weekday": "e shtunë", "fajr": "04:43", "dhuhr": "12:22", "asr": "15:20", "maghrib": "18:04", "isha": "19:38" },
+  { "date": "2025-03-09", "weekday": "e diel", "fajr": "04:41", "dhuhr": "12:22", "asr": "15:21", "maghrib": "18:06", "isha": "19:40" },
+  { "date": "2025-03-10", "weekday": "e hënë", "fajr": "04:39", "dhuhr": "12:22", "asr": "15:23", "maghrib": "18:08", "isha": "19:41" },
+  { "date": "2025-03-11", "weekday": "e martë", "fajr": "04:36", "dhuhr": "12:22", "asr": "15:24", "maghrib": "18:10", "isha": "19:43" },
+  { "date": "2025-03-12", "weekday": "e mërkurë", "fajr": "04:34", "dhuhr": "12:21", "asr": "15:25", "maghrib": "18:12", "isha": "19:45" },
+  { "date": "2025-03-13", "weekday": "e enjte", "fajr": "04:31", "dhuhr": "12:21", "asr": "15:26", "maghrib": "18:13", "isha": "19:47" },
+  { "date": "2025-03-14", "weekday": "e premte", "fajr": "04:29", "dhuhr": "12:21", "asr": "15:27", "maghrib": "18:15", "isha": "19:49" },
+  { "date": "2025-03-15", "weekday": "e shtunë", "fajr": "04:26", "dhuhr": "12:20", "asr": "15:28", "maghrib": "18:17", "isha": "19:51" },
+  { "date": "2025-03-16", "weekday": "e diel", "fajr": "04:23", "dhuhr": "12:20", "asr": "15:30", "maghrib": "18:19", "isha": "19:53" },
+  { "date": "2025-03-17", "weekday": "e hënë", "fajr": "04:21", "dhuhr": "12:20", "asr": "15:31", "maghrib": "18:20", "isha": "19:55" },
+  { "date": "2025-03-18", "weekday": "e martë", "fajr": "04:18", "dhuhr": "12:20", "asr": "15:32", "maghrib": "18:22", "isha": "19:57" },
+  { "date": "2025-03-19", "weekday": "e mërkurë", "fajr": "04:15", "dhuhr": "12:19", "asr": "15:33", "maghrib": "18:24", "isha": "19:59" },
+  { "date": "2025-03-20", "weekday": "e enjte", "fajr": "04:13", "dhuhr": "12:19", "asr": "15:34", "maghrib": "18:26", "isha": "20:01" },
+  { "date": "2025-03-21", "weekday": "e premte", "fajr": "04:10", "dhuhr": "12:19", "asr": "15:35", "maghrib": "18:28", "isha": "20:03" },
+  { "date": "2025-03-22", "weekday": "e shtunë", "fajr": "04:07", "dhuhr": "12:18", "asr": "15:36", "maghrib": "18:29", "isha": "20:05" },
+  { "date": "2025-03-23", "weekday": "e diel", "fajr": "04:05", "dhuhr": "12:18", "asr": "15:37", "maghrib": "18:31", "isha": "20:07" },
+  { "date": "2025-03-24", "weekday": "e hënë", "fajr": "04:02", "dhuhr": "12:18", "asr": "15:38", "maghrib": "18:33", "isha": "20:09" },
+  { "date": "2025-03-25", "weekday": "e martë", "fajr": "03:59", "dhuhr": "12:18", "asr": "15:39", "maghrib": "18:35", "isha": "20:11" },
+  { "date": "2025-03-26", "weekday": "e mërkurë", "fajr": "03:56", "dhuhr": "12:17", "asr": "15:40", "maghrib": "18:36", "isha": "20:13" },
+  { "date": "2025-03-27", "weekday": "e enjte", "fajr": "03:54", "dhuhr": "12:17", "asr": "15:41", "maghrib": "18:38", "isha": "20:15" },
+  { "date": "2025-03-28", "weekday": "e premte", "fajr": "03:51", "dhuhr": "12:17", "asr": "15:42", "maghrib": "18:40", "isha": "20:17" },
+  { "date": "2025-03-29", "weekday": "e shtunë", "fajr": "03:48", "dhuhr": "12:16", "asr": "15:43", "maghrib": "18:42", "isha": "20:19" }
+];
 
 
 // Define Berlin's prayer times
@@ -1779,3 +1969,4 @@ export const nuernbergRamadanTimes = [
   { "date": "2025-03-28", "weekday": "E Diel", "fajr": "04:11", "dhuhr": "12:26", "asr": "15:54", "maghrib": "18:47", "isha": "20:17" },
   { "date": "2025-03-29", "weekday": "E Hënë", "fajr": "04:08", "dhuhr": "12:26", "asr": "15:54", "maghrib": "18:49", "isha": "20:19" }
 ];
+
