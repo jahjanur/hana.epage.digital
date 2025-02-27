@@ -61,7 +61,7 @@ export const ramadanTimes = [
   { "date": "2025-03-26", "weekday": "Mërkurë", "fajr": "3:49", "dhuhr": "11:49", "asr": "15:15", "maghrib": "18:01", "isha": "19:29", "special": "   Nata e Kadrit" },
   { "date": "2025-03-27", "weekday": "Enjte", "fajr": "3:47", "dhuhr": "11:49", "asr": "15:16", "maghrib": "18:02", "isha": "19:30" },
   { "date": "2025-03-28", "weekday": "Premte", "fajr": "3:45", "dhuhr": "11:49", "asr": "15:16", "maghrib": "18:03", "isha": "19:31" },
-  { "date": "2025-03-29", "weekday": "Shtunë", "fajr": "3:43", "dhuhr": "11:48", "asr": "15:17", "maghrib": "16:19", "isha": "19:33" }
+  { "date": "2025-03-29", "weekday": "Shtunë", "fajr": "3:43", "dhuhr": "11:48", "asr": "15:17", "maghrib": "18:04", "isha": "19:33" }
 ]
 
 
@@ -253,6 +253,8 @@ baseTime = austriaRamadanTimes.find(day => day.date === date);
 baseTime = germanRamadanTimes.find(day => day.date === date);
 } else if (isKosovoCity) {
 baseTime = kosovoRamadanTimes.find(day => day.date === date);
+}else if (isAlbanianCity) {
+baseTime = albaniaRamadanTimes.find(day => day.date === date);
 } else if (isSwissCity) {
 baseTime = swissRamadanTimes.find(day => day.date === date);
 } else {
@@ -866,7 +868,7 @@ export const swissCityAdjustments : Record<string, CityAdjustment> = {
       nameAlb: "Lugano",
       nameEn: "Lugano",
       nameTr: "Lugano",
-      adjustment: { fajr: 3, dhuhr: 3, asr: 3, maghrib: 3, isha: 3 }
+      adjustment: { fajr: -2, dhuhr: -2, asr: -2, maghrib: -2, isha: -2 }
     },
     luzern: {
       name: "Luzern",
@@ -957,7 +959,7 @@ export const swissCityAdjustments : Record<string, CityAdjustment> = {
       nameAlb: "Solothurn",
       nameEn: "Solothurn",
       nameTr: "Solothurn",
-      adjustment: { fajr: -1, dhuhr: -1, asr: -1, maghrib: -1, isha: -1 }
+      adjustment: { fajr: 4, dhuhr: 4, asr: 4, maghrib: 4, isha: 4 }
     },
     stgallen: {
       name: "St. Gallen",
@@ -999,7 +1001,7 @@ export const swissCityAdjustments : Record<string, CityAdjustment> = {
       nameAlb: "Will",
       nameEn: "Will",
       nameTr: "Will",
-      adjustment: { fajr: -1, dhuhr: -1, asr: -1, maghrib: -1, isha: -1 }
+      adjustment: { fajr: -2, dhuhr: -2, asr: -2, maghrib: -2, isha: -2 }
     },
     winterthur: {
       name: "Winterthur",
@@ -1036,7 +1038,7 @@ export const swissCityAdjustments : Record<string, CityAdjustment> = {
  }
      
   
- export const albanianRamadanTimes = [
+ export const albaniaRamadanTimes = [
   { "date": "2025-03-01", "day": "E shtunë", "fajr": "04:39", "dhuhr": "12:00", "asr": "15:04", "maghrib": "17:37", "isha": "18:59" },
   { "date": "2025-03-02", "day": "E diel", "fajr": "04:38", "dhuhr": "12:00", "asr": "15:05", "maghrib": "17:38", "isha": "19:00" },
   { "date": "2025-03-03", "day": "E hënë", "fajr": "04:36", "dhuhr": "12:00", "asr": "15:06", "maghrib": "17:39", "isha": "19:01" },
