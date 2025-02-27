@@ -865,21 +865,14 @@
 
 /* Footer Styles */
 .footer-epage {
-  position: relative;
-  width: 100%;
-  height: 120px;
-  margin-top: 20px;
-  margin-bottom: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-top: auto;
+  padding: 20px;
+  text-align: center;
 }
 
-.footer-epage svg {
-  width: 200px;
-  max-width: 500px;
+.footer-image {
+  max-width: 200px;
   height: auto;
-  opacity: 0.9;
 }
 
 @media (max-width: 768px) {
@@ -1095,5 +1088,30 @@
   
   .goals-title::after {
     width: 40px;
+  }
+}
+
+.loading-spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: white;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: #4a4aff;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

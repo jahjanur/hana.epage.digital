@@ -6,7 +6,7 @@ const DuateContent: React.FC = () => {
     {
       title: "Dua e Syfyrit",
       arabic: "نَوَيْتُ صَوْمَ غَدٍ عَنْ أَدَاءِ فَرْضِ شَهْرِ رَمَضَانَ هٰذِهِ السَّنَةِ لِلّٰهِ تَعَالَى",
-      transliteration: "Nevejtus savme gadin min šehri Ramadane",
+      transliteration: "Nevejtus savme gadin min šehri Nawaitu sawma ghadin an adai fardhi shahri Ramadana hadhihi as-sanati lillahi taala.",
       translation: "Kam për qëllim të agjëroj nesër në muajin e Ramazanit për hir të Allahut të Madhëruar.",
       time: "Duaja e Syfyrit"
     },

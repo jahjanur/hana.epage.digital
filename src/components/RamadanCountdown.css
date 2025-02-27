@@ -1,10 +1,32 @@
 .countdown-container {
+  font-family: var(--font-primary);
+  background-color: rgba(0, 0, 0, 0.733);
+  background-image: url('../assets/BG.svg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   min-height: 100vh;
-  background-color: #3f3ff4;
-  color: white;
   padding: 0;
+  color: white;
+  display: flex;
+  flex-direction: column;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+
+/* Add a dark overlay */
+.countdown-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(0, 0, 0);
+  pointer-events: none;
 }
 
 .clock-container {
@@ -579,12 +601,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(63, 63, 244, 0.8) 0%,
-    rgba(83, 83, 255, 0.4) 50%,
-    rgba(63, 63, 244, 0.8) 100%
-  );
+  background: rgba(0, 0, 0, 0.7);
   animation: gradientBG 15s ease infinite;
   z-index: 0;
   opacity: 0.6;
