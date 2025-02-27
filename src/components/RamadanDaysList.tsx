@@ -5,11 +5,10 @@ import { IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
 import { BsSunset } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import confetti from 'canvas-confetti';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { FaPrayingHands, FaMosque, FaQuran } from 'react-icons/fa';
-import { CircularProgressWithLabel } from './CircularProgressWithLabel';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useNavigate } from 'react-router-dom';
+import { FaPrayingHands, FaMosque, FaQuran } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 
 interface RamadanDay {
@@ -38,7 +37,7 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   const [showCelebration, setShowCelebration] = useState(false);
   
   // Current day for highlighting
-  const currentDay: number = 29;
+  const currentDay: number = 27;
   
   const duas = {
     syfyr: {
@@ -56,7 +55,6 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   };
 
   const navigate = useNavigate();
-  const [hasGoals, setHasGoals] = useState(false);
 
   useEffect(() => {
     const allDays = ramadanTimes.map((day, index) => {
@@ -189,73 +187,6 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
     return '';
   };
 
-  const GoalsOverview = () => {
-    return (
-      <motion.div 
-        className="goals-overview"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        {!hasGoals ? (
-          <div className="empty-goals-state">
-            <div className="goals-illustration">
-              <motion.div 
-                className="floating-icon"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <FaPrayingHands size={40} />
-              </motion.div>
-              <motion.div 
-                className="floating-icon"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
-              >
-                <FaMosque size={40} />
-              </motion.div>
-              <motion.div 
-                className="floating-icon"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}
-              >
-                <FaQuran size={40} />
-              </motion.div>
-            </div>
-            <h3>Track Your Ramadan Journey</h3>
-            <p>Set daily goals for prayers, taraweeh, and Quran reading</p>
-            <button 
-              className="start-tracking-btn"
-              onClick={() => navigate('/goals')}
-            >
-              Start Tracking
-            </button>
-          </div>
-        ) : (
-          <div className="goals-progress">
-            <div className="progress-rings">
-              <div className="progress-ring">
-                <CircularProgressWithLabel value={80} label="Prayers" icon={<FaPrayingHands />} />
-              </div>
-              <div className="progress-ring">
-                <CircularProgressWithLabel value={60} label="Taraweeh" icon={<FaMosque />} />
-              </div>
-              <div className="progress-ring">
-                <CircularProgressWithLabel value={40} label="Quran" icon={<FaQuran />} />
-              </div>
-            </div>
-            <button 
-              className="view-details-btn"
-              onClick={() => navigate('/goals')}
-            >
-              View Details
-            </button>
-          </div>
-        )}
-      </motion.div>
-    );
-  };
-
   return (
     <div style={{ position: 'relative' }} className={showCelebration ? 'celebration-active' : ''}>
       {/* Modern Circular Progress Section */}
@@ -335,8 +266,6 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
         </div>
       </div>
 
-      <GoalsOverview />
-
       <div className="dua-buttons-container">
         <button 
           className="dua-button"
@@ -362,7 +291,7 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
               <IoClose size={18} />
             </button>
           </div>
-          <div className="dua-content">
+          <div className="dua-content-nijet">
             <div className="arabic-text">{duas[expandedDua].arabic}</div>
             <div className="transliteration">{duas[expandedDua].transliteration}</div>
             <div className="translation">{duas[expandedDua].translation}</div>
@@ -409,6 +338,56 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
           ))}
         </div>
       </div>
+
+      <motion.div 
+        className="goals-redirect-container"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="goals-content">
+          <h3 className="goals-title">{t('trackYourJourney')}</h3>
+          <p className="goals-description">{('trackYourProgress')}</p>
+          
+          <div className="goals-features">
+            <motion.div 
+              className="feature-item"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaPrayingHands className="feature-icon" />
+              <span>{t('dailyPrayers')}</span>
+            </motion.div>
+            
+            <motion.div 
+              className="feature-item"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaMosque className="feature-icon" />
+              <span>{t('taraweehPrayer')}</span>
+            </motion.div>
+            
+            <motion.div 
+              className="feature-item"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaQuran className="feature-icon" />
+              <span>{t('quranReading')}</span>
+            </motion.div>
+          </div>
+
+          <motion.button
+            className="start-tracking-btn"
+            onClick={() => navigate('/goals')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            {t('startTracking')}
+          </motion.button>
+        </div>
+      </motion.div>
 
       <div className="powered-by">
         {t('poweredBy')} <a href="https://epage.digital" target="_blank" rel="noopener noreferrer">epage.digital</a>

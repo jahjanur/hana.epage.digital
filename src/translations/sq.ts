@@ -55,7 +55,8 @@ export const sq: TranslationType = {
   austria: "Austria",
   switzerland: "Zvicra",
   germany: "Gjermania",
-  
+  albania: "Shqipëri",
+
   // Days of the week
   monday: "E Hënë",
   tuesday: "E Martë",
@@ -79,7 +80,7 @@ export const sq: TranslationType = {
   
   // Duas
   nijetTitle: "Nijeti",
-  nijetTransliteration: "Nevejtus savme gadin min šehri Ramadane",
+  nijetTransliteration: "Nevejtus savme Nawaitu sawma ghadin an adai fardhi shahri Ramadana hadhihi as-sanati lillahi taala. min šehri Ramadane",
   nijetTranslation: "Kam për qëllim të agjëroj nesër në muajin e Ramazanit për hir të Allahut të Madhëruar.",
   iftarDuaTitle: "Duaja e Iftarit",
   iftarDuaTransliteration: "Allahumme leke sumtu ve bike amentu ve ala rizkike eftertu ve alejke tevekkeltu",

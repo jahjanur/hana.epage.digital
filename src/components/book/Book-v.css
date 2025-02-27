@@ -826,12 +826,12 @@ body.loading {
 
 .countdown-content {
   text-align: center;
-  padding: 2rem;
+ 
   background: rgba(56, 56, 208, 0.1);
-  border: 1px solid rgba(56, 56, 208, 0.2);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border: 1px transparent rgba(56, 56, 208, 0.2);
+  border-radius: 100px;
+  
+  
 }
 
 .countdown-title {

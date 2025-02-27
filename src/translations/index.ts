@@ -61,6 +61,7 @@ export type TranslationType = {
   kosovo: string;
   austria: string;
   switzerland: string;
+  albania: string;
   
   // Days of the week
   monday: string;

@@ -59,6 +59,8 @@
 
 .country-selector {
   display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 8px;
   padding: 0 4px;

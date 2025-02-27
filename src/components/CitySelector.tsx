@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './CitySelector.css';
 import { IoLocationOutline } from "react-icons/io5";
 import { IoChevronDownOutline } from "react-icons/io5";
-import { cityAdjustments, kosovoCityAdjustments, austriaCityAdjustments, swissCityAdjustments, germanCityAdjustments } from '../data/prayerTimes';
+import { cityAdjustments, kosovoCityAdjustments, austriaCityAdjustments, swissCityAdjustments, germanCityAdjustments, albaniaCityAdjustments } from '../data/prayerTimes';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface CitySelectorProps {
@@ -13,11 +13,11 @@ interface CitySelectorProps {
 const CitySelector: React.FC<CitySelectorProps> = ({ selectedCity, onCityChange }) => {
   const { t, language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<'macedonia' | 'kosovo' | 'austria' | 'switzerland' | 'germany'>(() => {
+  const [selectedCountry, setSelectedCountry] = useState<'macedonia' | 'kosovo' | 'austria' | 'switzerland' | 'germany' | 'albania'>(() => {
     // Initialize from localStorage or default to 'macedonia'
     const savedCountry = localStorage.getItem('selectedCountry');
     if (savedCountry === 'macedonia' || savedCountry === 'kosovo' || 
-        savedCountry === 'austria' || savedCountry === 'switzerland' || savedCountry === 'germany') {
+        savedCountry === 'austria' || savedCountry === 'switzerland' || savedCountry === 'germany' || savedCountry === 'albania') {
       return savedCountry;
     }
     return 'macedonia';
@@ -36,6 +36,7 @@ const CitySelector: React.FC<CitySelectorProps> = ({ selectedCity, onCityChange 
                     austriaCityAdjustments[cityId] || 
                     swissCityAdjustments[cityId] || 
                     kosovoCityAdjustments[cityId] || 
+                    albaniaCityAdjustments[cityId] ||
                     cityAdjustments[cityId];
 
     if (!cityData) return cityId;
@@ -55,7 +56,7 @@ const CitySelector: React.FC<CitySelectorProps> = ({ selectedCity, onCityChange 
     }
   };
 
-  const handleCountryChange = (country: 'macedonia' | 'kosovo' | 'austria' | 'switzerland' | 'germany') => {
+  const handleCountryChange = (country: 'macedonia' | 'kosovo' | 'austria' | 'switzerland' | 'germany' | 'albania') => {
     setSelectedCountry(country);
     localStorage.setItem('selectedCountry', country);
     
@@ -76,6 +77,9 @@ const CitySelector: React.FC<CitySelectorProps> = ({ selectedCity, onCityChange 
         break;
       case 'germany':
         cities = Object.keys(germanCityAdjustments);
+        break;
+      case 'albania':
+        cities = Object.keys(albaniaCityAdjustments);
         break;
       default:
         cities = [];
@@ -105,6 +109,8 @@ const CitySelector: React.FC<CitySelectorProps> = ({ selectedCity, onCityChange 
         return Object.entries(swissCityAdjustments);
       case 'germany':
         return Object.entries(germanCityAdjustments);
+      case 'albania':
+        return Object.entries(albaniaCityAdjustments);
       default:
         return Object.entries(cityAdjustments);
     }
@@ -153,6 +159,12 @@ const CitySelector: React.FC<CitySelectorProps> = ({ selectedCity, onCityChange 
               onClick={() => handleCountryChange('germany')}
             >
               {t('germany')}
+            </button>
+            <button
+              className={`country-option ${selectedCountry === 'albania' ? 'active' : ''}`}
+              onClick={() => handleCountryChange('albania')}
+            >
+              {t('albania')}
             </button>
           </div>
           <div className="cities-list">

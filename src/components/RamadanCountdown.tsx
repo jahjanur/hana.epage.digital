@@ -7,7 +7,7 @@ import BottomNavigation from './BottomNavigation';
 import { ReactComponent as HanaLogo } from '../assets/hanaMainLogoWhite.svg';
 import RamadanDaysList from './RamadanDaysList';
 import AnimatedBackground from './AnimatedBackground';
-import Background from './Background';
+
 import CitySelector from './CitySelector';
 import AppHeader from './AppHeader';
 import { getCityPrayerTimes } from '../data/prayerTimes';
@@ -315,7 +315,7 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
     <div className="ramadan-countdown">
       <AppHeader selectedCity={selectedCity} onCityChange={onCityChange} />
       <div className="countdown-container">
-        <Background />
+
         <div className="content-wrapper" style={{ position: 'relative', zIndex: 3 }}>
           <AnimatedBackground />
           

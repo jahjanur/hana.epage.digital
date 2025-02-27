@@ -68,6 +68,7 @@ interface Translations {
     austria: string;
     switzerland: string;
     germany: string;
+    albania: string;
     
     // Add notification-related keys
     syfyr: string;
@@ -116,7 +117,7 @@ interface Translations {
 }
 
 const translations: Translations = {
-  'sq': {
+  'sq': { 
     // Albanian translations
     fajr: 'Sabah',
     dhuhr: 'Dreka',
@@ -156,7 +157,7 @@ const translations: Translations = {
     acceptancePrayer: 'Allahu jua pranoftë agjërimin!',
     poweredBy: 'Mundësuar nga',
     nijetTitle: 'Nijeti',
-    nijetTransliteration: 'Nevejtus savme gadin min šehri Ramadane',
+    nijetTransliteration: 'Nawaitu sawma ghadin an adai fardhi shahri Ramadana hadhihi as-sanati lillahi taala.',
     nijetTranslation: 'Kam për qëllim të agjëroj nesër në muajin e Ramazanit për hir të Allahut të Madhëruar.',
     iftarDuaTitle: 'Duaja e Iftarit',
     iftarDuaTransliteration: 'Allahumme leke sumtu ve bike amentu ve ala rizkike eftertu ve alejke tevekkeltu',
@@ -174,7 +175,7 @@ const translations: Translations = {
     austria: 'Austria',
     switzerland: 'Switzerland',
     germany: 'Germany',
-    
+    albania: 'Albania',
     // Add notification-related translations
     syfyr: 'Suhoor',
     iftar: 'Iftar',
@@ -352,7 +353,7 @@ const translations: Translations = {
     nijetTransliteration: 'Nawaitu sawma ghadin...',
     nijetTranslation: 'I intend to fast tomorrow in the month of Ramadan...',
     iftarDuaTitle: 'Iftar Dua',
-    iftarDuaTransliteration: 'Allahumma laka sumtu...',
+    iftarDuaTransliteration: 'Allahumma laka sumtu wa bika amantu wa ‘alayka tawakkaltu wa ‘ala rizq-ika-aftartu.',
     iftarDuaTranslation: 'O Allah, I fasted for You and I believe in You...',
     laylatulQadr: 'Laylatul Qadr',
     startTracking: 'Start Tracking',
@@ -367,7 +368,7 @@ const translations: Translations = {
     austria: 'Austria',
     switzerland: 'Switzerland',
     germany: 'Germany',
-    
+    albania: 'Albania',
     // Add notification-related translations
     syfyr: 'Suhoor',
     iftar: 'Iftar',
@@ -562,7 +563,7 @@ const translations: Translations = {
     austria: 'Avusturya',
     switzerland: 'İsviçre',
     germany: 'Almanya',
-    
+    albania: 'Arnavutluk',
     // Notification-related translations
     syfyr: 'Sahur',
     iftar: 'İftar',
@@ -757,7 +758,7 @@ const translations: Translations = {
     austria: 'Österreich',
     switzerland: 'Schweiz',
     germany: 'Deutschland',
-    
+    albania: 'Albanien',
     // Notification-related translations
     syfyr: 'Suhur',
     iftar: 'Iftar',
