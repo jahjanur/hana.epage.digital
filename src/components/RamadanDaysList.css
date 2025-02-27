@@ -1352,19 +1352,18 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  width: 272px;  /* 312px - 2 * 20px padding */
+  width: 0px;  /* 312px - 2 * 20px padding */
   height: 272px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
+  
   background: radial-gradient(
     circle at center,
     rgba(0, 0, 0, 0.6) 0%,
     rgba(0, 0, 0, 0.3) 100%
   );
-  backdrop-filter: blur(8px);
   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
   animation: pulseBackground 4s ease-in-out infinite;
 }
@@ -1439,8 +1438,8 @@
 /* Responsive styles */
 @media (max-width: 768px) {
   .countdown-circle-wrapper {
-    width: 260px;
-    height: 260px;
+    width: 29px;
+    height: 20px;
   }
 
   .countdown-digit {
@@ -1456,7 +1455,7 @@
   }
 
   .countdown-content {
-    width: 220px;
+    width: 0;
     height: 220px;
   }
 }
@@ -1482,7 +1481,7 @@
   }
 
   .countdown-content {
-    width: 202px;
+    width: 0px;
     height: 202px;
   }
 }

@@ -5,10 +5,6 @@ import { IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
 import { BsSunset } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import confetti from 'canvas-confetti';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { FaPrayingHands, FaMosque, FaQuran } from 'react-icons/fa';
-import { CircularProgressWithLabel } from './CircularProgressWithLabel';
 import { useLanguage } from '../contexts/LanguageContext';
 
 
@@ -54,9 +50,6 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
       translation: t('iftarDuaTranslation')
     }
   };
-
-  const navigate = useNavigate();
-  const [hasGoals, setHasGoals] = useState(false);
 
   useEffect(() => {
     const allDays = ramadanTimes.map((day, index) => {
@@ -189,73 +182,6 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
     return '';
   };
 
-  const GoalsOverview = () => {
-    return (
-      <motion.div 
-        className="goals-overview"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        {!hasGoals ? (
-          <div className="empty-goals-state">
-            <div className="goals-illustration">
-              <motion.div 
-                className="floating-icon"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <FaPrayingHands size={40} />
-              </motion.div>
-              <motion.div 
-                className="floating-icon"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
-              >
-                <FaMosque size={40} />
-              </motion.div>
-              <motion.div 
-                className="floating-icon"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}
-              >
-                <FaQuran size={40} />
-              </motion.div>
-            </div>
-            <h3>Track Your Ramadan Journey</h3>
-            <p>Set daily goals for prayers, taraweeh, and Quran reading</p>
-            <button 
-              className="start-tracking-btn"
-              onClick={() => navigate('/goals')}
-            >
-              Start Tracking
-            </button>
-          </div>
-        ) : (
-          <div className="goals-progress">
-            <div className="progress-rings">
-              <div className="progress-ring">
-                <CircularProgressWithLabel value={80} label="Prayers" icon={<FaPrayingHands />} />
-              </div>
-              <div className="progress-ring">
-                <CircularProgressWithLabel value={60} label="Taraweeh" icon={<FaMosque />} />
-              </div>
-              <div className="progress-ring">
-                <CircularProgressWithLabel value={40} label="Quran" icon={<FaQuran />} />
-              </div>
-            </div>
-            <button 
-              className="view-details-btn"
-              onClick={() => navigate('/goals')}
-            >
-              View Details
-            </button>
-          </div>
-        )}
-      </motion.div>
-    );
-  };
-
   return (
     <div style={{ position: 'relative' }} className={showCelebration ? 'celebration-active' : ''}>
       {/* Modern Circular Progress Section */}
@@ -334,8 +260,6 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
           )}
         </div>
       </div>
-
-      <GoalsOverview />
 
       <div className="dua-buttons-container">
         <button 
