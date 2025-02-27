@@ -37,7 +37,7 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   const [showCelebration, setShowCelebration] = useState(false);
   
   // Current day for highlighting
-  const currentDay: number = 29;
+  const currentDay: number = 2;
   
   const duas = {
     syfyr: {

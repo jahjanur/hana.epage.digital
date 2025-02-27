@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import './StoryModal.css';
-import { ReactComponent as HanaLogoComponent } from '../../assets/hana-logo.svg';
+
 import Footer from '../Footer';
+import { ReactComponent as HanaLogo } from '../../assets/hanaMainLogoWhite.svg';
+import hanaLogo from '../../assets/hanaMainLogoWhite.svg';
 
 interface Story {
   id: number;
@@ -82,10 +84,9 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, onClose, onNavigate }) =
         </svg>
       </button>
       <div className="story-header">
-        <img 
-          src={`${process.env.PUBLIC_URL}/assets/hana-logo.svg`} 
-          alt="Hana Logo" 
-          className="story-logo" 
+        <HanaLogo 
+          className="story-logo"
+          aria-label="Hana Logo"
         />
       </div>
       <div 
