@@ -241,7 +241,7 @@ export const getCityPrayerTimes = (cityId: string, date: string): PrayerTime | n
 const isSwissCity = Object.keys(swissCityAdjustments).includes(cityId);
 const isAustrianCity = Object.keys(austriaCityAdjustments).includes(cityId); // Check for Austrian cities
 const isGermanCity = Object.keys(germanCityAdjustments).includes(cityId); // Check for German cities
-
+const isAlbanianCity = Object.keys(albaniaCityAdjustments).includes(cityId); // Check for Albanian cities
 // Get base times from the capital city for Austria and Germany
 let baseTime;
 
@@ -397,6 +397,7 @@ isha: baseTime.isha,
 
 // For cities that still use adjustments
 const cityAdj = isKosovoCity ? kosovoCityAdjustments[cityId] :
+isAlbanianCity ? albaniaCityAdjustments[cityId] :
 isSwissCity ? swissCityAdjustments[cityId] :
 cityAdjustments[cityId];
 
@@ -1029,7 +1030,108 @@ export const swissCityAdjustments : Record<string, CityAdjustment> = {
  }
      
   
-
+ export const albanianRamadanTimes = [
+  { "date": "2025-03-01", "day": "E shtunë", "fajr": "04:39", "dhuhr": "12:00", "asr": "15:04", "maghrib": "17:37", "isha": "18:59" },
+  { "date": "2025-03-02", "day": "E diel", "fajr": "04:38", "dhuhr": "12:00", "asr": "15:05", "maghrib": "17:38", "isha": "19:00" },
+  { "date": "2025-03-03", "day": "E hënë", "fajr": "04:36", "dhuhr": "12:00", "asr": "15:06", "maghrib": "17:39", "isha": "19:01" },
+  { "date": "2025-03-04", "day": "E martë", "fajr": "04:34", "dhuhr": "12:00", "asr": "15:07", "maghrib": "17:41", "isha": "19:02" },
+  { "date": "2025-03-05", "day": "E mërkurë", "fajr": "04:33", "dhuhr": "11:59", "asr": "15:07", "maghrib": "17:42", "isha": "19:03" },
+  { "date": "2025-03-06", "day": "E enjte", "fajr": "04:31", "dhuhr": "11:59", "asr": "15:08", "maghrib": "17:43", "isha": "19:04" },
+  { "date": "2025-03-07", "day": "E premte", "fajr": "04:30", "dhuhr": "11:59", "asr": "15:09", "maghrib": "17:44", "isha": "19:05" },
+  { "date": "2025-03-08", "day": "E shtunë", "fajr": "04:28", "dhuhr": "11:59", "asr": "15:10", "maghrib": "17:45", "isha": "19:07" },
+  { "date": "2025-03-09", "day": "E diel", "fajr": "04:26", "dhuhr": "11:58", "asr": "15:10", "maghrib": "17:46", "isha": "19:08" },
+  { "date": "2025-03-10", "day": "E hënë", "fajr": "04:25", "dhuhr": "11:58", "asr": "15:11", "maghrib": "17:47", "isha": "19:09" },
+  { "date": "2025-03-11", "day": "E martë", "fajr": "04:23", "dhuhr": "11:58", "asr": "15:12", "maghrib": "17:49", "isha": "19:10" },
+  { "date": "2025-03-12", "day": "E mërkurë", "fajr": "04:21", "dhuhr": "11:58", "asr": "15:12", "maghrib": "17:50", "isha": "19:11" },
+  { "date": "2025-03-13", "day": "E enjte", "fajr": "04:20", "dhuhr": "11:57", "asr": "15:13", "maghrib": "17:51", "isha": "19:12" },
+  { "date": "2025-03-14", "day": "E premte", "fajr": "04:18", "dhuhr": "11:57", "asr": "15:14", "maghrib": "17:52", "isha": "19:14" },
+  { "date": "2025-03-15", "day": "E shtunë", "fajr": "04:16", "dhuhr": "11:57", "asr": "15:14", "maghrib": "17:53", "isha": "19:15" },
+  { "date": "2025-03-16", "day": "E diel", "fajr": "04:14", "dhuhr": "11:57", "asr": "15:15", "maghrib": "17:54", "isha": "19:16" },
+  { "date": "2025-03-17", "day": "E hënë", "fajr": "04:12", "dhuhr": "11:56", "asr": "15:15", "maghrib": "17:55", "isha": "19:17" },
+  { "date": "2025-03-18", "day": "E martë", "fajr": "04:11", "dhuhr": "11:56", "asr": "15:16", "maghrib": "17:56", "isha": "19:18" },
+  { "date": "2025-03-19", "day": "E mërkurë", "fajr": "04:09", "dhuhr": "11:56", "asr": "15:17", "maghrib": "17:58", "isha": "19:20" },
+  { "date": "2025-03-20", "day": "E enjte", "fajr": "04:07", "dhuhr": "11:55", "asr": "15:17", "maghrib": "17:59", "isha": "19:21" },
+  { "date": "2025-03-21", "day": "E premte", "fajr": "04:05", "dhuhr": "11:55", "asr": "15:18", "maghrib": "18:00", "isha": "19:22" },
+  { "date": "2025-03-22", "day": "E shtunë", "fajr": "04:03", "dhuhr": "11:55", "asr": "15:18", "maghrib": "18:01", "isha": "19:23" },
+  { "date": "2025-03-23", "day": "E diel", "fajr": "04:02", "dhuhr": "11:54", "asr": "15:19", "maghrib": "18:02", "isha": "19:24" },
+  { "date": "2025-03-24", "day": "E hënë", "fajr": "04:00", "dhuhr": "11:54", "asr": "15:19", "maghrib": "18:03", "isha": "19:26" },
+  { "date": "2025-03-25", "day": "E martë", "fajr": "03:58", "dhuhr": "11:54", "asr": "15:20", "maghrib": "18:04", "isha": "19:27" },
+  { "date": "2025-03-26", "day": "E mërkurë", "fajr": "03:56", "dhuhr": "11:54", "asr": "15:20", "maghrib": "18:05", "isha": "19:28" },
+  { "date": "2025-03-27", "day": "E enjte", "fajr": "03:54", "dhuhr": "11:53", "asr": "15:21", "maghrib": "18:06", "isha": "19:29" },
+  { "date": "2025-03-28", "day": "E premte", "fajr": "03:52", "dhuhr": "11:53", "asr": "15:21", "maghrib": "18:07", "isha": "19:31" },
+  { "date": "2025-03-29", "day": "E shtunë", "fajr": "03:50", "dhuhr": "11:53", "asr": "15:22", "maghrib": "18:08", "isha": "19:32" }
+];
+export const albaniaCityAdjustments : Record<string, CityAdjustment> = {
+  Tirana: {
+    name: "Tirana",
+      nameAlb: "Tirana",
+      nameEn: "Tirana",
+      nameTr: "Tirana",
+    adjustment: { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 }
+  },
+  Durres: {
+    name: "Durres",
+      nameAlb: "Durres",
+      nameEn: "Durres",
+      nameTr: "Durres",
+    adjustment: { fajr: 2, dhuhr: 2, asr: 2, maghrib: 2, isha: 2 }
+  },
+  Elbasan: {
+    name: "Elbasan",
+      nameAlb: "Elbasan",
+      nameEn: "Elbasan",
+      nameTr: "Elbasan",
+    adjustment: { fajr: -1, dhuhr: -1, asr: -1, maghrib: -1, isha: -1 }
+  },
+  Shkodra: {
+    name: "Shkodra",
+      nameAlb: "Shkodra",
+      nameEn: "Shkodra",
+      nameTr: "Shkodra",
+    adjustment: { fajr: 2, dhuhr: 2, asr: 2, maghrib: 2, isha: 2 },
+  },
+  Lushnje: {
+    name: "Lushnje",
+      nameAlb: "Lushnje",
+      nameEn: "Lushnje",
+      nameTr: "Lushnje",
+      adjustment: { fajr: 1, dhuhr: 1, asr: 1, maghrib: 1, isha: 1 }
+    },
+    Vlora: {
+      name: "Vlora",
+      nameAlb: "Vlora",
+      nameEn: "Vlora",
+      nameTr: "Vlora",
+      adjustment: { fajr: 1, dhuhr: 1, asr: 1, maghrib: 1, isha: 1 }
+    },
+    Berat: {
+      name: "Berat",
+      nameAlb: "Berat",
+      nameEn: "Berat",
+      nameTr: "Berat",
+      adjustment: { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 }
+    },
+      Kukes: {
+      name: "Kukes",
+      nameAlb: "Kukes",
+      nameEn: "Kukes",
+      nameTr: "Kukes",
+      adjustment: { fajr: -1, dhuhr: -1, asr: -1, maghrib: -1, isha: -1 }
+    },Librazhd: {
+      name: "Librazhd",
+      nameAlb: "Librazhd",
+      nameEn: "Librazhd",
+      nameTr: "Librazhd",
+      adjustment: { fajr: -2, dhuhr: -2, asr: -2, maghrib: -2, isha: -2 }
+    },Korce: {
+      name: "Korce",
+      nameAlb: "Korce",
+      nameEn: "Korce",
+      nameTr: "Korce",
+      adjustment: { fajr: -5, dhuhr: -5, asr: -5, maghrib: -5, isha: -5 }
+    }
+  
+}
 
 
 // Base times for Wolfsberg
