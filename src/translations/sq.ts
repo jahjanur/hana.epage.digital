@@ -55,7 +55,8 @@ export const sq: TranslationType = {
   austria: "Austria",
   switzerland: "Zvicra",
   germany: "Gjermania",
-  
+  albania: "Shqipëri",
+
   // Days of the week
   monday: "E Hënë",
   tuesday: "E Martë",
