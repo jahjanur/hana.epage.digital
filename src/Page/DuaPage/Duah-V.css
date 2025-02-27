@@ -1,0 +1,109 @@
+.duah-v-container {
+  background: #3f3ff4;
+  min-height: 100vh;
+  padding: 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.duah-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  margin-bottom: 20px;
+}
+
+.duah-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.search-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.search-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 16px;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.duas-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.dua-item {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+}
+
+.dua-number {
+  font-weight: bold;
+  opacity: 0.8;
+}
+
+.dua-title {
+  flex: 1;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #666;
+  text-decoration: none;
+  font-size: 12px;
+  gap: 4px;
+}
+
+.nav-item.active {
+  color: #3f3ff4;
+}
+
+.nav-item svg {
+  font-size: 20px;
+}

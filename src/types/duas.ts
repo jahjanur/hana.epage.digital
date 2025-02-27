@@ -4,12 +4,18 @@ export interface DuaContent {
   translation: string[];
 }
 
-export interface Dua {
-  id: string;
+export interface DuaTranslation {
   title: string;
-  contents?: DuaContent[];
+  content: DuaContent[];
 }
 
-export interface DuaResponse {
+export interface Dua {
+  id: string;
+  translations: {
+    [key: string]: DuaTranslation;
+  };
+}
+
+export interface DuasData {
   duas: Dua[];
 } 

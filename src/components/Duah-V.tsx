@@ -4,8 +4,10 @@ import { Dua } from '../types/duas';
 import { getDuas } from '../services/duaService';
 import AppHeader from './AppHeader';
 import Footer from './Footer';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const DuahV: React.FC = () => {
+  const { language } = useLanguage();
   const [selectedDua, setSelectedDua] = useState<Dua | null>(null);
   const [duas, setDuas] = useState<Dua[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -17,8 +19,10 @@ const DuahV: React.FC = () => {
       try {
         setIsLoading(true);
         const response = await getDuas();
-        setDuas(response.duas);
+        console.log('Fetched duas:', response);
+        setDuas(response);
       } catch (err) {
+        console.error('Error fetching duas:', err);
         setError('Failed to load duas. Please try again later.');
       } finally {
         setIsLoading(false);
@@ -28,8 +32,20 @@ const DuahV: React.FC = () => {
     fetchDuas();
   }, []);
 
-  const handleDuaClick = (dua: Dua) => {
-    setSelectedDua(dua);
+  const getLocalizedContent = (dua: Dua) => {
+    console.log('Current language:', language);
+    console.log('Available translations:', Object.keys(dua.translations));
+    
+    // Try to get the translation in the current language, then fall back in this order:
+    const translation = dua.translations[language] || 
+                       dua.translations[language === 'tr' ? 'en' : 'tr'] || // If Turkish is selected but missing, try English, else try Turkish
+                       dua.translations[language === 'de' ? 'en' : 'de'] || // If German is selected but missing, try English, else try German
+                       dua.translations['en'] || 
+                       dua.translations['sq'] ||
+                       Object.values(dua.translations)[0];
+                       
+    console.log('Selected translation:', translation?.title);
+    return translation;
   };
 
   if (isLoading) {
@@ -37,7 +53,12 @@ const DuahV: React.FC = () => {
       <div className="duah-v-container">
         <div className="loading-spinner">
           <div className="spinner"></div>
-          <span>Loading duas...</span>
+          <span>
+            {language === 'tr' ? 'Dualar yükleniyor...' :
+             language === 'de' ? 'Bittgebete werden geladen...' :
+             language === 'en' ? 'Loading duas...' :
+             'Duke ngarkuar duatë...'}
+          </span>
         </div>
         <Footer />
       </div>
@@ -49,8 +70,18 @@ const DuahV: React.FC = () => {
       <div className="duah-v-container">
         <div className="error-message">
           <span>⚠️</span>
-          <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Try Again</button>
+          <p>
+            {language === 'tr' ? 'Duaları yüklerken bir hata oluştu. Lütfen tekrar deneyin.' :
+             language === 'de' ? 'Fehler beim Laden der Bittgebete. Bitte versuchen Sie es erneut.' :
+             language === 'en' ? 'Failed to load duas. Please try again.' :
+             'Dështoi ngarkimi i duave. Ju lutemi provoni përsëri.'}
+          </p>
+          <button onClick={() => window.location.reload()}>
+            {language === 'tr' ? 'Tekrar Dene' :
+             language === 'de' ? 'Erneut Versuchen' :
+             language === 'en' ? 'Try Again' :
+             'Provo Përsëri'}
+          </button>
         </div>
         <Footer />
       </div>
@@ -58,17 +89,23 @@ const DuahV: React.FC = () => {
   }
 
   if (selectedDua) {
+    const localizedContent = getLocalizedContent(selectedDua);
     return (
       <div className="duah-v-container">
         <AppHeader selectedCity={selectedCity} onCityChange={setSelectedCity} />
         <div className="duah-header">
-          <h1>{selectedDua.title}</h1>
+          <h1>{localizedContent?.title}</h1>
         </div>
         <div className="dua-detail">
           <button 
             className="dua-close-button" 
             onClick={() => setSelectedDua(null)}
-            aria-label="Close dua"
+            aria-label={
+              language === 'tr' ? 'Duayı kapat' :
+              language === 'de' ? 'Bittgebet schließen' :
+              language === 'en' ? 'Close dua' :
+              'Mbyll duanë'
+            }
           >
             <svg 
               width="24" 
@@ -86,11 +123,11 @@ const DuahV: React.FC = () => {
               />
             </svg>
           </button>
-          {selectedDua.contents?.map((content, index) => (
+          {localizedContent?.content.map((content, index) => (
             <div key={index} className="dua-content">
-              <div className="arabic-text">{content.arabic}</div>
-              <div className="transliteration">{content.transliteration}</div>
-              <div className="translation">{content.translation}</div>
+              <div className="arabic-text">{Array.isArray(content.arabic) ? content.arabic.join(' ') : content.arabic}</div>
+              <div className="transliteration">{Array.isArray(content.transliteration) ? content.transliteration.join(' ') : content.transliteration}</div>
+              <div className="translation">{Array.isArray(content.translation) ? content.translation.join(' ') : content.translation}</div>
             </div>
           ))}
         </div>
@@ -106,8 +143,18 @@ const DuahV: React.FC = () => {
         <div className="book-title-wrapper">
           <div className="title-decoration left"></div>
           <div className="title-content">
-            <h1 className="book-title">Koleksioni i Duave</h1>
-            <p className="book-subtitle">Lutjet e Profetit Muhamed ﷺ</p>
+            <h1 className="book-title">
+              {language === 'en' ? 'Collection of Duas' :
+               language === 'tr' ? 'Dua Koleksiyonu' :
+               language === 'de' ? 'Sammlung von Bittgebeten' :
+               'Koleksioni i Duave'}
+            </h1>
+            <p className="book-subtitle">
+              {language === 'en' ? "Prayers of Prophet Muhammad ﷺ" :
+               language === 'tr' ? "Peygamber Muhammed'in (ﷺ) Duaları" :
+               language === 'de' ? "Gebete des Propheten Muhammad ﷺ" :
+               "Lutjet e Profetit Muhamed ﷺ"}
+            </p>
             <div className="title-accent"></div>
           </div>
           <div className="title-decoration right"></div>
@@ -115,21 +162,29 @@ const DuahV: React.FC = () => {
       </div>
 
       <div className="duas-grid">
-        {duas.map((dua) => (
-          <div 
-            key={dua.id} 
-            className="dua-card" 
-            onClick={() => handleDuaClick(dua)}
-          >
-            <div className="dua-card-content">
-              <span className="dua-number">{dua.id}</span>
-              <h2 className="dua-title">{dua.title}</h2>
-              <div className="dua-card-footer">
-                <span className="read-more">Lexo →</span>
+        {duas.map((dua) => {
+          const localizedContent = getLocalizedContent(dua);
+          return (
+            <div 
+              key={dua.id} 
+              className="dua-card" 
+              onClick={() => setSelectedDua(dua)}
+            >
+              <div className="dua-card-content">
+                <span className="dua-number">{dua.id}</span>
+                <h2 className="dua-title">{localizedContent?.title}</h2>
+                <div className="dua-card-footer">
+                  <span className="read-more">
+                    {language === 'en' ? 'Read →' :
+                     language === 'tr' ? 'Oku →' :
+                     language === 'de' ? 'Lesen →' :
+                     'Lexo →'}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       <Footer />
     </div>
