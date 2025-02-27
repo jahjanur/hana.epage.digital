@@ -1060,3 +1060,64 @@
   display: inline-block;
   margin: 0 auto;
 }
+
+.preloader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preloader-video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes fadeOut {
+  0% { 
+    opacity: 1;
+    background-color: #000;
+  }
+  100% { 
+    opacity: 0;
+    background-color: #000;
+  }
+}
+
+.fade-out {
+  animation: fadeOut 0.8s ease-out forwards;
+  background-color: #000;
+}
+
+.preloader-container.fade-out::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  z-index: 1;
+}
+
+/* Add these new styles */
+.ramadan-countdown {
+  transition: opacity 0.3s ease-in;
+}
+
+.ramadan-countdown.hidden {
+  opacity: 0;
+}
+
+.ramadan-countdown.visible {
+  opacity: 1;
+}

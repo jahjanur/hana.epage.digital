@@ -23,6 +23,7 @@
   },
   "include": [
     "src",
-    "src/custom.d.ts"
+    "src/custom.d.ts",
+    "src/types/*.d.ts"
   ]
 } 

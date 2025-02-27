@@ -12,6 +12,7 @@ import CitySelector from './CitySelector';
 import AppHeader from './AppHeader';
 import { getCityPrayerTimes } from '../data/prayerTimes';
 import { useLanguage } from '../contexts/LanguageContext';
+import preloaderVideo from '../assets/PRELOADERI2.webm';
 
 interface RamadanCountdownProps {
   selectedCity: string;
@@ -45,6 +46,8 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
   const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
   const [completedProgress, setCompletedProgress] = useState<number>(0);
   const [remainingProgress, setRemainingProgress] = useState<number>(0);
+  const [showPreloader, setShowPreloader] = useState(true);
+  const preloaderRef = useRef<HTMLVideoElement>(null);
 
   // Create date objects for comparison
   const getCurrentFajrAndIftar = (now: Date) => {
@@ -233,104 +236,169 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    // Check if intro has been shown in this session
+    const introShownThisSession = sessionStorage.getItem('introShown');
+    
+    if (!introShownThisSession) {
+      // Only show preloader if it hasn't been shown in this session
+      setShowPreloader(true);
+      
+      const handleVideoEnded = () => {
+        if (preloaderRef.current?.parentElement) {
+          preloaderRef.current.parentElement.classList.add('fade-out');
+          setTimeout(() => {
+            setShowPreloader(false);
+            // Mark that intro has been shown in this session
+            sessionStorage.setItem('introShown', 'true');
+          }, 800);
+        }
+      };
+
+      const handleVideoError = (error: any) => {
+        console.error('Video loading error:', error);
+        setShowPreloader(false);
+        sessionStorage.setItem('introShown', 'true');
+      };
+
+      if (preloaderRef.current) {
+        preloaderRef.current.addEventListener('ended', handleVideoEnded);
+        preloaderRef.current.addEventListener('error', handleVideoError);
+      }
+
+      return () => {
+        if (preloaderRef.current) {
+          preloaderRef.current.removeEventListener('ended', handleVideoEnded);
+          preloaderRef.current.removeEventListener('error', handleVideoError);
+        }
+      };
+    } else {
+      // If intro has been shown in this session, don't show preloader
+      setShowPreloader(false);
+    }
+  }, []); // Empty dependency array means this only runs once when component mounts
+
   return (
-    <div className="ramadan-countdown">
-      <AppHeader selectedCity={selectedCity} onCityChange={onCityChange} />
-      <div className="countdown-container">
+    <>
+      {showPreloader && (
+        <div className="preloader-container">
+          <video
+            ref={preloaderRef}
+            className="preloader-video"
+            autoPlay
+            muted
+            playsInline
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            onError={(e) => console.error('Video Error:', e)}
+          >
+            <source src={preloaderVideo} type="video/webm" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      )}
+      
+      <div className="ramadan-countdown" style={{ 
+        visibility: showPreloader ? 'hidden' : 'visible',
+        opacity: showPreloader ? 0 : 1,
+        transition: 'opacity 0.3s ease-in'
+      }}>
+        <AppHeader selectedCity={selectedCity} onCityChange={onCityChange} />
+        <div className="countdown-container">
 
-        <div className="content-wrapper" style={{ position: 'relative', zIndex: 3 }}>
-          <AnimatedBackground />
-          
-          {/* Floating circles */}
-          <div className="floating-circle"></div>
-          <div className="floating-circle"></div>
-          <div className="floating-circle"></div>
-          
-          {/* Clock Display */}
-          <div className="clock-container scale-in">
-            <div className="inner-circle">
-              <div className="inner-content">
-                <div className="icon-container">
-                  <div className="weather-icon">
-                    {currentPeriod === 'fasting' ? '🌙' : '☀️'}
+          <div className="content-wrapper" style={{ position: 'relative', zIndex: 3 }}>
+            <AnimatedBackground />
+            
+            {/* Floating circles */}
+            <div className="floating-circle"></div>
+            <div className="floating-circle"></div>
+            <div className="floating-circle"></div>
+            
+            {/* Clock Display */}
+            <div className="clock-container scale-in">
+              <div className="inner-circle">
+                <div className="inner-content">
+                  <div className="icon-container">
+                    <div className="weather-icon">
+                      {currentPeriod === 'fasting' ? '🌙' : '☀️'}
+                    </div>
                   </div>
-                </div>
-                <div className="countdown-display">
-                  <div className="time-digits">
-                    <span className="time-digit">
-                      {parseInt(remainingTime.split(':')[0], 10).toString().padStart(2, '0')}
-                    </span>
-                    <span className="time-separator">:</span>
-                    <span className="time-digit">
-                      {parseInt(remainingTime.split(':')[1], 10).toString().padStart(2, '0')}
-                    </span>
-                    <span className="time-separator">:</span>
-                    <span className="time-digit">
-                      {parseInt(remainingTime.split(':')[2], 10).toString().padStart(2, '0')}
-                    </span>
-                  </div>
-                  <div className="period-label">
-                    <span className="period-text">
-                      {currentPeriod === 'fasting' ? t('untilIftar') : t('untilSyfyr')}
-                    </span>
+                  <div className="countdown-display">
+                    <div className="time-digits">
+                      <span className="time-digit">
+                        {parseInt(remainingTime.split(':')[0], 10).toString().padStart(2, '0')}
+                      </span>
+                      <span className="time-separator">:</span>
+                      <span className="time-digit">
+                        {parseInt(remainingTime.split(':')[1], 10).toString().padStart(2, '0')}
+                      </span>
+                      <span className="time-separator">:</span>
+                      <span className="time-digit">
+                        {parseInt(remainingTime.split(':')[2], 10).toString().padStart(2, '0')}
+                      </span>
+                    </div>
+                    <div className="period-label">
+                      <span className="period-text">
+                        {currentPeriod === 'fasting' ? t('untilIftar') : t('untilSyfyr')}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Reminder Section */}
-          <div className="reminder-section slide-up">
-            <div className="times-container">
-              <div className={`time-block ${isTimeForSyfyr() ? 'active' : ''}`}>
-                <div className="time-header">
-                  <IoMoonOutline className="time-icon" />
-                  <span>{t('syfyr')}</span>
-                  <button 
-                    className={`notification-toggle ${notifications.syfyr ? 'enabled' : ''}`}
-                    onClick={() => toggleNotification('syfyr')}
-                    title={notifications.syfyr ? t('disableNotifications') : t('enableNotifications')}
-                  >
-                    {notifications.syfyr ? 
-                      <IoNotificationsOutline className="notification-icon" /> : 
-                      <IoNotificationsOffOutline className="notification-icon" />
-                    }
-                  </button>
+            {/* Reminder Section */}
+            <div className="reminder-section slide-up">
+              <div className="times-container">
+                <div className={`time-block ${isTimeForSyfyr() ? 'active' : ''}`}>
+                  <div className="time-header">
+                    <IoMoonOutline className="time-icon" />
+                    <span>{t('syfyr')}</span>
+                    <button 
+                      className={`notification-toggle ${notifications.syfyr ? 'enabled' : ''}`}
+                      onClick={() => toggleNotification('syfyr')}
+                      title={notifications.syfyr ? t('disableNotifications') : t('enableNotifications')}
+                    >
+                      {notifications.syfyr ? 
+                        <IoNotificationsOutline className="notification-icon" /> : 
+                        <IoNotificationsOffOutline className="notification-icon" />
+                      }
+                    </button>
+                  </div>
+                  <div className="time-value">
+                    {`${fajrTime.hours}:${String(fajrTime.minutes).padStart(2, '0')}`}
+                  </div>
                 </div>
-                <div className="time-value">
-                  {`${fajrTime.hours}:${String(fajrTime.minutes).padStart(2, '0')}`}
-                </div>
-              </div>
-              
-              <div className={`time-block ${isTimeForIftar() ? 'active' : ''}`}>
-                <div className="time-header">
-                  <IoSunnyOutline className="time-icon" />
-                  <span>{t('iftar')}</span>
-                  <button 
-                    className={`notification-toggle ${notifications.iftar ? 'enabled' : ''}`}
-                    onClick={() => toggleNotification('iftar')}
-                    title={notifications.iftar ? t('disableNotifications') : t('enableNotifications')}
-                  >
-                    {notifications.iftar ? 
-                      <IoNotificationsOutline className="notification-icon" /> : 
-                      <IoNotificationsOffOutline className="notification-icon" />
-                    }
-                  </button>
-                </div>
-                <div className="time-value">
-                  {`${iftarTime.hours}:${String(iftarTime.minutes).padStart(2, '0')}`}
+                
+                <div className={`time-block ${isTimeForIftar() ? 'active' : ''}`}>
+                  <div className="time-header">
+                    <IoSunnyOutline className="time-icon" />
+                    <span>{t('iftar')}</span>
+                    <button 
+                      className={`notification-toggle ${notifications.iftar ? 'enabled' : ''}`}
+                      onClick={() => toggleNotification('iftar')}
+                      title={notifications.iftar ? t('disableNotifications') : t('enableNotifications')}
+                    >
+                      {notifications.iftar ? 
+                        <IoNotificationsOutline className="notification-icon" /> : 
+                        <IoNotificationsOffOutline className="notification-icon" />
+                      }
+                    </button>
+                  </div>
+                  <div className="time-value">
+                    {`${iftarTime.hours}:${String(iftarTime.minutes).padStart(2, '0')}`}
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Days List */}
+            <RamadanDaysList selectedCity={selectedCity} />
+
+            <BottomNavigation />
           </div>
-
-          {/* Days List */}
-          <RamadanDaysList selectedCity={selectedCity} />
-
-          <BottomNavigation />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
