@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './StoryModal.css';
-import hanaLogo from '../../assets/hanaMainLogoWhite.svg';
+import { ReactComponent as HanaLogoComponent } from '../../assets/hana-logo.svg';
 import Footer from '../Footer';
 
 interface Story {
@@ -82,7 +82,11 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, onClose, onNavigate }) =
         </svg>
       </button>
       <div className="story-header">
-        <img src={hanaLogo} alt="Hana Logo" className="story-logo" />
+        <img 
+          src={`${process.env.PUBLIC_URL}/assets/hana-logo.svg`} 
+          alt="Hana Logo" 
+          className="story-logo" 
+        />
       </div>
       <div 
         className="story-image-section" 

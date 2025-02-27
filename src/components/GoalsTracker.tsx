@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaPrayingHands, FaMosque, FaQuran } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import { useGoals } from '../contexts/GoalsContext';
+import { getUserFromStorage } from '../firebase/auth-utils';
 import { db } from '../firebase/config';
 import { 
   collection, 
@@ -36,6 +37,7 @@ import {
 } from 'recharts';
 import AppHeader from './AppHeader';
 import { useLanguage } from '../contexts/LanguageContext';
+import Footer from './Footer';
 
 type NameType = string | number;
 
@@ -134,6 +136,7 @@ const GoalsTracker: React.FC = () => {
   const [email, setEmail] = useState('');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [selectedCity, setSelectedCity] = useState('gostivar');
+  const [isInitializing, setIsInitializing] = useState(true);
 
   const fetchTodayProgress = useCallback(async () => {
     if (!currentUser) return;
@@ -290,6 +293,33 @@ const GoalsTracker: React.FC = () => {
     console.log('Chart data updated:', chartData);
   }, [chartData]);
 
+  useEffect(() => {
+    // Add error logging
+    const handleError = async () => {
+      try {
+        if (currentUser) {
+          console.log('Current user state:', currentUser);
+          const today = format(new Date(), 'yyyy-MM-dd');
+          console.log('Attempting to fetch data for:', today);
+          
+          const activityRef = doc(db, 'daily_activities', `${currentUser.email}_${today}`);
+          const docSnap = await getDoc(activityRef);
+          console.log('Document exists:', docSnap.exists());
+          
+          if (docSnap.exists()) {
+            console.log('Document data:', docSnap.data());
+          }
+        } else {
+          console.log('No current user');
+        }
+      } catch (error) {
+        console.error('Debug error:', error);
+      }
+    };
+
+    handleError();
+  }, [currentUser]);
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -393,6 +423,37 @@ const GoalsTracker: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        // Wait for auth state to be determined
+        const user = getUserFromStorage();
+        if (user) {
+          console.log('Found user in storage:', user);
+        } else {
+          console.log('No user in storage');
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+      } finally {
+        setIsInitializing(false);
+      }
+    };
+
+    initializeAuth();
+  }, []);
+
+  if (isInitializing) {
+    return (
+      <div className="goals-container">
+        <div className="loading-spinner-container">
+          <div className="loading-spinner"></div>
+          <span>Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="goals-container">
       <AppHeader 
@@ -467,7 +528,7 @@ const GoalsTracker: React.FC = () => {
             <div className="error-message">
               {error}
               <button onClick={() => fetchActivityData()}>Retry</button>
-              </div>
+            </div>
           )}
           
           <motion.h1 className="goals-title">
@@ -519,7 +580,7 @@ const GoalsTracker: React.FC = () => {
               <FaQuran />
               <span>{t('quranReading')}</span>
             </motion.button>
-                </div>
+          </div>
 
           <div className="time-filter">
             <motion.button
@@ -685,10 +746,10 @@ const GoalsTracker: React.FC = () => {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-      </div>
+          </div>
 
           <AnimatePresence>
-      {isModalOpen && (
+            {isModalOpen && (
               <motion.div 
                 className="modal-overlay"
                 initial={{ opacity: 0 }}
@@ -701,7 +762,7 @@ const GoalsTracker: React.FC = () => {
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.9, opacity: 0 }}
                 >
-            <div className="modal-header">
+                  <div className="modal-header">
                     <h2>
                       {selectedType === 'prayer' ? 'Daily Prayers' :
                        selectedType === 'taraweeh' ? 'Taraweeh Prayer' :
@@ -716,9 +777,9 @@ const GoalsTracker: React.FC = () => {
                       }}
                     >
                       <IoClose size={24} />
-              </button>
-            </div>
-            
+                    </button>
+                  </div>
+                  
                   {selectedType === 'prayer' && (
                     <div className="prayer-times">
                       <div className="prayer-options">
@@ -796,8 +857,8 @@ const GoalsTracker: React.FC = () => {
                         >
                           {t('submitTaraweehPrayer')}
                         </motion.button>
-              )}
-            </div>
+                      )}
+                    </div>
                   )}
 
                   {selectedType === 'quran' && (
@@ -815,30 +876,26 @@ const GoalsTracker: React.FC = () => {
                               const value = Math.min(Math.max(0, Number(e.target.value)), 100);
                               setInputValue(value);
                             }}
-                            placeholder=""
+                            placeholder="0"
                             className="quran-input"
                             min={0}
                             max={100}
                           />
                           <div className="quran-input-controls">
-                            <motion.button
+                            <button
                               className="quran-control-btn"
                               onClick={() => setInputValue(prev => Math.min(prev + 1, 100))}
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
                               disabled={inputValue >= 100}
                             >
-                              ▲
-                            </motion.button>
-                            <motion.button
+                              +
+                            </button>
+                            <button
                               className="quran-control-btn"
                               onClick={() => setInputValue(prev => Math.max(prev - 1, 0))}
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
                               disabled={inputValue <= 0}
                             >
-                              ▼
-                            </motion.button>
+                              -
+                            </button>
                           </div>
                         </div>
                         <span className="quran-input-label">{t('pagesReadToday')}</span>
@@ -869,6 +926,8 @@ const GoalsTracker: React.FC = () => {
               {successMessage}
             </motion.div>
           )}
+
+          <Footer />
         </div>
       )}
     </div>

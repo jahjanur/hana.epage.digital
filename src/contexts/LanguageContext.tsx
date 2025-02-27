@@ -71,6 +71,9 @@ interface Translations {
     enableNotifications: string;
     disableNotifications: string;
     save: string;
+    
+    // Goals section
+    trackYourProgress: string;
   }
 }
 
@@ -115,7 +118,7 @@ const translations: Translations = {
     acceptancePrayer: 'Allahu jua pranoftë agjërimin!',
     poweredBy: 'Mundësuar nga',
     nijetTitle: 'Nijeti',
-    nijetTransliteration: 'Nevejtus savme gadin min šehri Ramadane',
+    nijetTransliteration: 'Nawaitu sawma ghadin an adai fardhi shahri Ramadana hadhihi as-sanati lillahi taala.',
     nijetTranslation: 'Kam për qëllim të agjëroj nesër në muajin e Ramazanit për hir të Allahut të Madhëruar.',
     iftarDuaTitle: 'Duaja e Iftarit',
     iftarDuaTransliteration: 'Allahumme leke sumtu ve bike amentu ve ala rizkike eftertu ve alejke tevekkeltu',
@@ -139,7 +142,10 @@ const translations: Translations = {
     iftar: 'Iftar',
     enableNotifications: 'Enable notifications',
     disableNotifications: 'Disable notifications',
-    save: 'Save'
+    save: 'Save',
+    
+    // Goals section
+    trackYourProgress: 'Mbaj shënim namazet ditore, Teravinë dhe leximin e Kuranit'
   },
   'en': {
     // English translations
@@ -184,7 +190,7 @@ const translations: Translations = {
     nijetTransliteration: 'Nawaitu sawma ghadin...',
     nijetTranslation: 'I intend to fast tomorrow in the month of Ramadan...',
     iftarDuaTitle: 'Iftar Dua',
-    iftarDuaTransliteration: 'Allahumma laka sumtu...',
+    iftarDuaTransliteration: 'Allahumma laka sumtu wa bika amantu wa ‘alayka tawakkaltu wa ‘ala rizq-ika-aftartu.',
     iftarDuaTranslation: 'O Allah, I fasted for You and I believe in You...',
     laylatulQadr: 'Laylatul Qadr',
     startTracking: 'Start Tracking',
@@ -205,7 +211,10 @@ const translations: Translations = {
     iftar: 'Iftar',
     enableNotifications: 'Enable notifications',
     disableNotifications: 'Disable notifications',
-    save: 'Save'
+    save: 'Save',
+    
+    // Goals section
+    trackYourProgress: 'Keep track of your daily prayers, Taraweeh, and Quran reading progress'
   },
   'tr': {
     // Prayer names
@@ -273,7 +282,10 @@ const translations: Translations = {
     iftar: 'İftar',
     enableNotifications: 'Bildirimleri aç',
     disableNotifications: 'Bildirimleri kapat',
-    save: 'Kaydet'
+    save: 'Kaydet',
+    
+    // Goals section
+    trackYourProgress: 'Günlük namazlarınızı, teravih ve Kuran okumalarınızı takip edin'
   },
   'de': {
     // Prayer names
@@ -341,7 +353,10 @@ const translations: Translations = {
     iftar: 'Iftar',
     enableNotifications: 'Benachrichtigungen aktivieren',
     disableNotifications: 'Benachrichtigungen deaktivieren',
-    save: 'Speichern'
+    save: 'Speichern',
+    
+    // Goals section
+    trackYourProgress: 'Verfolgen Sie Ihre täglichen Gebete, Tarawih und Koran-Lesungen'
   },
   // Add other languages here...
 };

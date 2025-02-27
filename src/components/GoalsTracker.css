@@ -1,247 +1,381 @@
+/* Import Clash Grotesk font */
+@import url('https://api.fontshare.com/v2/css?f[]=clash-grotesk@200,400,300,600,700,500&display=swap');
+
+/* Root level font styling */
+:root {
+  --font-primary: 'Clash Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Apply font globally */
+* {
+  font-family: var(--font-primary);
+}
+
 .goals-container {
-  min-height: 100vh;
-  background: #1a1a1a url('../assets/BG.svg') no-repeat center center;
+
+  font-family: var(--font-primary);
+  background-color: rgba(0, 0, 0, 0.733);
+  background-image: url('../assets/BG.svg');
   background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
   padding: 0;
   color: white;
-  position: relative;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  max-width: 100%;
+  margin: 0 auto;
 }
+
 
 .goals-container::before {
-  display: none;
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 0;
+  pointer-events: none;
 }
+
+
 
 .goals-content {
-  flex: 1;
-  padding: 16px;
-  padding-top: 80px;
-  width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 50px auto 0 auto; /* top margin of 40px, horizontal margins auto */
+  padding: 20px;
   position: relative;
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.goals-title {
-  text-align: center;
-  font-size: 32px;
-  margin-bottom: 32px;
-  color: white;
-  font-weight: 600;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.time-filter {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 32px;
-  padding: 0 16px;
-}
-
-.filter-btn {
-  padding: 8px 24px;
-  border: none;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.filter-btn.active {
-  background: linear-gradient(135deg, #4a4aff 0%, #00ff87 100%);
-  box-shadow: 0 0 20px rgba(74, 74, 255, 0.3);
-}
-
-.progress-section {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+.goals-header {
   margin-bottom: 40px;
 }
 
-.progress-rings {
+.book-title-wrapper {
+  text-align: center;
+  position: relative;
+  padding: 20px 0;
+  margin-bottom: 40px;
+}
+
+.title-decoration {
+  position: absolute;
+  top: 50%;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.title-decoration.left {
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.title-decoration.right {
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.title-content {
+  position: relative;
+  display: inline-block;
+}
+
+.book-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+}
+
+.book-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 8px 0 0;
+  text-align: center;
+}
+
+.title-accent {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #4a4aff, #5447e0);
+  margin: 16px auto 0;
+  border-radius: 2px;
+}
+
+.activity-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.activity-button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.activity-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.activity-button svg {
+  font-size: 2rem;
+  color: #4a4aff;
+}
+
+.activity-button span {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.completion-badge {
+  background: rgba(74, 74, 255, 0.2);
+  color: #4a4aff;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.time-filter {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 12px;
   display: flex;
   justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+  backdrop-filter: blur(10px);
+}
+
+.filter-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #4a4aff, #5447e0);
+  color: white;
+}
+
+.charts-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
+  margin-bottom: 40px;
+}
+
+.chart-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+  position: relative;
+  padding-bottom: 48px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card.empty {
+  filter: blur(2px) grayscale(0.5);
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.chart-card.empty:hover {
+  filter: blur(1px) grayscale(0.3);
+  opacity: 0.8;
+}
+
+.empty-chart-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  width: 100%;
+  padding: 0 20px;
+  pointer-events: none;
+  z-index: 2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(0);
+  filter: blur(0);
+}
+
+.empty-chart-message h4 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.empty-chart-message p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.chart-card.empty .recharts-wrapper {
+  opacity: 0.2;
+  filter: grayscale(1);
+  pointer-events: none;
+}
+
+.chart-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.2rem;
+  color: white;
+  margin-bottom: 24px;
+}
+
+.chart-card h3 svg {
+  color: #4a4aff;
+}
+
+.recharts-wrapper {
+  margin: 0 auto;
+}
+
+.recharts-default-legend {
+  position: absolute !important;
+  bottom: 12px !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  margin-left: 22px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 12px;
   flex-wrap: wrap;
 }
 
-.progress-bars {
-  background: #2a2a2a;
-  padding: 24px;
-  border-radius: 12px;
-}
-
-.progress-bar-item {
-  margin-bottom: 16px;
-}
-
-.progress-bar-item:last-child {
-  margin-bottom: 0;
-}
-
-.progress-bar-label {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.progress-bar-container {
-  height: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: #4a4aff;
-  border-radius: 4px;
-  transition: width 0.3s ease;
-}
-
-.chart-container {
-  background: rgba(42, 42, 42, 0.5);
-  padding: 24px;
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-.add-activity-btn {
-  display: none;
-}
-
-.unauthenticated {
-  display: flex;
-  justify-content: center;
+.recharts-legend-item {
+  display: inline-flex !important;
   align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.8);
-}
-
-.auth-prompt {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  padding: 2rem;
-  border-radius: 15px;
-  text-align: center;
-  max-width: 400px;
-  width: 100%;
-}
-
-.auth-prompt h2 {
-  color: white;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-}
-
-.auth-prompt p {
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 2rem;
-}
-
-.email-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.email-input {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 1rem;
-  width: 100%;
-}
-
-.email-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.start-tracking-btn {
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  background: #4a4aff;
-  color: white;
-  font-size: 1rem;
+  gap: 6px;
   cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 6px;
   transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 0 !important;
+  min-width: auto !important;
+  white-space: nowrap;
 }
 
-.start-tracking-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.recharts-legend-item:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.error-message {
-  color: #ff4a4a;
-  margin-top: 1rem;
-  font-size: 0.9rem;
+.recharts-legend-item-text {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-.floating-icons {
-  display: flex;
-  gap: 24px;
-  justify-content: center;
-  margin-bottom: 24px;
-  font-size: 40px;
+/* Single colors for charts */
+.chart-prayer {
+  fill: #5447e0;
 }
 
-.sign-in-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 220px;
-  height: 48px;
-  padding: 0 24px;
-  background: white;
-  color: #444;
-  border: 1px solid #ddd;
-  border-radius: 24px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.chart-taraweeh {
+  fill: #4a9eff;
 }
 
-.sign-in-btn:hover:not(:disabled) {
-  background: #f8f8f8;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.sign-in-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.chart-quran {
+  fill: #47b0e0;
 }
 
 @media (max-width: 768px) {
-  .sign-in-btn {
-    width: 100%;
-    max-width: 280px;
+  .chart-card {
+    padding-bottom: 44px;
+  }
+
+  .recharts-default-legend {
+    bottom: 10px !important;
+    gap: 8px;
+  }
+
+  .recharts-legend-item {
+    padding: 3px 8px;
+  }
+
+  .recharts-legend-item-text {
+    font-size: 0.8rem !important;
+  }
+
+  .empty-chart-message h4 {
+    font-size: 1rem;
+  }
+
+  .empty-chart-message p {
+    font-size: 0.85rem;
   }
 }
 
-/* Add smooth transitions */
-* {
-  transition: all 0.3s ease;
+@media (max-width: 480px) {
+  .chart-card {
+    padding-bottom: 40px;
+  }
+
+  .recharts-default-legend {
+    bottom: 8px !important;
+    gap: 6px;
+    padding: 0 8px;
+  }
+
+  .recharts-legend-item {
+    padding: 3px 6px;
+  }
+
+  .recharts-legend-item-text {
+    font-size: 0.75rem !important;
+  }
+
+  .empty-chart-message h4 {
+    font-size: 0.95rem;
+  }
+
+  .empty-chart-message p {
+    font-size: 0.8rem;
+  }
 }
 
+/* Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -249,428 +383,298 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 20px;
 }
 
-.modal-content {
-  background: #2a2a2a;
+.activity-modal {
+  background: #1a1a1a;
+  border-radius: 24px;
   padding: 24px;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 400px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.modal-header h2 {
-  margin: 0;
-  font-size: 20px;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  padding: 4px;
-}
-
-.activity-types {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.activity-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 12px;
-  background: #3a3a3a;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-}
-
-.activity-btn.selected {
-  border-color: #4a4aff;
-  background: #3a3a3a;
-}
-
-.activity-input {
-  margin-bottom: 24px;
-}
-
-.activity-input h3 {
-  margin-bottom: 16px;
-  font-size: 18px;
-}
-
-.prayer-buttons,
-.rakat-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  gap: 8px;
-}
-
-.prayer-btn,
-.rakat-btn {
-  padding: 8px 16px;
-  background: #3a3a3a;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-}
-
-.prayer-btn.selected,
-.rakat-btn.selected {
-  border-color: #4a4aff;
-}
-
-.pages-input {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.pages-input button {
-  width: 40px;
-  height: 40px;
-  background: #3a3a3a;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.pages-input span {
-  font-size: 24px;
-  min-width: 40px;
-  text-align: center;
-}
-
-.submit-btn {
   width: 100%;
-  padding: 12px;
-  background: #4a4aff;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.submit-btn:disabled {
-  background: #3a3a3a;
-  cursor: not-allowed;
-}
-
-@media (max-width: 480px) {
-  .goals-content {
-    padding: 16px;
-  }
-
-  .goals-title {
-    font-size: 24px;
-  }
-
-  .progress-rings {
-    gap: 16px;
-  }
-
-  .chart-container {
-    padding: 16px;
-  }
-
-  .floating-icons {
-    font-size: 32px;
-    gap: 16px;
-  }
-}
-
-.auth-modal {
-  background: rgba(42, 42, 42, 0.95);
-  padding: 24px;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 400px;
-  backdrop-filter: blur(10px);
+  max-width: 500px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.auth-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  padding: 24px 0;
-}
-
-.google-sign-in-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 12px;
-  background: white;
-  color: #333;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.google-sign-in-btn img {
-  width: 20px;
-  height: 20px;
-}
-
-.google-sign-in-btn:hover {
-  background: #f8f8f8;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .modal-header h2 {
-  margin: 0;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: white;
+  margin: 0;
 }
 
 .close-btn {
-  background: none;
+  background: transparent;
   border: none;
-  color: white;
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
-  padding: 4px;
+  padding: 8px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
   transition: all 0.3s ease;
 }
 
 .close-btn:hover {
   background: rgba(255, 255, 255, 0.1);
-}
-
-.goals-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-  margin-bottom: 24px;
-}
-
-.activity-section {
-  display: none;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 16px;
-  padding: 24px;
-  backdrop-filter: blur(10px);
-}
-
-.activity-section h2 {
-  margin: 0 0 16px;
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.activity-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.activity-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.activity-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateX(4px);
-}
-
-.activity-icon {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  font-size: 20px;
-}
-
-.activity-details {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.activity-type {
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.activity-value {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.activity-time {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.activity-modal {
-  background: rgba(42, 42, 42, 0.95);
-  padding: 24px;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 400px;
-  backdrop-filter: blur(10px);
-}
-
-.activity-options {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin: 24px 0;
-}
-
-.activity-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid transparent;
-  border-radius: 12px;
   color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.activity-option.selected {
-  border-color: #4a4aff;
-  background: rgba(74, 74, 255, 0.1);
-}
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .goals-content {
+    padding: 16px;
+  }
 
-.value-input {
-  margin: 24px 0;
-}
+  .book-title {
+    font-size: 2rem;
+  }
 
-.number-input {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 8px;
-}
+  .book-subtitle {
+    font-size: 1rem;
+  }
 
-.number-input button {
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+  .activity-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
 
-.number-input input {
-  width: 80px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.05);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  text-align: center;
-  font-size: 18px;
-}
+  .activity-button {
+    padding: 16px 12px;
+  }
 
-.submit-btn {
-  width: 100%;
-  padding: 16px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #4a4aff 0%, #00ff87 100%);
-  color: white;
-  font-size: 18px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+  .activity-button svg {
+    font-size: 1.6rem;
+  }
 
-.submit-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+  .activity-button span {
+    font-size: 0.9rem;
+    text-align: center;
+  }
 
-@media (min-width: 768px) {
-  .goals-grid {
-    grid-template-columns: 1fr 1fr;
+  .completion-badge {
+    font-size: 0.8rem;
+    padding: 3px 8px;
+  }
+
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+
+  .time-filter {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .filter-btn {
+    width: 100%;
+    padding: 8px;
+    font-size: 0.9rem;
+    text-align: center;
   }
 }
 
+@media (max-width: 480px) {
+  .goals-container {
+    padding: 12px;
+  }
+
+  .book-title {
+    font-size: 1.75rem;
+  }
+
+  .activity-buttons {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .activity-button {
+    padding: 12px 8px;
+  }
+
+  .activity-button svg {
+    font-size: 1.4rem;
+  }
+
+  .activity-button span {
+    font-size: 0.8rem;
+  }
+
+  .completion-badge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
+
+  .time-filter {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .filter-btn {
+    padding: 6px;
+    font-size: 0.85rem;
+    min-width: auto;
+  }
+
+  .activity-modal {
+    padding: 20px;
+  }
+}
+
+/* Auth Modal Styles */
+.auth-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.733);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.auth-modal {
+  background: #1a1a1a;
+  border-radius: 24px;
+  padding: 32px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.auth-modal h2 {
+  font-size: 1.75rem;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.auth-modal p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: white;
+  font-size: 1rem;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: #4a4aff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.auth-submit-btn {
+  background: linear-gradient(135deg, #4a4aff, #5447e0);
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.auth-submit-btn:hover {
+  transform: translateY(-2px);
+}
+
+.auth-error {
+  color: #ff4a4a;
+  font-size: 0.9rem;
+  margin-top: 12px;
+}
+
+/* Success Message */
+.success-message {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(84, 71, 224, 0.2);
+  color: #5447e0;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+}
+
+/* Prayer and Taraweeh Options Styles */
 .prayer-times {
-  margin: 24px 0;
+  padding: 0 12px;
+  margin-bottom: 24px;
 }
 
 .prayer-options {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
   margin-bottom: 24px;
 }
 
 .prayer-option {
   position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 12px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid transparent;
-  border-radius: 12px;
-  color: white;
-  font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.prayer-option svg {
+  font-size: 1.8rem;
+  color: #4a4aff;
+  margin-bottom: 8px;
+}
+
+.prayer-option span {
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .prayer-option.selected {
@@ -678,12 +682,28 @@
   border-color: #4a4aff;
 }
 
-.prayer-option.completed,
-.taraweeh-option.completed {
-  background: rgba(0, 255, 135, 0.1) !important;
-  border-color: #00ff87 !important;
+.prayer-option.completed {
+  background: rgba(84, 71, 224, 0.1);
+  border-color: #5447e0;
   pointer-events: none;
-  cursor: not-allowed;
+}
+
+.prayer-option:not(.completed):hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.completed-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #5447e0;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(84, 71, 224, 0.3);
 }
 
 .selected-badge {
@@ -692,383 +712,45 @@
   right: -8px;
   background: #4a4aff;
   color: white;
-  padding: 4px 8px;
+  padding: 4px 12px;
   border-radius: 12px;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
+  box-shadow: 0 2px 8px rgba(74, 74, 255, 0.3);
 }
 
-.completed-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #00ff87;
-  color: #1a1a1a;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.prayer-option:disabled,
-.taraweeh-option:disabled {
-  opacity: 1 !important;
-}
-
-/* Add hover effect for non-completed prayers */
-.prayer-option:not(.completed):hover,
-.taraweeh-option:not(.completed):hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.number-wheel {
-  position: relative;
-  height: 200px;
-  overflow: hidden;
-  margin: 20px 0;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  touch-action: none;
-}
-
-.number-wheel-container {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.number-wheel-container::before,
-.number-wheel-container::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 80px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.number-wheel-container::before {
-  top: 0;
-  background: linear-gradient(to bottom, rgba(26, 26, 26, 1), transparent);
-}
-
-.number-wheel-container::after {
-  bottom: 0;
-  background: linear-gradient(to top, rgba(26, 26, 26, 1), transparent);
-}
-
-.number-wheel-track {
-  cursor: grab;
-  padding: 80px 0;
-  touch-action: none;
-  transform: translateY(80px);
-}
-
-.number-wheel-track:active {
-  cursor: grabbing;
-}
-
-.number-wheel-item {
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  color: rgba(255, 255, 255, 0.5);
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.number-wheel-item.selected {
-  color: white;
-  font-size: 32px;
-  font-weight: 500;
-}
-
-.quran-progress-info {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 16px;
-  margin-top: 12px;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 14px;
-}
-
-.unit {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 16px;
-}
-
-/* Add these new styles */
-.activity-buttons {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 40px;
-  padding: 0 16px;
-}
-
-.activity-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 24px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid transparent;
-  border-radius: 16px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.activity-button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
-}
-
-.activity-button.prayer {
-  border-color: rgba(74, 74, 255, 0.3);
-}
-
-.activity-button.taraweeh {
-  border-color: rgba(0, 255, 135, 0.3);
-}
-
-.activity-button.quran {
-  border-color: rgba(255, 74, 74, 0.3);
-}
-
-.activity-button svg {
-  font-size: 32px;
-}
-
-.activity-button span {
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.activity-button.completed {
-  opacity: 0.7;
-  cursor: not-allowed;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.activity-button.partially-completed {
-  background: linear-gradient(135deg, rgba(74, 74, 255, 0.5) 0%, rgba(0, 255, 135, 0.5) 100%);
-}
-
-.completion-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(0, 255, 135, 0.9);
-  color: white;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.radio-group {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin: 24px 0;
-}
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.number-scroll {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 24px 0;
-}
-
-.number-scroll input {
-  width: 100px;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.05);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 24px;
-  text-align: center;
-}
-
-.unit {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 16px;
-}
-
-/* Update existing modal styles */
-.activity-modal {
-  width: 90%;
-  max-width: 400px;
-  background: rgba(42, 42, 42, 0.95);
-  padding: 24px;
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 16px;
-  margin-top: 24px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #4a4aff 0%, #00ff87 100%);
-  color: white;
-  font-size: 18px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.submit-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Add these new styles */
-.charts-container {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 0 16px;
-}
-
-.chart-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-  border-radius: 24px;
-  padding: 24px;
-  backdrop-filter: blur(12px);
-  box-shadow: 
-    0 4px 24px -1px rgba(0, 0, 0, 0.2),
-    0 1px 2px rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.chart-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 32px -1px rgba(0, 0, 0, 0.3),
-    0 1px 4px rgba(255, 255, 255, 0.07);
-}
-
-.chart-card h3 {
-  color: white;
-  margin-bottom: 20px;
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-align: left;
-  padding-left: 8px;
-  border-left: 3px solid #4a4aff;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Style the chart tooltips */
-.recharts-tooltip-wrapper .recharts-default-tooltip {
-  background: rgba(26, 26, 26, 0.95) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 12px !important;
-  padding: 12px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* Style the chart grid */
-.recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line {
-  stroke: rgba(255, 255, 255, 0.05) !important;
-}
-
-/* Style the axis lines */
-.recharts-xAxis .recharts-cartesian-axis-line,
-.recharts-yAxis .recharts-cartesian-axis-line {
-  stroke: rgba(255, 255, 255, 0.1);
-}
-
-/* Style the chart text */
-.recharts-text {
-  fill: rgba(255, 255, 255, 0.7) !important;
-  font-size: 12px !important;
-}
-
-.loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px;
-  color: white;
-}
-
-.error-message {
-  background: rgba(255, 74, 74, 0.1);
-  border: 1px solid #ff4a4a;
-  color: white;
-  padding: 16px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.error-message button {
-  background: #ff4a4a;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.error-message button:hover {
-  background: #ff6b6b;
-}
-
+/* Taraweeh Options Styles */
 .taraweeh-options {
-  padding: 20px 0;
+  padding: 0 12px;
+  margin-bottom: 24px;
 }
 
 .taraweeh-option {
-  width: 100%;
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  color: white;
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 20px;
-  margin-bottom: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid transparent;
-  border-radius: 12px;
-  color: white;
-  font-size: 16px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-  opacity: 1;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  margin-bottom: 16px;
+}
+
+.taraweeh-option svg {
+  font-size: 2rem;
+  color: #4a4aff;
+  flex-shrink: 0;
+}
+
+.taraweeh-option span {
+  font-size: 1.1rem;
+  font-weight: 500;
+  flex-grow: 1;
 }
 
 .taraweeh-option.selected {
@@ -1076,239 +758,346 @@
   border-color: #4a4aff;
 }
 
-.taraweeh-option.disabled {
+.taraweeh-option.completed {
+  background: rgba(84, 71, 224, 0.1);
+  border-color: #5447e0;
   pointer-events: none;
-  opacity: 0.6;
 }
 
-.check-mark {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: #00ff87;
+.taraweeh-option:not(.completed):hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+/* Submit Button Styles */
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #4a4aff, #5447e0);
+  border: none;
+  border-radius: 16px;
+  padding: 16px;
   color: white;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
+  font-size: 1.1rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 24px;
 }
 
-/* Remove the old number wheel styles and add these new styles */
-.quran-input-container {
-  padding: 20px 0;
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(84, 71, 224, 0.2);
 }
 
-.quran-input-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 32px;
-  color: #ff4a4a;
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-.quran-input-header h3 {
-  margin: 0;
-  color: white;
-  font-size: 18px;
+/* Responsive Styles for Prayer and Taraweeh Options */
+@media (max-width: 768px) {
+  .prayer-options {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+  }
+
+  .prayer-option {
+    padding: 16px;
+  }
+
+  .prayer-option svg {
+    font-size: 1.5rem;
+  }
+
+  .prayer-option span {
+    font-size: 0.9rem;
+  }
+
+  .taraweeh-option {
+    padding: 20px;
+  }
+
+  .taraweeh-option svg {
+    font-size: 1.8rem;
+  }
+
+  .taraweeh-option span {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .prayer-options {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .prayer-option {
+    padding: 14px;
+  }
+
+  .prayer-option svg {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+  }
+
+  .completed-badge,
+  .selected-badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+
+  .taraweeh-option {
+    padding: 16px;
+  }
+
+  .taraweeh-option svg {
+    font-size: 1.6rem;
+  }
+
+  .submit-btn {
+    padding: 14px;
+    font-size: 1rem;
+  }
+}
+
+/* Footer Styles */
+.footer-epage {
+  margin-top: auto;
+  padding: 20px;
   text-align: center;
 }
 
-.page-input-section {
+.footer-image {
+  max-width: 200px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .footer-epage {
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-epage {
+    height: 80px;
+  }
+}
+
+/* Quran Input Styles */
+.quran-options {
+  padding: 0 12px;
+  margin-bottom: 24px;
+}
+
+.quran-input-container {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+}
+
+.quran-input-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.quran-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 12px;
+  color: white;
+  font-size: 1.5rem;
+  width: 120px;
+  text-align: center;
+  transition: all 0.3s ease;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quran-input::-webkit-inner-spin-button,
+.quran-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quran-input:focus {
+  outline: none;
+  border-color: #5447e0;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.quran-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.quran-input-controls {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 4px;
 }
 
-.page-counter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-}
-
-.counter-btn {
-  width: 48px;
-  height: 48px;
+.quran-control-btn {
+  background: rgba(84, 71, 224, 0.2);
   border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
   color: white;
-  font-size: 24px;
-  cursor: pointer;
+  width: 40px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
 }
 
-.counter-btn:disabled {
+.quran-control-btn:hover {
+  background: rgba(84, 71, 224, 0.3);
+}
+
+.quran-control-btn:active {
+  transform: scale(0.95);
+}
+
+.quran-control-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.page-display {
-  width: 120px;
-  text-align: center;
-}
-
-.page-number {
-  font-size: 48px;
-  font-weight: 600;
-  color: #ff4a4a;
-}
-
-.page-label {
+.quran-input-label {
   display: block;
-  font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
-  margin-top: 4px;
+  font-size: 0.9rem;
+  margin-top: 8px;
 }
 
-.page-slider {
-  padding: 0 12px;
-}
-
-.slider {
-  width: 100%;
-  height: 4px;
-  -webkit-appearance: none;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-  outline: none;
-  margin: 20px 0;
-}
-
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #ff4a4a;
-  cursor: pointer;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.2s ease;
-}
-
-.slider::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-}
-
-.slider-labels {
-  display: flex;
-  justify-content: space-between;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 14px;
-}
-
-.quran-progress-info {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px;
-  margin-top: 24px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 14px;
-}
-
-.charts-section {
+.quran-quick-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  margin-top: 32px;
-  padding: 16px;
-}
-
-.chart-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-  border-radius: 24px;
-  padding: 24px;
-  backdrop-filter: blur(12px);
-  box-shadow: 
-    0 4px 24px -1px rgba(0, 0, 0, 0.2),
-    0 1px 2px rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.chart-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 32px -1px rgba(0, 0, 0, 0.3),
-    0 1px 4px rgba(255, 255, 255, 0.07);
-}
-
-.chart-card h3 {
-  color: white;
-  margin-bottom: 20px;
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-align: left;
-  padding-left: 8px;
-  border-left: 3px solid #4a4aff;
-  display: flex;
-  align-items: center;
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
+  margin-top: 16px;
 }
 
-/* Style the chart tooltips */
-.recharts-tooltip-wrapper .recharts-default-tooltip {
-  background: rgba(26, 26, 26, 0.95) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 12px !important;
-  padding: 12px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+.quran-quick-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* Style the chart grid */
-.recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line {
-  stroke: rgba(255, 255, 255, 0.05) !important;
-}
-
-/* Style the axis lines */
-.recharts-xAxis .recharts-cartesian-axis-line,
-.recharts-yAxis .recharts-cartesian-axis-line {
-  stroke: rgba(255, 255, 255, 0.1);
-}
-
-/* Style the chart text */
-.recharts-text {
-  fill: rgba(255, 255, 255, 0.7) !important;
-  font-size: 12px !important;
+.quran-quick-btn:hover {
+  background: rgba(84, 71, 224, 0.2);
+  border-color: #5447e0;
 }
 
 @media (max-width: 768px) {
-  .charts-section {
-    grid-template-columns: 1fr;
-    padding: 12px;
+  .quran-input {
+    font-size: 1.3rem;
+    width: 100px;
+    padding: 10px;
   }
-  
-  .chart-card {
+
+  .quran-control-btn {
+    width: 36px;
+    height: 28px;
+  }
+
+  .quran-quick-buttons {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .quran-input-container {
     padding: 16px;
   }
+
+  .quran-input {
+    font-size: 1.2rem;
+    width: 90px;
+    padding: 8px;
+  }
+
+  .quran-control-btn {
+    width: 32px;
+    height: 26px;
+  }
+
+  .quran-quick-buttons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .quran-quick-btn {
+    padding: 6px;
+    font-size: 0.9rem;
+  }
 }
 
-.no-data-message {
-  text-align: center;
-  padding: 40px;
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  margin: 20px 0;
+.goals-title {
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 40px 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 12px;
 }
 
-.loading-container {
+.goals-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #4a4aff, #5447e0);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .goals-title {
+    font-size: 1.8rem;
+    margin-bottom: 32px;
+  }
+  
+  .goals-title::after {
+    width: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .goals-title {
+    font-size: 1.6rem;
+    margin-bottom: 24px;
+  }
+  
+  .goals-title::after {
+    width: 40px;
+  }
+}
+
+.loading-spinner-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  color: rgba(255, 255, 255, 0.7);
+  min-height: 100vh;
+  color: white;
 }
 
 .loading-spinner {
@@ -1317,7 +1106,7 @@
   border: 3px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   border-top-color: #4a4aff;
-  animation: spin 1s linear infinite;
+  animation: spin 1s ease-in-out infinite;
   margin-bottom: 16px;
 }
 
@@ -1325,486 +1114,4 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-/* Add responsive styles */
-@media (max-width: 768px) {
-  .goals-container {
-    padding: 8px;
-  }
-
-  .goals-content {
-    padding: 12px;
-  }
-
-  .goals-title {
-    font-size: 24px;
-    margin-bottom: 24px;
-  }
-
-  .chart-card {
-    padding: 16px;
-    margin-bottom: 16px;
-  }
-
-  .chart-card h3 {
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
-
-  .time-filter {
-    gap: 8px;
-    margin-bottom: 24px;
-    padding: 0 8px;
-  }
-
-  .filter-btn {
-    padding: 6px 16px;
-    font-size: 14px;
-  }
-
-  .activity-buttons {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 0 8px;
-  }
-
-  .modal-content {
-    padding: 16px;
-    width: 95%;
-  }
-
-  .sign-in-btn {
-    min-height: 48px;
-    padding: 12px 24px;
-    font-size: 16px;
-  }
-
-  .loading-indicator {
-    font-size: 14px;
-  }
-}
-
-/* Add touch-friendly sizes for mobile */
-@media (hover: none) {
-  .activity-button,
-  .filter-btn,
-  .counter-btn {
-    min-height: 44px; /* Apple's recommended minimum touch target size */
-  }
-
-  .slider::-webkit-slider-thumb {
-    width: 24px;
-    height: 24px;
-  }
-}
-
-.sign-in-btn:disabled {
-  opacity: 0.8;
-  cursor: wait;
-  background: linear-gradient(135deg, rgba(74, 74, 255, 0.7) 0%, rgba(0, 255, 135, 0.7) 100%);
-}
-
-.error-message {
-  color: #ff4a4a;
-  margin-top: 16px;
-  padding: 12px;
-  background: rgba(255, 74, 74, 0.1);
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.loading-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.loading-indicator .loading-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0;
-}
-
-.sign-in-btn {
-  min-width: 220px;
-  height: 48px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #4a4aff 0%, #00ff87 100%);
-  border: none;
-  border-radius: 24px;
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-@media (max-width: 768px) {
-  .sign-in-btn {
-    width: 100%;
-    max-width: 280px;
-    height: 52px;
-  }
-}
-
-.retry-btn {
-  display: block;
-  margin: 8px auto 0;
-  padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.retry-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.google-icon {
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
-}
-
-.sign-in-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
-  max-width: 320px;
-  margin: 24px auto 0;
-}
-
-.email-input {
-  width: 100%;
-  height: 48px;
-  padding: 0 16px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-.email-input:focus {
-  outline: none;
-  border-color: rgba(74, 74, 255, 0.5);
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.email-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.email-input:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.sign-in-btn {
-  height: 48px;
-  padding: 0 24px;
-  border: none;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #4a4aff 0%, #00ff87 100%);
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.sign-in-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.auth-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  z-index: 1000;
-  backdrop-filter: blur(8px);
-}
-
-.auth-modal {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  border-radius: 20px;
-  padding: 2rem;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.auth-modal-content {
-  text-align: center;
-}
-
-.auth-modal-content h2 {
-  color: white;
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  font-weight: 600;
-}
-
-.auth-modal-content p {
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 2rem;
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.input-group {
-  position: relative;
-}
-
-.auth-input {
-  width: 100%;
-  padding: 1rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.auth-input:focus {
-  outline: none;
-  border-color: #4a4aff;
-  box-shadow: 0 0 0 2px rgba(74, 74, 255, 0.2);
-}
-
-.auth-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.auth-submit-btn {
-  padding: 1rem;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #4a4aff 0%, #00ff87 100%);
-  color: white;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.auth-submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.loading-spinner-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.loading-spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-.auth-error {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  border-radius: 8px;
-  background: rgba(255, 74, 74, 0.1);
-  color: #ff4a4a;
-  font-size: 0.9rem;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (max-width: 480px) {
-  .auth-modal {
-    padding: 1.5rem;
-  }
-
-  .auth-modal-content h2 {
-    font-size: 1.5rem;
-  }
-
-  .auth-modal-content p {
-    font-size: 0.9rem;
-  }
-}
-
-.success-message {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 255, 0, 0.1);
-  color: #4caf50;
-  padding: 12px 24px;
-  border-radius: 8px;
-  z-index: 1000;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(76, 175, 80, 0.2);
-}
-
-.quran-options {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem;
-}
-
-.quran-input-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.quran-input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.quran-input {
-  width: 120px;
-  padding: 1rem;
-  font-size: 2rem;
-  text-align: center;
-  background: transparent;
-  border: none;
-  color: white;
-  -moz-appearance: textfield;
-}
-
-.quran-input::-webkit-outer-spin-button,
-.quran-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.quran-input:focus {
-  outline: none;
-}
-
-.quran-input-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.quran-control-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  padding: 0;
-}
-
-.quran-input-label {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
-}
-
-.prayer-option.selected {
-  pointer-events: none;
-  opacity: 0.8;
-}
-
-.prayer-option.prayed {
-  pointer-events: none;
-  opacity: 0.6;
-}
-
-.taraweeh-option.disabled {
-  pointer-events: none;
-  opacity: 0.6;
-}
-
-.quran-control-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.quran-input:invalid {
-  border-color: #ff4a4a;
-}
-
-.prayer-option.completed,
-.taraweeh-option.completed {
-  background: rgba(0, 255, 135, 0.1) !important;
-  border-color: #00ff87 !important;
-  pointer-events: none;
-  cursor: not-allowed;
-}
-
-.completed-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #00ff87;
-  color: #1a1a1a;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.prayer-option,
-.taraweeh-option {
-  position: relative;
-}
-
-.prayer-option:disabled,
-.taraweeh-option:disabled {
-  opacity: 1 !important;
 }

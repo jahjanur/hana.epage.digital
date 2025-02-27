@@ -6,6 +6,9 @@ import { BsSunset } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useNavigate } from 'react-router-dom';
+import { FaPrayingHands, FaMosque, FaQuran } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 
 interface RamadanDay {
@@ -50,6 +53,8 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
       translation: t('iftarDuaTranslation')
     }
   };
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const allDays = ramadanTimes.map((day, index) => {
@@ -286,7 +291,7 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
               <IoClose size={18} />
             </button>
           </div>
-          <div className="dua-content">
+          <div className="dua-content-nijet">
             <div className="arabic-text">{duas[expandedDua].arabic}</div>
             <div className="transliteration">{duas[expandedDua].transliteration}</div>
             <div className="translation">{duas[expandedDua].translation}</div>
@@ -333,6 +338,56 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
           ))}
         </div>
       </div>
+
+      <motion.div 
+        className="goals-redirect-container"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="goals-content">
+          <h3 className="goals-title">{t('trackYourJourney')}</h3>
+          <p className="goals-description">{t('trackYourProgress')}</p>
+          
+          <div className="goals-features">
+            <motion.div 
+              className="feature-item"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaPrayingHands className="feature-icon" />
+              <span>{t('dailyPrayers')}</span>
+            </motion.div>
+            
+            <motion.div 
+              className="feature-item"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaMosque className="feature-icon" />
+              <span>{t('taraweehPrayer')}</span>
+            </motion.div>
+            
+            <motion.div 
+              className="feature-item"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaQuran className="feature-icon" />
+              <span>{t('quranReading')}</span>
+            </motion.div>
+          </div>
+
+          <motion.button
+            className="start-tracking-btn"
+            onClick={() => navigate('/goals')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            {t('startTracking')}
+          </motion.button>
+        </div>
+      </motion.div>
 
       <div className="powered-by">
         {t('poweredBy')} <a href="https://epage.digital" target="_blank" rel="noopener noreferrer">epage.digital</a>
