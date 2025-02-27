@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow users to read and write their own data using email
+    match /users/{email} {
+      allow read, write: if true;
+    }
+    
+    // Allow users to read and write their own activities
+    match /daily_activities/{activityId} {
+      allow read, write: if true;
+      // We'll implement stricter rules later:
+      // allow read, write: if 
+      //   request.resource.data.email != null &&
+      //   request.resource.data.email == resource.data.email;
+    }
+  }
+} 

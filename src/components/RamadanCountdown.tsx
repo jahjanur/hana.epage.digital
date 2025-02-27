@@ -7,24 +7,26 @@ import BottomNavigation from './BottomNavigation';
 import { ReactComponent as HanaLogo } from '../assets/hanaMainLogoWhite.svg';
 import RamadanDaysList from './RamadanDaysList';
 import AnimatedBackground from './AnimatedBackground';
-import Background from './Background';
+
 import CitySelector from './CitySelector';
 import AppHeader from './AppHeader';
 import { getCityPrayerTimes } from '../data/prayerTimes';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface RamadanCountdownProps {
   selectedCity: string;
   onCityChange: (cityId: string) => void;
   selectedLanguage: string;
-  onLanguageChange: (lang: string) => void;
+  onLanguageChange: (language: string) => void;
 }
 
 const RamadanCountdown: React.FC<RamadanCountdownProps> = ({ 
   selectedCity, 
   onCityChange,
   selectedLanguage,
-  onLanguageChange 
+  onLanguageChange
 }) => {
+  const { t } = useLanguage();
 
   const [greenProgress, setGreenProgress] = useState<number>(0);
   const [redProgress, setRedProgress] = useState<number>(0);
@@ -37,7 +39,6 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
     longitude?: number;
     city?: string;
   } | null>(null);
-  const [currentLanguage, setCurrentLanguage] = useState('sq');
   const [notifications, setNotifications] = useState({
     syfyr: false,
     iftar: false
@@ -312,14 +313,9 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
 
   return (
     <div className="ramadan-countdown">
-      <AppHeader 
-        selectedCity={selectedCity} 
-        onCityChange={onCityChange}
-        selectedLanguage={selectedLanguage}
-        onLanguageChange={onLanguageChange}
-      />
+      <AppHeader selectedCity={selectedCity} onCityChange={onCityChange} />
       <div className="countdown-container">
-        <Background />
+
         <div className="content-wrapper" style={{ position: 'relative', zIndex: 3 }}>
           <AnimatedBackground />
           
@@ -339,34 +335,39 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
                 </div>
                 <div className="countdown-display">
                   <div className="time-digits">
-                    <span className="time-digit">{parseInt(remainingTime.split(':')[0], 10).toString().padStart(2, '0')}</span>
+                    <span className="time-digit">
+                      {parseInt(remainingTime.split(':')[0], 10).toString().padStart(2, '0')}
+                    </span>
                     <span className="time-separator">:</span>
-                    <span className="time-digit">{parseInt(remainingTime.split(':')[1], 10).toString().padStart(2, '0')}</span>
+                    <span className="time-digit">
+                      {parseInt(remainingTime.split(':')[1], 10).toString().padStart(2, '0')}
+                    </span>
                     <span className="time-separator">:</span>
-                    <span className="time-digit">{parseInt(remainingTime.split(':')[2], 10).toString().padStart(2, '0')}</span>
+                    <span className="time-digit">
+                      {parseInt(remainingTime.split(':')[2], 10).toString().padStart(2, '0')}
+                    </span>
                   </div>
                   <div className="period-label">
-                    <span className="period-text">{currentPeriod === 'fasting' ? 'Until Iftar' : 'Until Syfyr'}</span>
+                    <span className="period-text">
+                      {currentPeriod === 'fasting' ? t('untilIftar') : t('untilSyfyr')}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Add the new RamadanDaysList component here */}
-          <RamadanDaysList selectedCity={selectedCity} />
-
-          {/* Updated Reminder Section */}
+          {/* Reminder Section */}
           <div className="reminder-section slide-up">
             <div className="times-container">
               <div className={`time-block ${isTimeForSyfyr() ? 'active' : ''}`}>
                 <div className="time-header">
                   <IoMoonOutline className="time-icon" />
-                  <span>Syfyru</span>
+                  <span>{t('syfyr')}</span>
                   <button 
                     className={`notification-toggle ${notifications.syfyr ? 'enabled' : ''}`}
                     onClick={() => toggleNotification('syfyr')}
-                    title={notifications.syfyr ? 'Çaktivizo njoftimet' : 'Aktivizo njoftimet'}
+                    title={notifications.syfyr ? t('disableNotifications') : t('enableNotifications')}
                   >
                     {notifications.syfyr ? 
                       <IoNotificationsOutline className="notification-icon" /> : 
@@ -374,17 +375,19 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
                     }
                   </button>
                 </div>
-                <div className="time-value">{`${fajrTime.hours}:${String(fajrTime.minutes).padStart(2, '0')}`}</div>
+                <div className="time-value">
+                  {`${fajrTime.hours}:${String(fajrTime.minutes).padStart(2, '0')}`}
+                </div>
               </div>
               
               <div className={`time-block ${isTimeForIftar() ? 'active' : ''}`}>
                 <div className="time-header">
                   <IoSunnyOutline className="time-icon" />
-                  <span>Iftari</span>
+                  <span>{t('iftar')}</span>
                   <button 
                     className={`notification-toggle ${notifications.iftar ? 'enabled' : ''}`}
                     onClick={() => toggleNotification('iftar')}
-                    title={notifications.iftar ? 'Çaktivizo njoftimet' : 'Aktivizo njoftimet'}
+                    title={notifications.iftar ? t('disableNotifications') : t('enableNotifications')}
                   >
                     {notifications.iftar ? 
                       <IoNotificationsOutline className="notification-icon" /> : 
@@ -392,24 +395,17 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
                     }
                   </button>
                 </div>
-                <div className="time-value">{`${iftarTime.hours}:${String(iftarTime.minutes).padStart(2, '0')}`}</div>
+                <div className="time-value">
+                  {`${iftarTime.hours}:${String(iftarTime.minutes).padStart(2, '0')}`}
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="main-content">
-            {/* Existing Suhoor and Iftar section */}
-            
-
-         
-
-
-            {/* Rest of the components */}
-          </div>
+          {/* Days List */}
+          <RamadanDaysList selectedCity={selectedCity} />
 
           <BottomNavigation />
-          
-          
         </div>
       </div>
     </div>

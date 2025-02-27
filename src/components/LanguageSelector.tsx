@@ -1,48 +1,55 @@
 import React, { useState } from 'react';
 import './LanguageSelector.css';
-import { IoLanguageOutline } from "react-icons/io5";
-import { IoChevronDownOutline } from "react-icons/io5";
+import { IoLanguageOutline, IoChevronDownOutline } from 'react-icons/io5';
+import { useLanguage } from '../contexts/LanguageContext';
 
-interface LanguageSelectorProps {
-  selectedLanguage: string;
-  onLanguageChange: (lang: string) => void;
-}
+// Define supported languages type
+type SupportedLanguages = 'sq' | 'en' | 'tr' | 'mk' | 'it' | 'de';
 
-const LanguageSelector: React.FC<LanguageSelectorProps> = ({ selectedLanguage, onLanguageChange }) => {
+const languages: { code: SupportedLanguages; name: string }[] = [
+  { code: 'sq', name: 'Shqip' },
+  { code: 'en', name: 'English' },
+  { code: 'tr', name: 'Turkish' },
+  { code: 'mk', name: 'Macedonian' },
+  { code: 'it', name: 'Italian' },
+  { code: 'de', name: 'Deutsch' },
+];
+
+const getLanguageName = (code: SupportedLanguages): string => {
+  return languages.find(lang => lang.code === code)?.name || code;
+};
+
+const LanguageSelector: React.FC = () => {
+  const { language, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
 
-  const languages = [
-    { code: 'sq', name: 'Shqip' },
-    { code: 'en', name: 'English' }
-  ];
-
-  const getLanguageName = (code: string) => {
-    return languages.find(lang => lang.code === code)?.name || code;
+  const handleLanguageSelect = (code: SupportedLanguages) => {
+    setLanguage(code);
+    setIsOpen(false);
   };
 
   return (
     <div className="language-selector">
-      <button
+      <button 
         className="language-button"
         onClick={() => setIsOpen(!isOpen)}
       >
         <IoLanguageOutline className="language-icon" />
-        <span className="language-name">{getLanguageName(selectedLanguage)}</span>
+        <span className="language-name">
+          {getLanguageName(language as SupportedLanguages)}
+        </span>
         <IoChevronDownOutline className={`chevron ${isOpen ? 'open' : ''}`} />
       </button>
 
       {isOpen && (
         <div className="language-dropdown">
-          {languages.map(lang => (
+          {languages.map(({ code, name }) => (
             <button
-              key={lang.code}
-              className={`language-option ${selectedLanguage === lang.code ? 'active' : ''}`}
-              onClick={() => {
-                onLanguageChange(lang.code);
-                setIsOpen(false);
-              }}
+              key={code}
+              className={`language-option ${language === code ? 'active' : ''}`}
+              onClick={() => handleLanguageSelect(code)}
             >
-              {lang.name}
+              {name}
             </button>
           ))}
         </div>
