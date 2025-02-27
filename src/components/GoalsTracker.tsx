@@ -116,7 +116,7 @@ const GoalsTracker: React.FC = () => {
     currentUser,
     signInWithEmail
   } = useGoals();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<'prayer' | 'taraweeh' | 'quran' | null>(null);
   const [inputValue, setInputValue] = useState(0);
@@ -137,6 +137,49 @@ const GoalsTracker: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [selectedCity, setSelectedCity] = useState('gostivar');
   const [isInitializing, setIsInitializing] = useState(true);
+
+  const getLocalizedText = () => {
+    switch (language) {
+      case 'tr':
+        return {
+          title: 'Ramazan Yolculuğunuzu Takip Edin',
+          subtitle: 'Günlük namazlarınızı, teravih ve Kuran okuma ilerleyişinizi takip etmek için e-postanızı girin',
+          emailPlaceholder: 'E-posta adresiniz',
+          startButton: 'Takibe Başla',
+          loading: 'Yükleniyor...',
+          error: 'Bir hata oluştu. Lütfen tekrar deneyin.'
+        };
+      case 'de':
+        return {
+          title: 'Verfolgen Sie Ihre Ramadan-Reise',
+          subtitle: 'Geben Sie Ihre E-Mail-Adresse ein, um Ihre täglichen Gebete, Tarawih und Koran-Lesungen zu verfolgen',
+          emailPlaceholder: 'Ihre E-Mail-Adresse',
+          startButton: 'Tracking starten',
+          loading: 'Wird geladen...',
+          error: 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'
+        };
+      case 'sq':
+        return {
+          title: 'Gjurmoni Udhëtimin tuaj të Ramazanit',
+          subtitle: 'Vendosni emailin tuaj për të gjurmuar namazet e përditshme, teravitë dhe leximin e Kuranit',
+          emailPlaceholder: 'Email-i juaj',
+          startButton: 'Fillo Gjurmimin',
+          loading: 'Duke u ngarkuar...',
+          error: 'Ndodhi një gabim. Ju lutemi provoni përsëri.'
+        };
+      default:
+        return {
+          title: 'Track Your Ramadan Journey',
+          subtitle: 'Enter your email to start tracking your daily prayers, Taraweeh and Quran reading progress',
+          emailPlaceholder: 'Enter your email',
+          startButton: 'Start Tracking',
+          loading: 'Loading...',
+          error: 'An error occurred. Please try again.'
+        };
+    }
+  };
+
+  const localizedText = getLocalizedText();
 
   const fetchTodayProgress = useCallback(async () => {
     if (!currentUser) return;
@@ -476,8 +519,8 @@ const GoalsTracker: React.FC = () => {
               exit={{ scale: 0.9, opacity: 0 }}
             >
               <div className="auth-modal-content">
-                <h2>Track Your Ramadan Journey</h2>
-                <p>Enter your email to start tracking your daily prayers, Taraweeh, and Quran reading progress</p>
+                <h2>{localizedText.title}</h2>
+                <p>{localizedText.subtitle}</p>
                 
                 <form onSubmit={handleSignIn} className="auth-form">
                   <div className="input-group">
@@ -485,11 +528,11 @@ const GoalsTracker: React.FC = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email"
+                      placeholder={localizedText.emailPlaceholder}
                       className="auth-input"
                       required
                     />
-        </div>
+                  </div>
 
                   <motion.button
                     type="submit"
@@ -501,10 +544,10 @@ const GoalsTracker: React.FC = () => {
                     {isLoading ? (
                       <div className="loading-spinner-container">
                         <div className="loading-spinner"></div>
-                        <span>Starting...</span>
+                        <span>{localizedText.loading}</span>
                       </div>
                     ) : (
-                      'Start Tracking'
+                      localizedText.startButton
                     )}
                   </motion.button>
                 </form>
@@ -518,7 +561,7 @@ const GoalsTracker: React.FC = () => {
                     {error}
                   </motion.div>
                 )}
-                </div>
+              </div>
             </motion.div>
           </motion.div>
         </AnimatePresence>
