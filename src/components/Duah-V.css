@@ -1,377 +1,513 @@
+/* Import Clash Grotesk font */
+@import url('https://api.fontshare.com/v2/css?f[]=clash-grotesk@200,400,300,600,700,500&display=swap');
+
+/* Root level font styling */
+:root {
+  --font-primary: 'Clash Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Apply font globally */
+* {
+  font-family: var(--font-primary);
+}
+
+/* Background & Layout */
 .duah-v-container {
-  background: #1a1a4b;
-  backdrop-filter: blur(20px);
+  font-family: var(--font-primary);
+  background-color: rgba(0, 0, 0, 0.733);
+  background-image: url('../assets/BG.svg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   min-height: 100vh;
-  padding: 83px 20px 20px 20px;
+  padding: 0;
   color: white;
   display: flex;
   flex-direction: column;
-  position: absolute;
+  position: relative;
+  overflow-x: hidden;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Add a dark overlay */
+.duah-v-container::before {
+  content: '';
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  overflow-y: auto;
-  max-width: 1200px;
-  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+  pointer-events: none;
 }
 
+/* Header Styling */
 .duah-header {
-  display: flex
-;
+  display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 6px;
-  padding-bottom: 25px;
-  border-bottom: 3px solid #1fa45b;
+  width: 100%;
+  padding: 2rem 4rem;
+  background: transparent;
   position: relative;
+  z-index: 2;
+  margin-top: 50px;
 }
 
-.duah-header::after {
-  content: '۞';
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  padding: 0 8px;
-  color: #1fa45b;
-  font-size: 14px;
-}
-
-.duah-header h1 {
-  margin: 0;
-  font-size: 1.6rem;
-  color: white;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  text-transform: capitalize;
-}
-
-.search-toggle {
-  position: absolute;
-  right: 0;
-  top: 0;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+/* Book Title Styling */
+.book-title-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.search-toggle img {
-  width: 16px;
-  height: 16px;
-  opacity: 0.8;
-}
-
-.search-toggle:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.search-toggle:hover img {
-  opacity: 1;
-}
-
-.search-wrapper {
-  margin-bottom: 30px;
-  opacity: 0;
-  height: 0;
-  transition: all 0.3s ease;
-}
-
-.search-wrapper.visible {
-  opacity: 1;
-  height: 48px;
-}
-
-.search-input {
+  gap: 2rem;
   width: 100%;
-  padding: 12px 20px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
-  font-size: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
 }
 
+.title-decoration {
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(
+    to var(--direction, right),
+    transparent,
+    rgba(255, 255, 255, 0.3)
+  );
+}
+
+.title-decoration.left {
+  --direction: right;
+}
+
+.title-decoration.right {
+  --direction: left;
+}
+
+.title-content {
+  text-align: center;
+  position: relative;
+  padding: 0 1rem;
+}
+
+.book-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+}
+
+.book-subtitle {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0.5rem 0 0;
+  font-weight: 400;
+}
+
+.title-accent {
+  width: 40px;
+  height: 2px;
+  background: #3838D0;
+  margin: 1rem auto 0;
+  position: relative;
+}
+
+.title-accent::before,
+.title-accent::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3838D0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.title-accent::before {
+  left: -10px;
+}
+
+.title-accent::after {
+  right: -10px;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Dua Card Grid */
 .duas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+  padding: 3rem;
+  position: relative;
+  z-index: 2;
+  margin-top: 1rem;
 }
 
+/* Dua Cards - Modern Book Style */
 .dua-card {
-  background: white;
-  border-radius: 10px;
-  padding: 12px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(175, 175, 175, 0.95));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 1.5rem;
   cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 160px;
   transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.6s ease backwards;
 }
 
-.dua-card:hover {
-  transform: translateY(-4px);
-  background: #f8f8f8;
-  border-color: rgba(0, 0, 0, 0.2);
-}
+/* Apply staggered animation delay to cards */
+.dua-card:nth-child(1) { animation-delay: 0.1s; }
+.dua-card:nth-child(2) { animation-delay: 0.15s; }
+.dua-card:nth-child(3) { animation-delay: 0.2s; }
+.dua-card:nth-child(4) { animation-delay: 0.25s; }
+.dua-card:nth-child(5) { animation-delay: 0.3s; }
+.dua-card:nth-child(6) { animation-delay: 0.35s; }
+.dua-card:nth-child(7) { animation-delay: 0.4s; }
+.dua-card:nth-child(8) { animation-delay: 0.45s; }
+.dua-card:nth-child(n+9) { animation-delay: 0.5s; }
 
+/* Dua Card Content */
 .dua-card-content {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  height: 100%;
 }
 
+/* Hover Effect */
+.dua-card:hover {
+  transform: translateY(-4px);
+  background: rgba(250, 250, 250, 0.92);
+  border-color: rgba(227, 227, 227, 0.3);
+  box-shadow: 
+    0 12px 24px rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Dua Number */
 .dua-number {
-  background: rgba(0, 0, 0, 0.1);
-  color: black;
-  padding: 1px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  width: fit-content;
+  font-size: 0.875rem;
+  color: #3838D0;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
 }
 
+/* Dua Title */
 .dua-title {
-  color: black;
-  font-size: 24px;
+  font-size: 1rem;
+  color: rgb(14, 14, 14);
+  font-weight: 600;
   margin: 0;
-  line-height: 1.4;
-  font-weight: 500;
+  line-height: 1.3;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Dua Card Footer */
 .dua-card-footer {
-  margin-top: 6px;
-  padding-top: 6px;
-  border-top: 1px solid #1fa45b;  /* Islamic green color */
-  position: relative;
-}
-
-.dua-card-footer::before {
-  content: '۞';
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  padding: 0 8px;
-  color: #1fa45b;  /* Same Islamic green color */
-  font-size: 14px;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .read-more {
-  color: rgba(0, 0, 0, 0.7);
-  font-size: 11px;
-  transition: color 0.3s ease;
-}
-
-.dua-card:hover .read-more {
-  color: black;
-}
-
-@media (max-width: 768px) {
-  .duas-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.loading,
-.error {
+  color: #3838D0;
+  font-weight: 500;
+  font-size: 0.875rem;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100%;
-  color: white;
-  font-size: 1.2rem;
+  gap: 0.5rem;
 }
 
-.error {
-  color: #ff6b6b;
-  text-align: center;
-  padding: 20px;
-}
-
-@keyframes fadeScaleIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.95) translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-/* Add a class that will be toggled by JavaScript when item is centered */
-.dua-item.centered {
-  transform: scale(1.08);
-  box-shadow: 0 8px 25px rgba(63, 63, 244, 0.15);
-  background-color: #ffffff;
+/* Dua Detail View */
+.dua-detail {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 24px;
+  padding: 3rem;
+  margin: 2rem auto;
+  max-width: 800px;
+  width: 90%;
+  position: relative;
   z-index: 2;
-  border: 2px solid rgba(63, 63, 244, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.3s ease backwards;
 }
 
-/* Slightly dim non-centered items */
-.dua-item:not(.centered) {
-  opacity: 0.85;
+.dua-content {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideInRight 0.5s ease backwards;
 }
 
+.dua-content:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.dua-content:nth-child(1) { animation-delay: 0.1s; }
+.dua-content:nth-child(2) { animation-delay: 0.2s; }
+.dua-content:nth-child(3) { animation-delay: 0.3s; }
+.dua-content:nth-child(n+4) { animation-delay: 0.4s; }
+
+.arabic-text {
+  font-size: 2rem;
+  line-height: 2;
+  text-align: right;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.transliteration {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.translation {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Loading Spinner */
 .loading-spinner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  justify-content: center;
+  height: 100vh;
+  gap: 1rem;
   color: white;
+  position: relative;
+  z-index: 2;
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid rgba(56, 56, 208, 0.1);
   border-radius: 50%;
-  border-top-color: white;
-  animation: spin 1s ease-in-out infinite;
+  border-top-color: #3838D0;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
+/* Error Message */
 .error-message {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 1rem;
   color: white;
-  padding: 20px;
-  border-radius: 12px;
-  background: rgba(255, 0, 0, 0.1);
-}
-
-.dua-detail {
-  background: white;
-  border-radius: 16px;
-  padding: 25px;
-  margin: 20px auto;
-  max-width: 800px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.dua-content {
-  margin-bottom: 30px;
-  border-bottom: 1px solid #1fa45b;
-  padding-bottom: 20px;
+  text-align: center;
   position: relative;
+  z-index: 2;
 }
 
-.dua-content:last-child {
-  margin-bottom: 0;
-  border-bottom: none;
+.error-message button {
+  background: #3838D0;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
-.dua-content::after {
-  content: '۞';
+.error-message button:hover {
+  background: #2f2fae;
+}
+
+/* Close Button */
+.dua-close-button {
   position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  padding: 0 8px;
-  color: #1fa45b;
-  font-size: 14px;
-}
-
-.dua-content:last-child::after {
-  display: none;
-}
-
-.arabic-text {
-  font-family: 'Noto Naskh Arabic', serif;
-  font-size: 1.8rem;
-  line-height: 2.2;
-  text-align: right;
-  margin-bottom: 20px;
-  color: black;
-  direction: rtl;
-}
-
-.transliteration {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  margin-bottom: 15px;
-  color: rgba(0, 0, 0, 0.85);
-  font-style: italic;
-  padding-left: 15px;
-  border-left: 2px solid #1fa45b;
-}
-
-.translation {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: rgba(0, 0, 0, 0.75);
-}
-
-.back-button {
-  position: fixed;
-  left: 20px;
-  top: 20px;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(56, 56, 208, 0.1);
+  border: 1.5px solid rgba(56, 56, 208, 0.3);
+  color: white;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: transparent;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  z-index: 10;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadeInUp 0.3s ease backwards 0.2s;
 }
 
-.back-icon {
-  font-size: 32px;
-  color: white;
+.dua-close-button:hover {
+  background: rgba(56, 56, 208, 0.2);
+  border-color: rgba(56, 56, 208, 0.5);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.back-text {
-  font-size: 16px;
-  color: white;
-  font-weight: 500;
+.dua-close-button:active {
+  transform: scale(0.95);
 }
 
+.dua-close-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(56, 56, 208, 0.25);
+}
+
+.dua-close-button svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.dua-close-button:hover svg {
+  transform: rotate(90deg);
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
+  .duah-header {
+    padding: 1.5rem 2rem;
+  }
+  
+  .duas-grid {
+    padding: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
   .dua-detail {
-    padding: 20px;
-    margin: 15px;
+    padding: 2rem;
+    margin: 1rem;
   }
-
-  .arabic-text {
-    font-size: 1.6rem;
+  
+  .dua-card {
+    height: 140px;
+    padding: 1.25rem;
   }
-
-  .transliteration {
-    font-size: 1rem;
+  
+  .dua-title {
+    font-size: 0.9375rem;
   }
-
-  .translation {
-    font-size: 0.95rem;
+  
+  .dua-close-button {
+    top: 1rem;
+    right: 1rem;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .dua-close-button svg {
+    width: 18px;
+    height: 18px;
   }
 }
 
-.main-header {
-  padding-bottom: 0 !important;
-  border-bottom: none !important;
-}
+@media (max-width: 480px) {
+  .duah-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .duas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    padding: 1rem;
+    gap: 0.875rem;
+  }
+  
+  .dua-card {
+    height: 130px;
+    min-height: 130px;
+    padding: 1rem;
+  }
+  
+  .dua-card-footer {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+  }
+  
+  .dua-title {
+    font-size: 0.875rem;
+    line-height: 1.2;
+  }
 
-.main-header::after {
-  display: none !important;
-}
-
-.main-header h1 {
-  padding-right: 50px;
-  font-size: 2.4rem;
-  font-weight: 700;
-  margin: 0;
-  color: white;
-  letter-spacing: -0.5px;
-  text-transform: capitalize;
+  .dua-detail {
+    padding: 1.5rem;
+    margin: 1rem 1rem 7rem 1rem;
+  }
+  
+  .dua-close-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+  
+  .dua-close-button svg {
+    width: 16px;
+    height: 16px;
+  }
 }

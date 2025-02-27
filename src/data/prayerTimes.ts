@@ -718,139 +718,319 @@ export const swissRamadanTimes = [
   { "date": "2025-03-29", "weekday": "Shtunë", "fajr": "04:25", "dhuhr": "12:36", "asr": "16:05", "maghrib": "18:57", "isha": "20:57" }
 ];
 
-// Time adjustments for Swiss cities relative to Zurich
-export const swissCityAdjustments: Record<string, CityAdjustment> = {
-  zurich: {
-    name: "Zürich",
-    nameAlb: "Zürich",
-    nameEn: "Zürich",
-    nameTr: "Zürich",
-    adjustment: {
-      fajr: 0,
-      dhuhr: 0,
-      asr: 0,
-      maghrib: 0,
-      isha: 0
+
+export const swissCityAdjustments : Record<string, CityAdjustment> = {
+  
+    aarau: {
+      name: "Aarau",
+      nameAlb: "Aarau",
+      nameEn: "Aarau",
+      nameTr: "Aarau",
+      adjustment: { fajr: 2, dhuhr: 2, asr: 2, maghrib: 2, isha: 2 }
+    },
+    appenzell: {
+      name: "Appenzell",
+      nameAlb: "Appenzell",
+      nameEn: "Appenzell",
+      nameTr: "Appenzell",
+      adjustment: { fajr: -4, dhuhr: -4, asr: -4, maghrib: -4, isha: -4 }
+    },
+    baden: {
+      name: "Baden",
+      nameAlb: "Baden",
+      nameEn: "Baden",
+      nameTr: "Baden",
+      adjustment: { fajr: 1, dhuhr: 1, asr: 1, maghrib: 1, isha: 1 }
+    },
+    basel: {
+      name: "Basel",
+      nameAlb: "Basel",
+      nameEn: "Basel",
+      nameTr: "Basel",
+      adjustment: { fajr: 4, dhuhr: 4, asr: 4, maghrib: 4, isha: 4 }
+    },
+    bern: {
+      name: "Bern",
+      nameAlb: "Bern",
+      nameEn: "Bern",
+      nameTr: "Bern",
+      adjustment: { fajr: 4, dhuhr: 4, asr: 4, maghrib: 4, isha: 4 }
+    },
+    "biel/bienne": {
+      name: "Biel/Bienne",
+      nameAlb: "Biel/Bienne",
+      nameEn: "Biel/Bienne",
+      nameTr: "Biel/Bienne",
+      adjustment: { fajr: 5, dhuhr: 5, asr: 5, maghrib: 5, isha: 5 }
+    },
+    chur: {
+      name: "Chur",
+      nameAlb: "Chur",
+      nameEn: "Chur",
+      nameTr: "Chur",
+      adjustment: { fajr: -4, dhuhr: -4, asr: -4, maghrib: -4, isha: -4 }
+    },
+    davos: {
+      name: "Davos",
+      nameAlb: "Davos",
+      nameEn: "Davos",
+      nameTr: "Davos",
+      adjustment: { fajr: -5, dhuhr: -5, asr: -5, maghrib: -5, isha: -5 }
+    },
+    delemont: {
+      name: "Delemont",
+      nameAlb: "Delemont",
+      nameEn: "Delemont",
+      nameTr: "Delemont",
+      adjustment: { fajr: 5, dhuhr: 5, asr: 5, maghrib: 5, isha: 5 }
+    },
+    diessenhofen: {
+      name: "Diessenhofen",
+      nameAlb: "Diessenhofen",
+      nameEn: "Diessenhofen",
+      nameTr: "Diessenhofen",
+      adjustment: { fajr: -1, dhuhr: -1, asr: -1, maghrib: -1, isha: -1 }
+    },
+    frauenfeld: {
+      name: "Frauenfeld",
+      nameAlb: "Frauenfeld",
+      nameEn: "Frauenfeld",
+      nameTr: "Frauenfeld",
+      adjustment: { fajr: -1, dhuhr: -1, asr: -1, maghrib: -1, isha: -1 }
+    },
+    fribourg: {
+      name: "Fribourg",
+      nameAlb: "Fribourg",
+      nameEn: "Fribourg",
+      nameTr: "Fribourg",
+      adjustment: { fajr: 5, dhuhr: 5, asr: 5, maghrib: 5, isha: 5 }
+    },
+    geneva: {
+      name: "Geneva",
+      nameAlb: "Geneva",
+      nameEn: "Geneva",
+      nameTr: "Geneva",
+      adjustment: { fajr: 9, dhuhr: 9, asr: 9, maghrib: 9, isha: 9 }
+    },
+    glarus: {
+      name: "Glarus",
+      nameAlb: "Glarus",
+      nameEn: "Glarus",
+      nameTr: "Glarus",
+      adjustment: { fajr: -2, dhuhr: -2, asr: -2, maghrib: -2, isha: -2 }
+    },
+    interlaken: {
+      name: "Interlaken",
+      nameAlb: "Interlaken",
+      nameEn: "Interlaken",
+      nameTr: "Interlaken",
+      adjustment: { fajr: 2, dhuhr: 2, asr: 2, maghrib: 2, isha: 2 }
+    },
+    kreuzlingen: {
+      name: "Kreuzlingen",
+      nameAlb: "Kreuzlingen",
+      nameEn: "Kreuzlingen",
+      nameTr: "Kreuzlingen",
+      adjustment: { fajr: -3, dhuhr: -3, asr: -3, maghrib: -3, isha: -3 }
+    },
+    langenthal: {
+      name: "Langenthal",
+      nameAlb: "Langenthal",
+      nameEn: "Langenthal",
+      nameTr: "Langenthal",
+      adjustment: { fajr: 3, dhuhr: 3, asr: 3, maghrib: 3, isha: 3 }
+    },
+    lausanne: {
+      name: "Lausanne",
+      nameAlb: "Lausanne",
+      nameEn: "Lausanne",
+      nameTr: "Lausanne",
+      adjustment: { fajr: 7, dhuhr: 7, asr: 7, maghrib: 7, isha: 7 }
+    },
+    liestal: {
+      name: "Liestal",
+      nameAlb: "Liestal",
+      nameEn: "Liestal",
+      nameTr: "Liestal",
+      adjustment: { fajr: 3, dhuhr: 3, asr: 3, maghrib: 3, isha: 3 }
+    },
+    lugano: {
+      name: "Lugano",
+      nameAlb: "Lugano",
+      nameEn: "Lugano",
+      nameTr: "Lugano",
+      adjustment: { fajr: 3, dhuhr: 3, asr: 3, maghrib: 3, isha: 3 }
+    },
+    luzern: {
+      name: "Luzern",
+      nameAlb: "Luzern",
+      nameEn: "Luzern",
+      nameTr: "Luzern",
+      adjustment: { fajr: 1, dhuhr: 1, asr: 1, maghrib: 1, isha: 1 }
+    },
+    martigny: {
+      name: "Martigny",
+      nameAlb: "Martigny",
+      nameEn: "Martigny",
+      nameTr: "Martigny",
+      adjustment: { fajr: 5, dhuhr: 5, asr: 5, maghrib: 5, isha: 5 }
+    },
+    neuchatel: {
+      name: "Neuchatel",
+      nameAlb: "Neuchatel",
+      nameEn: "Neuchatel",
+      nameTr: "Neuchatel",
+      adjustment: { fajr: 6, dhuhr: 6, asr: 6, maghrib: 6, isha: 6 }
+    },
+    nyon: {
+      name: "Nyon",
+      nameAlb: "Nyon",
+      nameEn: "Nyon",
+      nameTr: "Nyon",
+      adjustment: { fajr: 9, dhuhr: 9, asr: 9, maghrib: 9, isha: 9 }
+    },
+    olten: {
+      name: "Olten",
+      nameAlb: "Olten",
+      nameEn: "Olten",
+      nameTr: "Olten",
+      adjustment: { fajr: 2, dhuhr: 2, asr: 2, maghrib: 2, isha: 2 }
+    },
+    reinach: {
+      name: "Reinach",
+      nameAlb: "Reinach",
+      nameEn: "Reinach",
+      nameTr: "Reinach",
+      adjustment: { fajr: 1, dhuhr: 1, asr: 1, maghrib: 1, isha: 1 }
+    },
+    romanshorn: {
+      name: "Romanshorn",
+      nameAlb: "Romanshorn",
+      nameEn: "Romanshorn",
+      nameTr: "Romanshorn",
+      adjustment: { fajr: -3, dhuhr: -3, asr: -3, maghrib: -3, isha: -3 }
+    },
+    rorschach: {
+      name: "Rorschach",
+      nameAlb: "Rorschach",
+      nameEn: "Rorschach",
+      nameTr: "Rorschach",
+      adjustment: { fajr: -4, dhuhr: -4, asr: -4, maghrib: -4, isha: -4 }
+    },
+    sarnen: {
+      name: "Sarnen",
+      nameAlb: "Sarnen",
+      nameEn: "Sarnen",
+      nameTr: "Sarnen",
+      adjustment: { fajr: 1, dhuhr: 1, asr: 1, maghrib: 1, isha: 1 }
+    },
+    schaffhausen: {
+      name: "Schaffhausen",
+      nameAlb: "Schaffhausen",
+      nameEn: "Schaffhausen",
+      nameTr: "Schaffhausen",
+      adjustment: { fajr: -1, dhuhr: 1, asr: 1, maghrib: 1, isha: 1 }
+    },
+    schwyz: {
+      name: "Schwyz",
+      nameAlb: "Schwyz",
+      nameEn: "Schwyz",
+      nameTr: "Schwyz",
+      adjustment: { fajr: -1, dhuhr: 1, asr: 1, maghrib: 1, isha: 1 }
+    },
+    sion: {
+      name: "Sion",
+      nameAlb: "Sion",
+      nameEn: "Sion",
+      nameTr: "Sion",
+      adjustment: { fajr: 4, dhuhr: 4, asr: 4, maghrib: 4, isha: 4 }
+    },
+    solothurn: {
+      name: "Solothurn",
+      nameAlb: "Solothurn",
+      nameEn: "Solothurn",
+      nameTr: "Solothurn",
+      adjustment: { fajr: -1, dhuhr: -1, asr: -1, maghrib: -1, isha: -1 }
+    },
+    stgallen: {
+      name: "St. Gallen",
+      nameAlb: "St. Gallen",
+      nameEn: "St. Gallen",
+      nameTr: "St. Gallen",
+      adjustment: { fajr: -3, dhuhr: -3, asr: -3, maghrib: -3, isha: -3 }
+    },
+    stmoritz: {
+      name: "St. Moritz",
+      nameAlb: "St. Moritz",
+      nameEn: "St. Moritz",
+      nameTr: "St. Moritz",
+      adjustment: { fajr: -6, dhuhr: -6, asr: -6, maghrib: -6, isha: -6 }
+    },
+    thun: {
+      name: "Thun",
+      nameAlb: "Thun",
+      nameEn: "Thun",
+      nameTr: "Thun",
+      adjustment: { fajr: 3, dhuhr: 3, asr: 3, maghrib: 3, isha: 3 }
+    },
+    visp: {
+      name: "Visp",
+      nameAlb: "Visp",
+      nameEn: "Visp",
+      nameTr: "Visp",
+      adjustment: { fajr: 2, dhuhr: 2, asr: 2, maghrib: 2, isha: 2 }
+    },
+    wetzikon: {
+      name: "Wetzikon",
+      nameAlb: "Wetzikon",
+      nameEn: "Wetzikon",
+      nameTr: "Wetzikon",
+      adjustment: { fajr: -1, dhuhr: 1, asr: 1, maghrib: 1, isha: 1 }
+    },
+    will: {
+      name: "Will",
+      nameAlb: "Will",
+      nameEn: "Will",
+      nameTr: "Will",
+      adjustment: { fajr: -1, dhuhr: -1, asr: -1, maghrib: -1, isha: -1 }
+    },
+    winterthur: {
+      name: "Winterthur",
+      nameAlb: "Winterthur",
+      nameEn: "Winterthur",
+      nameTr: "Winterthur",
+      adjustment: { fajr: -1, dhuhr: -1, asr: -1, maghrib: -1, isha: -1 }
+    },
+    yverdon: {
+      name: "Yverdon",
+      nameAlb: "Yverdon",
+      nameEn: "Yverdon",
+      nameTr: "Yverdon",
+      adjustment: { fajr: 7, dhuhr: 7, asr: 7, maghrib: 7, isha: 7 }
+    },Zermat:{
+      name: "Zermat",
+      nameAlb: "Zermat",
+      nameEn: "Zermat",
+      nameTr: "Zermat",
+      adjustment: { fajr: 3, dhuhr: 3, asr: 3, maghrib: 3, isha: 3 }
+    },Zug:{
+      name: "Zug",
+      nameAlb: "Zug",
+      nameEn: "Zug",
+      nameTr: "Zug",
+      adjustment: { fajr: 0, dhuhr: 0 , asr: 0, maghrib: 0, isha: 0 }
+    },zurich: {
+      name: "Zurich",
+      nameAlb: "Zurich",
+      nameEn: "Zurich",
+      nameTr: "Zurich",
+      adjustment: { fajr: 0, dhuhr: 0 , asr: 0, maghrib: 0, isha: 0 }
     }
-  },
-  baden: {
-    name: "Baden",
-    nameAlb: "Baden",
-    nameEn: "Baden",
-    nameTr: "Baden",
-    adjustment: {
-      fajr: +1,
-      dhuhr: +1,
-      asr: +1,
-      maghrib: +1,
-      isha: +1
-    }
-  },
-  aarau: {
-    name: "Aarau",
-    nameAlb: "Aarau",
-    nameEn: "Aarau",
-    nameTr: "Aarau",
-    adjustment: {
-      fajr: +2,
-      dhuhr: +2,
-      asr: +2,
-      maghrib: +2,
-      isha: +2
-    }
-  },
-  basel: {
-    name: "Basel",
-    nameAlb: "Basel",
-    nameEn: "Basel",
-    nameTr: "Basel",
-    adjustment: {
-      fajr: +4,
-      dhuhr: +4,
-      asr: +4,
-      maghrib: +4,
-      isha: +4
-    }
-  },
-  bern: {
-    name: "Bern",
-    nameAlb: "Bern",
-    nameEn: "Bern",
-    nameTr: "Bern",
-    adjustment: {
-      fajr: +4,
-      dhuhr: +4,
-      asr: +4,
-      maghrib: +4,
-      isha: +4
-    }
-  },
-  liestal: {
-    name: "Liestal",
-    nameAlb: "Liestal",
-    nameEn: "Liestal",
-    nameTr: "Liestal",
-    adjustment: {
-      fajr: +3,
-      dhuhr: +3,
-      asr: +3,
-      maghrib: +3,
-      isha: +3
-    }
-  },
-  olten: {
-    name: "Olten",
-    nameAlb: "Olten",
-    nameEn: "Olten",
-    nameTr: "Olten",
-    adjustment: {
-      fajr: +2,
-      dhuhr: +2,
-      asr: +2,
-      maghrib: +2,
-      isha: +2
-    }
-  },
-  frauenfeld: {
-    name: "Frauenfeld",
-    nameAlb: "Frauenfeld",
-    nameEn: "Frauenfeld",
-    nameTr: "Frauenfeld",
-    adjustment: {
-      fajr: -1,
-      dhuhr: -1,
-      asr: -1,
-      maghrib: -1,
-      isha: -1
-    }
-  },
-  winterthur: {
-    name: "Winterthur",
-    nameAlb: "Winterthur",
-    nameEn: "Winterthur",
-    nameTr: "Winterthur",
-    adjustment: {
-      fajr: -1,
-      dhuhr: -1,
-      asr: -1,
-      maghrib: -1,
-      isha: -1
-    }
-  },
-  lausanne: {
-    name: "Lausanne",
-    nameAlb: "Lausanne",
-    nameEn: "Lausanne",
-    nameTr: "Lausanne",
-    adjustment: {
-      fajr: +7,
-      dhuhr: +7,
-      asr: +7,
-      maghrib: +7,
-      isha: +7
-    }
-  }
-};
+ }
+     
+  
+
+
 
 // Base times for Wolfsberg
 export const wolfsbergRamadanTimes = [

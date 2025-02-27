@@ -16,11 +16,15 @@ import { useLanguage } from '../contexts/LanguageContext';
 interface RamadanCountdownProps {
   selectedCity: string;
   onCityChange: (cityId: string) => void;
+  selectedLanguage: string;
+  onLanguageChange: (language: string) => void;
 }
 
 const RamadanCountdown: React.FC<RamadanCountdownProps> = ({ 
   selectedCity, 
-  onCityChange 
+  onCityChange,
+  selectedLanguage,
+  onLanguageChange
 }) => {
   const { t } = useLanguage();
 
