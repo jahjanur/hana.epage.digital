@@ -63,6 +63,7 @@ interface Translations {
     austria: string;
     switzerland: string;
     germany: string;
+    albania: string;
     
     // Add notification-related keys
     syfyr: string;
@@ -74,7 +75,7 @@ interface Translations {
 }
 
 const translations: Translations = {
-  'sq': {
+  'sq': { 
     // Albanian translations
     fajr: 'Sabah',
     dhuhr: 'Dreka',
@@ -132,7 +133,7 @@ const translations: Translations = {
     austria: 'Austria',
     switzerland: 'Switzerland',
     germany: 'Germany',
-    
+    albania: 'Albania',
     // Add notification-related translations
     syfyr: 'Suhoor',
     iftar: 'Iftar',
@@ -198,7 +199,7 @@ const translations: Translations = {
     austria: 'Austria',
     switzerland: 'Switzerland',
     germany: 'Germany',
-    
+    albania: 'Albania',
     // Add notification-related translations
     syfyr: 'Suhoor',
     iftar: 'Iftar',
@@ -266,7 +267,7 @@ const translations: Translations = {
     austria: 'Avusturya',
     switzerland: 'İsviçre',
     germany: 'Almanya',
-    
+    albania: 'Arnavutluk',
     // Notification-related translations
     syfyr: 'Sahur',
     iftar: 'İftar',
@@ -334,7 +335,7 @@ const translations: Translations = {
     austria: 'Österreich',
     switzerland: 'Schweiz',
     germany: 'Deutschland',
-    
+    albania: 'Albanien',
     // Notification-related translations
     syfyr: 'Suhur',
     iftar: 'Iftar',
