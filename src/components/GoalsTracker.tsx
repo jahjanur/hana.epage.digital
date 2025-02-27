@@ -35,6 +35,7 @@ import {
   Legend
 } from 'recharts';
 import AppHeader from './AppHeader';
+import { ReactComponent as FooterEPAGE } from '../assets/FooterEPAGE.svg';
 
 type NameType = string | number;
 
@@ -465,7 +466,7 @@ const GoalsTracker: React.FC = () => {
             <div className="error-message">
               {error}
               <button onClick={() => fetchActivityData()}>Retry</button>
-              </div>
+            </div>
           )}
           
           <motion.h1 className="goals-title">
@@ -517,7 +518,7 @@ const GoalsTracker: React.FC = () => {
               <FaQuran />
               <span>Quran</span>
             </motion.button>
-                </div>
+          </div>
 
           <div className="time-filter">
             <motion.button
@@ -683,10 +684,10 @@ const GoalsTracker: React.FC = () => {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-      </div>
+          </div>
 
           <AnimatePresence>
-      {isModalOpen && (
+            {isModalOpen && (
               <motion.div 
                 className="modal-overlay"
                 initial={{ opacity: 0 }}
@@ -699,7 +700,7 @@ const GoalsTracker: React.FC = () => {
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.9, opacity: 0 }}
                 >
-            <div className="modal-header">
+                  <div className="modal-header">
                     <h2>
                       {selectedType === 'prayer' ? 'Daily Prayers' :
                        selectedType === 'taraweeh' ? 'Taraweeh Prayer' :
@@ -714,9 +715,9 @@ const GoalsTracker: React.FC = () => {
                       }}
                     >
                       <IoClose size={24} />
-              </button>
-            </div>
-            
+                    </button>
+                  </div>
+                  
                   {selectedType === 'prayer' && (
                     <div className="prayer-times">
                       <div className="prayer-options">
@@ -794,8 +795,8 @@ const GoalsTracker: React.FC = () => {
                         >
                           Submit Taraweeh Prayer
                         </motion.button>
-              )}
-            </div>
+                      )}
+                    </div>
                   )}
 
                   {selectedType === 'quran' && (
@@ -813,34 +814,58 @@ const GoalsTracker: React.FC = () => {
                               const value = Math.min(Math.max(0, Number(e.target.value)), 100);
                               setInputValue(value);
                             }}
-                            placeholder=""
+                            placeholder="0"
                             className="quran-input"
                             min={0}
                             max={100}
                           />
                           <div className="quran-input-controls">
-                            <motion.button
+                            <button
                               className="quran-control-btn"
                               onClick={() => setInputValue(prev => Math.min(prev + 1, 100))}
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
                               disabled={inputValue >= 100}
                             >
-                              ▲
-                            </motion.button>
-                            <motion.button
+                              +
+                            </button>
+                            <button
                               className="quran-control-btn"
                               onClick={() => setInputValue(prev => Math.max(prev - 1, 0))}
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
                               disabled={inputValue <= 0}
                             >
-                              ▼
-                            </motion.button>
+                              -
+                            </button>
                           </div>
                         </div>
-                        <span className="quran-input-label">Pages Read Today (Max: 100)</span>
+                        <span className="quran-input-label">Pages Read Today</span>
+                        
+                        <div className="quran-quick-buttons">
+                          <button 
+                            className="quran-quick-btn" 
+                            onClick={() => setInputValue(5)}
+                          >
+                            5
+                          </button>
+                          <button 
+                            className="quran-quick-btn" 
+                            onClick={() => setInputValue(10)}
+                          >
+                            10
+                          </button>
+                          <button 
+                            className="quran-quick-btn" 
+                            onClick={() => setInputValue(15)}
+                          >
+                            15
+                          </button>
+                          <button 
+                            className="quran-quick-btn" 
+                            onClick={() => setInputValue(20)}
+                          >
+                            20
+                          </button>
+                        </div>
                       </div>
+                      
                       <motion.button
                         className="submit-btn"
                         onClick={handleAddActivity}
@@ -867,6 +892,10 @@ const GoalsTracker: React.FC = () => {
               {successMessage}
             </motion.div>
           )}
+
+          <div className="footer-epage">
+            <FooterEPAGE />
+          </div>
         </div>
       )}
     </div>
