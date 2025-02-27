@@ -390,7 +390,7 @@
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: rgba(56, 56, 208, 0.1);
+  background: rgb(56, 56, 208);
   border: 1.5px solid rgba(56, 56, 208, 0.3);
   color: white;
   cursor: pointer;
@@ -510,4 +510,33 @@
     width: 16px;
     height: 16px;
   }
+}
+
+.language-selector {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 10px;
+  /* background: rgba(255, 255, 255, 0.1); */
+  border-radius: 8px;
+}
+
+.lang-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lang-btn.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
 }

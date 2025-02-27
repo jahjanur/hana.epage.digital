@@ -489,8 +489,8 @@ const GoalsTracker: React.FC = () => {
                       className="auth-input"
                       required
                     />
-                  </div>
-                  
+        </div>
+
                   <motion.button
                     type="submit"
                     className="auth-submit-btn"
@@ -518,7 +518,7 @@ const GoalsTracker: React.FC = () => {
                     {error}
                   </motion.div>
                 )}
-              </div>
+                </div>
             </motion.div>
           </motion.div>
         </AnimatePresence>

@@ -27,22 +27,20 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <LanguageProvider>
         <GoalsProvider>
-          <div className="App">
-            <Routes>
-              <Route path="/" element={
-                <RamadanCountdown 
-                  selectedCity={selectedCity} 
-                  onCityChange={setSelectedCity}
-                  selectedLanguage={selectedLanguage}
-                  onLanguageChange={setSelectedLanguage}
-                />
-              } />
-              <Route path="/duah-v" element={<DuahV />} />
-              <Route path="/goals" element={<GoalsTracker />} />
-              <Route path="/book-v" element={<Book />} />
-            </Routes>
-            <BottomNavigation />
-          </div>
+          <Routes>
+            <Route path="/" element={
+              <RamadanCountdown 
+                selectedCity={selectedCity} 
+                onCityChange={setSelectedCity}
+                selectedLanguage={selectedLanguage}
+                onLanguageChange={setSelectedLanguage}
+              />
+            } />
+            <Route path="/duah-v" element={<DuahV />} />
+            <Route path="/goals" element={<GoalsTracker />} />
+            <Route path="/book-v" element={<Book />} />
+          </Routes>
+          <BottomNavigation />
         </GoalsProvider>
       </LanguageProvider>
     </ErrorBoundary>

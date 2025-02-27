@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import './StoryModal.css';
-
+import { useLanguage } from '../../contexts/LanguageContext';
 import Footer from '../Footer';
 import { ReactComponent as HanaLogo } from '../../assets/hanaMainLogoWhite.svg';
 import hanaLogo from '../../assets/hanaMainLogoWhite.svg';
-
 interface Story {
   id: number;
   title: string;
@@ -19,6 +18,8 @@ interface StoryModalProps {
 }
 
 const StoryModal: React.FC<StoryModalProps> = ({ story, onClose, onNavigate }) => {
+  const { t } = useLanguage();
+
   useEffect(() => {
     // Disable body scroll when modal is open
     document.body.style.overflow = 'hidden';
@@ -106,7 +107,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, onClose, onNavigate }) =
         </div>
       </div>
       <div className="powered-by">
-        Powered by <a href="https://epage.digital/" target="_blank" rel="noopener noreferrer">EPAGE</a>
+        {t('poweredBy')} <a href="https://epage.digital/" target="_blank" rel="noopener noreferrer">EPAGE</a>
       </div>
       <div className="navigation-buttons">
         <button 

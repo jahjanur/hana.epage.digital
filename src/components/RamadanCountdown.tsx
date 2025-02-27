@@ -34,11 +34,6 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
   const [currentTime, setCurrentTime] = useState<string>('');
   const [remainingTime, setRemainingTime] = useState<string>('');
   const [progress, setProgress] = useState<number>(0);
-  const [location, setLocation] = useState<{
-    latitude?: number;
-    longitude?: number;
-    city?: string;
-  } | null>(null);
   const [notifications, setNotifications] = useState({
     syfyr: false,
     iftar: false
@@ -61,45 +56,6 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
 
     return { fajr, iftar };
   };
-
-  // Get user's location
-  useEffect(() => {
-    const getLocation = () => {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const { latitude, longitude } = position.coords;
-            
-            try {
-              // Reverse geocoding to get city name
-              const response = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-              );
-              const data = await response.json();
-              
-              setLocation({
-                latitude,
-                longitude,
-                city: data.address.city || data.address.town || data.address.village
-              });
-            } catch (error) {
-              console.error('Error getting location details:', error);
-              setLocation({ latitude, longitude });
-            }
-          },
-          (error) => {
-            console.error('Error getting location:', error);
-            // Handle error or set default location
-          }
-        );
-      } else {
-        console.log("Geolocation is not supported by this browser.");
-        // Handle lack of geolocation support
-      }
-    };
-
-    getLocation();
-  }, []);
 
   useEffect(() => {
     const updateTimes = () => {
@@ -207,40 +163,6 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
     const timer = setInterval(updateTimes, 1000);
     return () => clearInterval(timer);
   }, [fajrTime, iftarTime]);
-
-  // Get user's location and reverse geocode for the city name.
-  useEffect(() => {
-    const getLocation = () => {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const { latitude, longitude } = position.coords;
-            try {
-              const response = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-              );
-              const data = await response.json();
-              setLocation({
-                latitude,
-                longitude,
-                city: data.address.city || data.address.town || data.address.village
-              });
-            } catch (error) {
-              console.error('Error getting location details:', error);
-              setLocation({ latitude, longitude });
-            }
-          },
-          (error) => {
-            console.error('Error getting location:', error);
-          }
-        );
-      } else {
-        console.log("Geolocation is not supported by this browser.");
-      }
-    };
-
-    getLocation();
-  }, []);
 
   // Define circle properties for the progress ring.
   const radius = 90;

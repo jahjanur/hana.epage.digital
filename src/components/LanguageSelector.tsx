@@ -10,8 +10,6 @@ const languages: { code: SupportedLanguages; name: string }[] = [
   { code: 'sq', name: 'Shqip' },
   { code: 'en', name: 'English' },
   { code: 'tr', name: 'Turkish' },
-  { code: 'mk', name: 'Macedonian' },
-  { code: 'it', name: 'Italian' },
   { code: 'de', name: 'Deutsch' },
 ];
 
