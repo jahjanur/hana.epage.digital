@@ -10,9 +10,11 @@ import { GoalsProvider } from './contexts/GoalsContext';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ErrorBoundary from './components/ErrorBoundary';
 import { LanguageProvider } from './contexts/LanguageContext';
+import RamadanDaysList from './components/RamadanDaysList';
+import PrayerAlarmSettings from './components/PrayerAlarmSettings';
 
 const App: React.FC = () => {
-  const [selectedCity, setSelectedCity] = useState('gostivar');
+  const [selectedCity, setSelectedCity] = useState('Gostivar');
   const [selectedLanguage, setSelectedLanguage] = useState('en');
 
   React.useEffect(() => {
@@ -40,6 +42,8 @@ const App: React.FC = () => {
               <Route path="/duah-v" element={<DuahV />} />
               <Route path="/goals" element={<GoalsTracker />} />
               <Route path="/book-v" element={<Book />} />
+              <Route path="/ramadan-days-list" element={<RamadanDaysList selectedCity={selectedCity} />} />
+              <Route path="/set-alarms" element={<PrayerAlarmSettings selectedCity={selectedCity} />} />
             </Routes>
             <BottomNavigation />
           </div>

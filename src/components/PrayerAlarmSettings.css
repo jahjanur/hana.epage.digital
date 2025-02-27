@@ -1,0 +1,84 @@
+.prayer-alarm-settings {
+  padding: 40px 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 40px auto;
+}
+
+.prayer-alarm-settings h2 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.city-picker {
+  margin-bottom: 20px;
+}
+
+.city-picker label {
+  font-size: 1rem;
+  color: #333;
+  margin-right: 10px;
+}
+
+.city-picker select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.prayer-alarm-settings ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.prayer-alarm-settings li {
+  margin: 15px 0;
+  text-align: left;
+}
+
+.prayer-alarm-settings label {
+  font-size: 1rem;
+  color: #333;
+}
+
+.prayer-alarm-settings input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.prayer-alarm-settings button {
+  padding: 12px 24px;
+  background-color: #4a4aff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  font-size: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.prayer-alarm-settings button:hover {
+  background-color: #3a3aff;
+  transform: translateY(-2px);
+}
+
+.prayer-alarm-settings button:active {
+  transform: translateY(0);
+}
+
+.prayer-alarm-settings .back-button {
+  background-color: #ccc;
+  color: #333;
+  margin-left: 10px;
+}
+
+.prayer-alarm-settings .back-button:hover {
+  background-color: #bbb;
+} 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './RamadanDaysList.css';
 import { ramadanTimes, getCityPrayerTimes, normalizeWeekday } from '../data/prayerTimes';
-import { IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
+import { IoMoonOutline, IoSunnyOutline, IoAlarmOutline } from "react-icons/io5";
 import { BsSunset } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import confetti from 'canvas-confetti';
@@ -187,6 +187,10 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
     return '';
   };
 
+  const handleAlarmClick = () => {
+    navigate('/set-alarms');
+  };
+
   return (
     <div style={{ position: 'relative' }} className={showCelebration ? 'celebration-active' : ''}>
       {/* Modern Circular Progress Section */}
@@ -280,6 +284,13 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
         >
           <IoSunnyOutline className="dua-button-icon" />
           <span className="dua-button-text">{t('iftarDuaTitle')}</span>
+        </button>
+        <button 
+          className="dua-button"
+          onClick={handleAlarmClick}
+        >
+          <IoAlarmOutline className="dua-button-icon" />
+          <span className="dua-button-text">Set Alarm</span>
         </button>
       </div>
 
