@@ -49,6 +49,11 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
   const [showPreloader, setShowPreloader] = useState(true);
   const preloaderRef = useRef<HTMLVideoElement>(null);
 
+  // Add this new useEffect for scroll behavior
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []); // Empty dependency array means this runs once when component mounts
+
   // Create date objects for comparison
   const getCurrentFajrAndIftar = (now: Date) => {
     const fajr = new Date(now);

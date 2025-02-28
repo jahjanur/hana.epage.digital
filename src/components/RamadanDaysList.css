@@ -1852,7 +1852,6 @@
 .epage-footer {
   margin: 4rem auto 6rem; /* Increased top and bottom margin */
   text-align: center;
-  padding: 1rem;
   position: relative;
   z-index: 1;
 }

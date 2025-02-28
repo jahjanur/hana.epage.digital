@@ -1,6 +1,6 @@
 .countdown-container {
   font-family: var(--font-primary);
-  background-color: rgba(0, 0, 0, 0.733);
+  background-color: rgba(0, 0, 0, 0.395);
   background-image: url('../assets/BG.svg');
   background-size: cover;
   background-position: center;

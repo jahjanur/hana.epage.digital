@@ -2,7 +2,7 @@
 .footer {
   width: 100%;
   padding: 2rem 1rem;
-  margin-bottom: 5rem; /* Space for bottom navigation */
+  margin-bottom: 40px; /* Space for bottom navigation */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,11 +19,6 @@
   opacity: 0.8;
 }
 
-.footer-logo {
-  height: auto;
-  width: 200px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-}
 
 /* Responsive design */
 @media (max-width: 768px) {
@@ -60,6 +55,12 @@
   text-align: center;
   z-index: 100;
 }
+.footer-epage a {
+  color: white;
+  font-weight: 400px;
+  text-decoration: none;
+}
+
 
 .footer-epage p {
   color: white;
