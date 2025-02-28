@@ -56,19 +56,37 @@
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  padding: 15px;
+  padding: 8px 16px;
   text-align: center;
   z-index: 100;
 }
 
-.footer-epage p {
-  color: white;
-  margin: 0;
-  font-size: 0.9rem;
+.epage-link {
+  display: inline-block;
+  transition: opacity 0.3s ease;
+}
+
+.epage-link:hover {
   opacity: 0.8;
+}
+
+.epage-logo {
+  height: 24px;
+  width: auto;
+  display: block;
 }
 
 /* Add padding to the bottom of the content to prevent footer overlap */
 .goals-container {
   padding-bottom: 60px;
+}
+
+@media (max-width: 768px) {
+  .footer-epage {
+    padding: 8px 12px;
+  }
+  
+  .epage-logo {
+    height: 20px;
+  }
 } 
