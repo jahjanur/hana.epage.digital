@@ -39,8 +39,15 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   const navigate = useNavigate();
   
   // Current day for highlighting
+  // const currentDay: number = new Date().getDate();
+
+
+
+  //para 00:00
   const currentDay: number = 1;
-  
+
+
+
   const duas = {
     syfyr: {
       title: t('nijetTitle'),

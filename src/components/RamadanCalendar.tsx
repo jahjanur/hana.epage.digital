@@ -44,7 +44,7 @@ const RamadanCalendar: React.FC = () => {
       
       <div className="schedule-list">
         {ramadanSchedule.map((schedule, index) => (
-          <div key={index} className={`schedule-item ${schedule.completed ? 'completed' : ''}`}>
+          <div key={index} className={`schedule-item ${schedule.completed ? 'completed' : 'c'}`}>
             <div className="schedule-content">
               <div className="date-section">
                 <div className="date">{schedule.date}</div>
@@ -64,11 +64,11 @@ const RamadanCalendar: React.FC = () => {
               </div>
             </div>
             
-            {schedule.completed && (
+            {/* {schedule.completed && (
               <div className="completion-marker">
                 <IoCheckmarkCircle className="check-icon" />
               </div>
-            )}
+            )} */}
           </div>
         ))}
       </div>
