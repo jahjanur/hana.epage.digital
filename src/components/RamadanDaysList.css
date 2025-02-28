@@ -361,8 +361,7 @@
   
   /* Current day styling */
   .schedule-item.current-day {
-  /* this */
-  /* background: rgba(255, 255, 255, 0.95); */
+  background: rgba(255, 255, 255, 0.95);
   border-color: rgba(59, 130, 246, 0.3);
   }
   
@@ -371,14 +370,10 @@
   .schedule-item.current-day .time-value,
   .schedule-item.current-day .time-icon,
   .schedule-item.current-day .time-label {
-  
-  /* this*/
-  /* color: #1e293b; */
-  
+  color: #1e293b;
   }
   
   .schedule-item.current-day .time {
-  
   background: rgba(59, 130, 246, 0.1);
   border: 1px solid rgba(59, 130, 246, 0.2);
   }
@@ -475,8 +470,8 @@
   .schedule-item.past-day .day-date,
   .schedule-item.past-day .time-label,
   .schedule-item.past-day .time-value {
-  color: #00ff5e !important;
   
+  color: #00ff5e !important;
   }
   
   /* Style the time containers for past days */
@@ -944,10 +939,6 @@
   }
   
   .today-badge {
-  
-  /* this*/
-  display: none;
-  
   position: absolute;
   top: 8px;
   left: 8px;

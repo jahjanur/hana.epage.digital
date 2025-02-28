@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import './RamadanDaysList.css';
 import { ramadanTimes, getCityPrayerTimes, normalizeWeekday } from '../data/prayerTimes';
 import { IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
@@ -38,15 +38,8 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   const [showCelebration, setShowCelebration] = useState(false);
   const navigate = useNavigate();
   
-  // Current day for highlighting
-  // const currentDay: number = new Date().getDate();
-
-
-
-  //para 00:00
-  const currentDay: number = 1;
-
-
+  // Current day for highlighting - using actual current date
+  const currentDay = useMemo(() => new Date().getDate(), []);
 
   const duas = {
     syfyr: {

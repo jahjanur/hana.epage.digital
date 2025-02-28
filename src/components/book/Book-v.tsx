@@ -39,8 +39,9 @@ const Book: React.FC = () => {
 
   // Wrap currentDate in useMemo
 
-  //para 00:00 this
-  const currentDate = useMemo(() => new Date(2025, 1, 28), []);
+  //para 00:00
+  const currentDate = useMemo(() => new Date(), []);
+
 
   const calculateTimeLeft = useCallback((targetDate: Date): CountdownTime => {
     const difference = targetDate.getTime() - currentDate.getTime();
