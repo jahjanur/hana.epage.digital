@@ -106,7 +106,7 @@
             {
               "arabic": ["بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا"],
               "transliteration": ["Bismike Allahümme emûtü ve ahyâ."],
-              "translation": ["Allah'ım! Senin isminle ölür, Senin isminle dirilirim."]
+              "translation": ["Allah'ım! Senin adınla ölür ve yaşarım."]
             }
           ]
         },
@@ -116,7 +116,7 @@
             {
               "arabic": ["بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا"],
               "transliteration": ["Bismika Allahumma amutu wa ahya."],
-              "translation": ["In Deinem Namen, o Allah, sterbe und lebe ich."]
+              "translation": ["In Deinem Namen, o Allah, lebe und sterbe ich."]
             }
           ]
         }
@@ -463,12 +463,12 @@
       "id": "10",
       "translations": {
         "sq": {
-          "title": "Kur largohemi nga shtëpia",
+          "title": "Kur hyjmë në shtëpi",
           "content": [
             {
               "arabic": ["بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى رَبِّنَا تَوَكَّلْنَا"],
               "transliteration": ["Bismillahi walajna, wa bismillahi kharajna, wa 'ala rabbina tawakkalna."],
-              "translation": ["Në emrin e Allahut, ne kemi hyrë dhe në emrin e Allahut, ne kemi dalë dhe në emrin e Zotit tonë, ne kemi vërë besimin."]
+              "translation": ["Në emrin e Allahut, ne kemi hyrë dhe në emrin e Allahut, ne kemi dalë dhe në Zotin tonë, ne kemi vënë besimin."]
             }
           ]
         },
@@ -882,8 +882,8 @@
           "content": [
             {
               "arabic": ["اللَّهُمَّ لَا سَهْلَ إِلَّا مَا جَعَلْتَهُ سَهْلًا، وَأَنْتَ تَجْعَلُ الْحَزْنَ إِذَا شِئْتَ سَهْلًا"],
-              "transliteration": ["Allahümme la sehle illa ma cealtahu sehla, ve ente tec'alul-hazne iza şi'te sehla."],
-              "translation": ["Allah'ım, Senin kolaylaştırdığından başka hiçbir şey kolay değildir. Ve Sen dilediğin şeyi kolaylaştırırsın."]
+              "transliteration": ["Allahümme la sehle illa ma cealtahu sehla, ve ente tec'alül-hazne iza şi'te sehla."],
+              "translation": ["Allah'ım! Senin kolaylaştırdığından başka kolay yoktur. Sen dilediğinde zorluğu kolaylaştırırsın."]
             }
           ]
         },
