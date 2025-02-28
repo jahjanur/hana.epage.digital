@@ -116,7 +116,7 @@ const GoalsTracker: React.FC = () => {
     currentUser,
     signInWithEmail
   } = useGoals();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<'prayer' | 'taraweeh' | 'quran' | null>(null);
   const [inputValue, setInputValue] = useState(0);
@@ -137,6 +137,129 @@ const GoalsTracker: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [selectedCity, setSelectedCity] = useState('gostivar');
   const [isInitializing, setIsInitializing] = useState(true);
+
+  const getLocalizedText = () => {
+    switch (language) {
+      case 'tr':
+        return {
+          title: 'Ramazan Yolculuğunuzu Takip Edin',
+          subtitle: 'Günlük namazlarınızı, teravih ve Kuran okuma ilerleyişinizi takip etmek için e-postanızı girin',
+          emailPlaceholder: 'E-posta adresiniz',
+          startButton: 'Takibe Başla',
+          loading: 'Yükleniyor...',
+          error: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+          welcome: 'Hoşgeldin',
+          dailyPrayers: 'Günlük Namazlar',
+          taraweehPrayer: 'Teravih Namazı',
+          quranReading: 'Kuran Okuma',
+          daily: 'Günlük',
+          weekly: 'Haftalık',
+          monthly: 'Aylık',
+          sabah: 'Sabah',
+          ogle: 'Öğle',
+          ikindi: 'İkindi',
+          aksam: 'Akşam',
+          yatsi: 'Yatsı',
+          teraweeh: 'Teravih',
+          quranPagesRead: 'Okunan Kuran Sayfaları',
+          noDataMessage: 'Grafikleri görmek için günlük ibadetlerinizi kaydedin',
+          tapToAdd: 'Kaydetmek için simgelere tıklayın',
+          startYourJourney: 'Ramazan yolculuğunuza başlayın',
+          noteTitle: 'Not',
+          noteMessage: 'Grafiklerinizi görmek için günlük ibadetlerinizi kaydedin',
+          noteAction: 'Yukarıdaki simgelere tıklayarak başlayın'
+        };
+      case 'de':
+        return {
+          title: 'Verfolgen Sie Ihre Ramadan-Reise',
+          subtitle: 'Geben Sie Ihre E-Mail-Adresse ein, um Ihre täglichen Gebete, Tarawih und Koran-Lesungen zu verfolgen',
+          emailPlaceholder: 'Ihre E-Mail-Adresse',
+          startButton: 'Tracking starten',
+          loading: 'Wird geladen...',
+          error: 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
+          welcome: 'Willkommen',
+          dailyPrayers: 'Tägliche Gebete',
+          taraweehPrayer: 'Tarawih-Gebet',
+          quranReading: 'Koran-Lesung',
+          daily: 'Täglich',
+          weekly: 'Wöchentlich',
+          monthly: 'Monatlich',
+          sabah: 'Fajr',
+          ogle: 'Dhuhr',
+          ikindi: 'Asr',
+          aksam: 'Maghrib',
+          yatsi: 'Isha',
+          teraweeh: 'Tarawih',
+          quranPagesRead: 'Gelesene Koran-Seiten',
+          noDataMessage: 'Zeichnen Sie Ihre täglichen Gebete auf, um die Diagramme zu sehen',
+          tapToAdd: 'Tippen Sie auf die Symbole zum Aufzeichnen',
+          startYourJourney: 'Beginnen Sie Ihre Ramadan-Reise',
+          noteTitle: 'Hinweis',
+          noteMessage: 'Zeichnen Sie Ihre täglichen Gebete auf, um Ihre Grafiken zu sehen',
+          noteAction: 'Klicken Sie auf die obigen Symbole, um zu beginnen'
+        };
+      case 'sq':
+        return {
+          title: 'Gjurmoni Udhëtimin tuaj të Ramazanit',
+          subtitle: 'Vendosni emailin tuaj për të gjurmuar namazet e përditshme, teravitë dhe leximin e Kuranit',
+          emailPlaceholder: 'Email-i juaj',
+          startButton: 'Fillo Gjurmimin',
+          loading: 'Duke u ngarkuar...',
+          error: 'Ndodhi një gabim. Ju lutemi provoni përsëri.',
+          welcome: 'Mirësevini',
+          dailyPrayers: 'Namazet e Përditshme',
+          taraweehPrayer: 'Namazi i Teravisë',
+          quranReading: 'Leximi i Kuranit',
+          daily: 'Ditore',
+          weekly: 'Javore',
+          monthly: 'Mujore',
+          sabah: 'Sabah',
+          ogle: 'Dreka',
+          ikindi: 'Ikindia',
+          aksam: 'Akshami',
+          yatsi: 'Jacia',
+          teraweeh: 'Teravia',
+          quranPagesRead: 'Faqet e Lexuara të Kuranit',
+          noDataMessage: 'Regjistroni lutjet tuaja ditore për të parë grafikët tuaj',
+          tapToAdd: 'Prekni ikonat për të regjistruar',
+          startYourJourney: 'Filloni udhëtimin tuaj të Ramazanit',
+          noteTitle: 'Shënim',
+          noteMessage: 'Regjistroni lutjet tuaja ditore për të parë grafikët tuaj',
+          noteAction: 'Klikoni ikonat më sipër për të filluar'
+        };
+      default:
+        return {
+          title: 'Track Your Ramadan Journey',
+          subtitle: 'Enter your email to start tracking your daily prayers, Taraweeh and Quran reading progress',
+          emailPlaceholder: 'Enter your email',
+          startButton: 'Start Tracking',
+          loading: 'Loading...',
+          error: 'An error occurred. Please try again.',
+          welcome: 'Welcome',
+          dailyPrayers: 'Daily Prayers',
+          taraweehPrayer: 'Taraweeh Prayer',
+          quranReading: 'Quran Reading',
+          daily: 'Daily',
+          weekly: 'Weekly',
+          monthly: 'Monthly',
+          sabah: 'Fajr',
+          ogle: 'Dhuhr',
+          ikindi: 'Asr',
+          aksam: 'Maghrib',
+          yatsi: 'Isha',
+          teraweeh: 'Taraweeh',
+          quranPagesRead: 'Quran Pages Read',
+          noDataMessage: 'Record your daily prayers to see the charts',
+          tapToAdd: 'Tap the icons to record',
+          startYourJourney: 'Start your Ramadan journey',
+          noteTitle: 'Note',
+          noteMessage: 'Record your daily prayers to see your charts',
+          noteAction: 'Click the icons above to begin'
+        };
+    }
+  };
+
+  const localizedText = getLocalizedText();
 
   const fetchTodayProgress = useCallback(async () => {
     if (!currentUser) return;
@@ -443,6 +566,34 @@ const GoalsTracker: React.FC = () => {
     initializeAuth();
   }, []);
 
+  const hasNoData = () => {
+    // Get today's date in yyyy-MM-dd format
+    const today = format(new Date(), 'yyyy-MM-dd');
+    
+    // Check if there's any data for today
+    const todayData = chartData.find(day => day.rawDate === today);
+    
+    if (todayData) {
+      // Check if any prayer, taraweeh, or quran reading was recorded today
+      const hasAnyActivity = 
+        todayData.fajr > 0 || 
+        todayData.dhuhr > 0 || 
+        todayData.asr > 0 || 
+        todayData.maghrib > 0 || 
+        todayData.isha > 0 || 
+        todayData.taraweeh > 0 || 
+        todayData.quran > 0;
+
+      // If there's any activity today, don't show the note
+      if (hasAnyActivity) {
+        return false;
+      }
+    }
+
+    // Show note if there's no data at all or no activity today
+    return true;
+  };
+
   if (isInitializing) {
     return (
       <div className="goals-container">
@@ -476,8 +627,8 @@ const GoalsTracker: React.FC = () => {
               exit={{ scale: 0.9, opacity: 0 }}
             >
               <div className="auth-modal-content">
-                <h2>Track Your Ramadan Journey</h2>
-                <p>Enter your email to start tracking your daily prayers, Taraweeh, and Quran reading progress</p>
+                <h2>{localizedText.title}</h2>
+                <p>{localizedText.subtitle}</p>
                 
                 <form onSubmit={handleSignIn} className="auth-form">
                   <div className="input-group">
@@ -485,11 +636,11 @@ const GoalsTracker: React.FC = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email"
+                      placeholder={localizedText.emailPlaceholder}
                       className="auth-input"
                       required
                     />
-        </div>
+                  </div>
 
                   <motion.button
                     type="submit"
@@ -501,10 +652,10 @@ const GoalsTracker: React.FC = () => {
                     {isLoading ? (
                       <div className="loading-spinner-container">
                         <div className="loading-spinner"></div>
-                        <span>Starting...</span>
+                        <span>{localizedText.loading}</span>
                       </div>
                     ) : (
-                      'Start Tracking'
+                      localizedText.startButton
                     )}
                   </motion.button>
                 </form>
@@ -518,21 +669,14 @@ const GoalsTracker: React.FC = () => {
                     {error}
                   </motion.div>
                 )}
-                </div>
+              </div>
             </motion.div>
           </motion.div>
         </AnimatePresence>
       ) : (
         <div className="goals-content">
-          {error && (
-            <div className="error-message">
-              {error}
-              <button onClick={() => fetchActivityData()}>Retry</button>
-            </div>
-          )}
-          
           <motion.h1 className="goals-title">
-            Welcome, {currentUser?.email?.split('@')[0] || 'User'} 
+            {localizedText.welcome}, {currentUser?.email?.split('@')[0] || 'User'} 
           </motion.h1>
 
           <div className="activity-buttons">
@@ -546,7 +690,7 @@ const GoalsTracker: React.FC = () => {
               whileTap={{ scale: 0.98 }}
             >
               <FaPrayingHands />
-              <span>{t('dailyPrayers')}</span>
+              <span>{localizedText.dailyPrayers}</span>
               {Object.values(prayedToday).filter(Boolean).length > 0 && (
                 <div className="completion-badge">
                   {Object.values(prayedToday).filter(Boolean).length}/6
@@ -565,7 +709,7 @@ const GoalsTracker: React.FC = () => {
               disabled={chartData.find(d => d.rawDate === format(new Date(), 'yyyy-MM-dd'))?.taraweeh}
             >
               <FaMosque />
-              <span>{t('taraweehPrayer')}</span>
+              <span>{localizedText.taraweehPrayer}</span>
               {chartData.find(d => d.rawDate === format(new Date(), 'yyyy-MM-dd'))?.taraweeh && (
                 <div className="completion-badge">✓</div>
               )}
@@ -578,7 +722,7 @@ const GoalsTracker: React.FC = () => {
               whileTap={{ scale: 0.98 }}
             >
               <FaQuran />
-              <span>{t('quranReading')}</span>
+              <span>{localizedText.quranReading}</span>
             </motion.button>
           </div>
 
@@ -589,7 +733,7 @@ const GoalsTracker: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Daily
+              {localizedText.daily}
             </motion.button>
             <motion.button
               className={`filter-btn ${activeTab === 'weekly' ? 'active' : ''}`}
@@ -597,7 +741,7 @@ const GoalsTracker: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Weekly
+              {localizedText.weekly}
             </motion.button>
             <motion.button
               className={`filter-btn ${activeTab === 'monthly' ? 'active' : ''}`}
@@ -605,15 +749,25 @@ const GoalsTracker: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Monthly
+              {localizedText.monthly}
             </motion.button>
           </div>
+
+          {hasNoData() && (
+            <div className="info-note">
+              <div className="info-note-content">
+                <h4>{localizedText.noteTitle}</h4>
+                <p>{localizedText.noteMessage}</p>
+                <span>{localizedText.noteAction}</span>
+              </div>
+            </div>
+          )}
 
           <div className="charts-section">
             <div className="chart-card">
               <h3>
                 <FaPrayingHands size={18} />
-                Daily Prayers
+                {localizedText.dailyPrayers}
               </h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart 
@@ -708,7 +862,7 @@ const GoalsTracker: React.FC = () => {
             <div className="chart-card">
               <h3>
                 <FaQuran size={18} />
-                Quran Pages Read
+                {localizedText.quranPagesRead}
               </h3>
               <ResponsiveContainer width="100%" height={250}>
                 <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 5 }}>
@@ -764,9 +918,9 @@ const GoalsTracker: React.FC = () => {
                 >
                   <div className="modal-header">
                     <h2>
-                      {selectedType === 'prayer' ? 'Daily Prayers' :
-                       selectedType === 'taraweeh' ? 'Taraweeh Prayer' :
-                       'Quran Reading'}
+                      {selectedType === 'prayer' ? localizedText.dailyPrayers :
+                       selectedType === 'taraweeh' ? localizedText.taraweehPrayer :
+                       localizedText.quranReading}
                     </h2>
                     <button 
                       className="close-btn"

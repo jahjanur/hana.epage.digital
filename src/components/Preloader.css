@@ -1,0 +1,32 @@
+.preloader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.preloader-video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .preloader-video {
+    width: 100vw;
+    height: 100vh;
+  }
+}
+
+@media (orientation: landscape) {
+  .preloader-video {
+    width: 100vw;
+    height: 100vh;
+  }
+} 
