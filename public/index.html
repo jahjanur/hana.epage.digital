@@ -27,9 +27,17 @@
     <meta name="twitter:image" content="https://hana.epage.digital/MetaImage.png" />
 
     <title>Hana - Ramadan 2025</title>
+    <script>
+        // Redirect to root path if accessed directly
+        if (window.location.pathname.includes('index.html')) {
+            window.location.replace(window.location.origin + '/');
+        }
+    </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>
+        If you are not redirected automatically, please <a href="/">click here</a>.
+    </noscript>
     <div id="root"></div>
   </body>
 </html>

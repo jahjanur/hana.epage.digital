@@ -1,16 +1,25 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import './RamadanDaysList.css';
 import { ramadanTimes, getCityPrayerTimes, normalizeWeekday } from '../data/prayerTimes';
-import { IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
+import { IoMoonOutline, IoSunnyOutline, IoShareOutline, IoAddCircleOutline } from "react-icons/io5";
 import { BsSunset } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
+import { IoDownloadOutline } from "react-icons/io5";
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../contexts/LanguageContext';
-import { FaPrayingHands, FaMosque, FaQuran } from 'react-icons/fa';
+import { FaPrayingHands, FaMosque, FaQuran, FaSafari, FaApple } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as FooterEpageLogo } from '../assets/FooterEPAGE.svg';
 
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
 
 interface RamadanDay {
   dayNumber: number;
@@ -37,6 +46,9 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   const [isIftarTime, setIsIftarTime] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const navigate = useNavigate();
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isAppInstalled, setIsAppInstalled] = useState(false);
+  const [showIOSModal, setShowIOSModal] = useState(false);
   
   // Current day for highlighting - using actual current date
   const currentDay = useMemo(() => new Date().getDate(), []);
@@ -130,10 +142,7 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
       const maghribTime = new Date(now);
       maghribTime.setHours(maghribHours, maghribMinutes, 0, 0);
 
-      let timeLeft: number;
-      let totalDuration: number;
-
-      // Check if it's exactly Iftar time
+      // Check if it's exactly Iftar time - only update if state would change
       if (now.getHours() === maghribHours && now.getMinutes() === maghribMinutes && !isIftarTime) {
         setIsIftarTime(true);
         setShowCelebration(true);
@@ -142,13 +151,18 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
           setShowCelebration(false);
           setIsIftarTime(false);
         }, 60000); // Reset after 1 minute
+        return; // Exit early to prevent other state updates
       }
+
+      let timeLeft: number;
+      let totalDuration: number;
+      let newPeriod: 'fasting' | 'eating' = currentPeriod;
 
       if (now >= fajrTime && now <= maghribTime) {
         // During fasting period
         timeLeft = maghribTime.getTime() - now.getTime();
         totalDuration = maghribTime.getTime() - fajrTime.getTime();
-        setCurrentPeriod('fasting');
+        newPeriod = 'fasting';
       } else {
         // During eating period
         const nextFajr = new Date(fajrTime);
@@ -157,26 +171,130 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
         }
         timeLeft = nextFajr.getTime() - now.getTime();
         totalDuration = nextFajr.getTime() - maghribTime.getTime();
-        setCurrentPeriod('eating');
+        newPeriod = 'eating';
+      }
+
+      // Only update period if it changed
+      if (newPeriod !== currentPeriod) {
+        setCurrentPeriod(newPeriod);
       }
 
       // Calculate progress percentage
       const progressPercent = ((totalDuration - timeLeft) / totalDuration) * 100;
-      setProgress(progressPercent);
+      
+      // Only update progress if it changed significantly (more than 0.1%)
+      if (Math.abs(progressPercent - progress) > 0.1) {
+        setProgress(progressPercent);
+      }
 
       // Format countdown
       const hours = Math.floor(timeLeft / (1000 * 60 * 60));
       const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-      setCountdown(
-        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-      );
+      const newCountdown = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      
+      // Only update countdown if it changed
+      if (newCountdown !== countdown) {
+        setCountdown(newCountdown);
+      }
     };
 
     const timer = setInterval(updateCountdown, 1000);
     return () => clearInterval(timer);
-  }, [visibleDays, currentDay, isIftarTime]);
+  }, [visibleDays, currentDay, isIftarTime, currentPeriod, progress, countdown]);
+
+  // Add event listener for PWA install prompt
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    const checkInstallation = () => {
+      // Check if running as standalone PWA
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                          (window.navigator as any).standalone ||
+                          document.referrer.includes('android-app://') ||
+                          window.location.href.includes('?mode=pwa');
+      
+      // Handle PWA URL cleanup
+      if (isStandalone || window.matchMedia('(display-mode: standalone)').matches) {
+        // Clean up URL if needed
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('index.html') || currentPath !== '/') {
+          const basePath = window.location.origin + '/';
+          // Use replace to avoid adding to browser history
+          window.location.replace(basePath);
+          return;
+        }
+      }
+      
+      setIsAppInstalled(isStandalone);
+    };
+
+    // Check on mount and when display mode changes
+    checkInstallation();
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
+    window.addEventListener('load', checkInstallation);
+    
+    const displayModeQuery = window.matchMedia('(display-mode: standalone)');
+    displayModeQuery.addListener(checkInstallation);
+
+    // Also check when the page becomes visible (handles iOS "Add to Home Screen" case)
+    document.addEventListener('visibilitychange', checkInstallation);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
+      window.removeEventListener('load', checkInstallation);
+      displayModeQuery.removeListener(checkInstallation);
+      document.removeEventListener('visibilitychange', checkInstallation);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    
+    if (isIOS) {
+      setShowIOSModal(true);
+      return;
+    }
+
+    if (!deferredPrompt) {
+      // Check if it's already installed
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+      if (isStandalone) {
+        alert('The app is already installed!');
+        return;
+      }
+      
+      // For desktop Chrome/Edge, show manual install instructions
+      const isChromium = navigator.userAgent.toLowerCase().includes('chrome') || 
+                        navigator.userAgent.toLowerCase().includes('edge');
+      if (isChromium) {
+        alert('To install: click the install icon (⊕) in the address bar or open the menu (⋮) and select "Install app"');
+      } else {
+        alert('To install the app, add this page to your home screen through your browser menu');
+      }
+      return;
+    }
+
+    try {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      if (outcome === 'accepted') {
+        setIsAppInstalled(true);
+        // Ensure the app opens to the root path after installation
+        if (window.location.pathname !== '/') {
+          window.location.replace(window.location.origin + '/');
+        }
+      }
+      setDeferredPrompt(null);
+    } catch (error) {
+      console.error('Error installing app:', error);
+    }
+  };
 
   const getDayStatus = (dayNumber: number) => {
     if (dayNumber < currentDay) {
@@ -186,6 +304,38 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
     }
     return '';
   };
+
+  const IOSInstallModal = () => (
+    <div className="ios-install-modal" onClick={() => setShowIOSModal(false)}>
+      <div className="ios-install-content" onClick={e => e.stopPropagation()}>
+        <button className="ios-install-close" onClick={() => setShowIOSModal(false)}>
+          <IoClose size={24} />
+        </button>
+        <div className="ios-install-header">
+          <h2 className="ios-install-title">
+            {t('installOnIOS')} <FaApple className="apple-logo" />
+          </h2>
+        </div>
+        <div className="ios-install-steps">
+          <div className="ios-install-step">
+            <div className="step-number">1</div>
+            <FaSafari className="step-icon" />
+            <div className="step-text">{t('openInSafari')}</div>
+          </div>
+          <div className="ios-install-step">
+            <div className="step-number">2</div>
+            <IoShareOutline className="step-icon" />
+            <div className="step-text">{t('tapShareButton')}</div>
+          </div>
+          <div className="ios-install-step">
+            <div className="step-number">3</div>
+            <IoAddCircleOutline className="step-icon" />
+            <div className="step-text">{t('tapAddToHomeScreen')}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div style={{ position: 'relative' }} className={showCelebration ? 'celebration-active' : ''}>
@@ -265,6 +415,22 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
           )}
         </div>
       </div>
+
+      {!isAppInstalled && (
+        <motion.div 
+          className="install-button-container"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <button className="install-button" onClick={handleInstallClick}>
+            <IoDownloadOutline className="install-icon" />
+            <span>{t('installApp')}</span>
+          </button>
+        </motion.div>
+      )}
+
+      {showIOSModal && <IOSInstallModal />}
 
       <div className="dua-buttons-container">
         <button 

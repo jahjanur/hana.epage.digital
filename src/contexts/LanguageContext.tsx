@@ -31,6 +31,11 @@ interface Translations {
     trackYourJourney: string;
     getStarted: string;
     signInToTrack: string;
+    installApp: string;
+    installOnIOS: string;
+    openInSafari: string;
+    tapShareButton: string;
+    tapAddToHomeScreen: string;
     
     // Additional translations
     welcome: string;
@@ -138,6 +143,11 @@ const translations: Translations = {
     trackYourJourney: 'Gjurmo Udhëtimin Tënd të Ramazanit',
     getStarted: 'Fillo',
     signInToTrack: 'Kyçu për të gjurmuar namazet, teravinë dhe leximin e Kuranit',
+    installApp: 'Instalo Aplikacionin',
+    installOnIOS: 'Instalo në iOS',
+    openInSafari: 'Hape këtë faqe në shfletuesin Safari',
+    tapShareButton: 'Prek butonin Shpërndaj në fund të shfletuesit',
+    tapAddToHomeScreen: 'Lëviz poshtë dhe prek "Shto në Ekranin Kryesor"',
     
     // Additional translations
     welcome: 'Mirë se vini',
@@ -331,7 +341,12 @@ const translations: Translations = {
     trackYourJourney: 'Track Your Ramadan Journey',
     getStarted: 'Get Started',
     signInToTrack: 'Sign in to start tracking your daily prayers, taraweeh, and Quran reading',
-
+    installApp: 'Install App',
+    installOnIOS: 'Install on iOS',
+    openInSafari: 'Open this page in Safari browser',
+    tapShareButton: 'Tap the Share button at the bottom of the browser',
+    tapAddToHomeScreen: 'Scroll down and tap "Add to Home Screen"',
+    
     // Add missing translations
     welcome: 'Welcome',
     daily: 'Daily',
@@ -526,6 +541,11 @@ const translations: Translations = {
     trackYourJourney: 'Ramazan Yolculuğunuzu Takip Edin',
     getStarted: 'Başla',
     signInToTrack: 'Namazlarınızı, teravih ve Kuran okumalarınızı takip etmek için giriş yapın',
+    installApp: 'Uygulamayı Yükle',
+    installOnIOS: 'iOS\'ta Yükle',
+    openInSafari: 'Bu sayfayı Safari tarayıcısında aç',
+    tapShareButton: 'Tarayıcının altındaki Paylaş düğmesine dokun',
+    tapAddToHomeScreen: 'Aşağı kaydır ve "Ana Ekrana Ekle" seçeneğine dokun',
     
     // Additional translations
     welcome: 'Hoş Geldiniz',
@@ -721,6 +741,11 @@ const translations: Translations = {
     trackYourJourney: 'Verfolgen Sie Ihre Ramadan-Reise',
     getStarted: 'Beginnen',
     signInToTrack: 'Melden Sie sich an, um Ihre Gebete, Tarawih und Koran-Lesung zu verfolgen',
+    installApp: 'App installieren',
+    installOnIOS: 'Auf iOS installieren',
+    openInSafari: 'Öffnen Sie diese Seite im Safari-Browser',
+    tapShareButton: 'Tippen Sie unten im Browser auf die Teilen-Schaltfläche',
+    tapAddToHomeScreen: 'Scrollen Sie nach unten und tippen Sie auf "Zum Home-Bildschirm"',
     
     // Additional translations
     welcome: 'Willkommen',
@@ -892,7 +917,7 @@ const translations: Translations = {
       title: "Die Letzte Stunde",
       content: "Der Prophet Muhammad ﷺ sagte: 'Wenn die Letzte Stunde kommt, während du einen Palmzweig in deiner Hand hältst und es möglich ist, ihn zu pflanzen, dann solltest du ihn pflanzen.'\n\n🌙 Lektion: Mache weiterhin gute Taten bis zum letzten Atemzug."
     }
-  }
+  },
 }
 
 interface LanguageContextType {

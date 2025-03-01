@@ -11,6 +11,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import ErrorBoundary from './components/ErrorBoundary';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { ReactComponent as HanaLogo } from './assets/hanaMainLogoWhite.svg';
+import { ReactComponent as FooterLogo } from './assets/FooterEPAGE.svg';
 
 const App: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState('gostivar');
@@ -61,19 +62,24 @@ const App: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000); // Show preloader for 2 seconds
+    }, 1500); // Show preloader for 1.5 seconds
 
     return () => clearTimeout(timer);
   }, []);
 
   if (isLoading) {
     return (
-      <div className="preloader">
+      <div className="site-preloader">
         <div className="preloader-content">
           <HanaLogo className="preloader-logo" />
-          <div className="loading-bar">
-            <div className="loading-bar-fill"></div>
+          <div className="loading-dots">
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
           </div>
+        </div>
+        <div className="preloader-footer">
+          <FooterLogo className="footer-logo" />
         </div>
       </div>
     );

@@ -12,7 +12,6 @@ import CitySelector from './CitySelector';
 import AppHeader from './AppHeader';
 import { getCityPrayerTimes } from '../data/prayerTimes';
 import { useLanguage } from '../contexts/LanguageContext';
-import preloaderVideo from '../assets/PRELOADERI2.webm';
 
 interface RamadanCountdownProps {
   selectedCity: string;
@@ -46,8 +45,11 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
   const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
   const [completedProgress, setCompletedProgress] = useState<number>(0);
   const [remainingProgress, setRemainingProgress] = useState<number>(0);
-  const [showPreloader, setShowPreloader] = useState(true);
-  const preloaderRef = useRef<HTMLVideoElement>(null);
+
+  // Add these refs for tracking previous values
+  const prevProgressRef = useRef({ green: 0, red: 0, yellow: 0 });
+  const prevTimeRef = useRef('');
+  const prevPeriodRef = useRef<'fasting' | 'eating' | 'free'>('free');
 
   // Add this new useEffect for scroll behavior
   useEffect(() => {
@@ -68,13 +70,17 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
   useEffect(() => {
     const updateTimes = () => {
       const now = new Date();
-      setCurrentDateTime(now);
       const timeString = now.toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: true
       });
-      setCurrentTime(timeString);
+      
+      // Only update if time string changed
+      if (timeString !== prevTimeRef.current) {
+        setCurrentTime(timeString);
+        prevTimeRef.current = timeString;
+      }
 
       // Create Date objects for today's Syfyru and Iftar
       const syfyr = new Date(now);
@@ -86,13 +92,18 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
       const isIftarTime = now.getHours() === iftarTime.hours && 
                          now.getMinutes() === iftarTime.minutes;
 
+      let newGreenProgress = prevProgressRef.current.green;
+      let newRedProgress = prevProgressRef.current.red;
+      let newProgress = prevProgressRef.current.yellow;
+      let newPeriod = prevPeriodRef.current;
+      let nextSyfyr: Date | null = null;
+
       if (isIftarTime) {
         // Show full green circle at Iftar time
-        setGreenProgress(100);
-        setRedProgress(0);
-        setProgress(0);
-        setCurrentPeriod('fasting');
-        setRemainingTime('It\'s Iftar time!');
+        newGreenProgress = 100;
+        newRedProgress = 0;
+        newProgress = 0;
+        newPeriod = 'fasting';
       } else if (now >= syfyr && now <= iftar) {
         // Regular fasting period logic
         const totalFastingDuration = iftar.getTime() - syfyr.getTime();
@@ -111,30 +122,18 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
           const twentyMinGreenProg = ((totalFastingDuration - (20 * 60 * 1000)) / totalFastingDuration) * 100;
           const twentyMinRedProg = ((20 * 60 * 1000) / totalFastingDuration) * 100;
           
-          setRedProgress(twentyMinRedProg);
-          setGreenProgress(twentyMinGreenProg);
+          newRedProgress = twentyMinRedProg;
+          newGreenProgress = twentyMinGreenProg;
         } else {
-          setRedProgress(redProg);
-          setGreenProgress(greenProg);
+          newRedProgress = redProg;
+          newGreenProgress = greenProg;
         }
         
-        setProgress(0);
-        setCurrentPeriod('fasting');
-
-        // Format the remaining time without HTML tags
-        const hoursLeft = Math.floor(remainingFasting / (1000 * 60 * 60));
-        const minutesLeft = Math.floor((remainingFasting % (1000 * 60 * 60)) / (1000 * 60));
-        const secondsLeft = Math.floor((remainingFasting % (1000 * 60)) / 1000);
-
-        // Format the time with padStart to ensure two digits
-        const formattedHours = String(hoursLeft).padStart(2, '0');
-        const formattedMinutes = String(minutesLeft).padStart(2, '0');
-        const formattedSeconds = String(secondsLeft).padStart(2, '0');
-
-        setRemainingTime(`${formattedHours}:${formattedMinutes}:${formattedSeconds}`);
+        newProgress = 0;
+        newPeriod = 'fasting';
       } else {
         // Eating period - calculate time until next Syfyr
-        let nextSyfyr = new Date(now);
+        nextSyfyr = new Date(now);
         
         // If we're past Iftar but before midnight, set nextSyfyr to tomorrow's Syfyr
         if (now > iftar && now.getHours() >= iftar.getHours()) {
@@ -148,29 +147,52 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
         const totalEatingDuration = nextSyfyr.getTime() - iftar.getTime();
         
         // Calculate yellow progress (starts at 100% and decreases)
-        const yellowProg = (timeLeftEating / totalEatingDuration) * 100;
-        setProgress(yellowProg);
-        setGreenProgress(0);
-        setRedProgress(0);
-        setCurrentPeriod('eating');
+        newProgress = (timeLeftEating / totalEatingDuration) * 100;
+        newGreenProgress = 0;
+        newRedProgress = 0;
+        newPeriod = 'eating';
+      }
 
-        const hoursLeft = Math.floor(timeLeftEating / (1000 * 60 * 60));
-        const minutesLeft = Math.floor((timeLeftEating % (1000 * 60 * 60)) / (1000 * 60));
-        const secondsLeft = Math.floor((timeLeftEating % (1000 * 60)) / 1000);
+      // Only update states if they've changed significantly
+      if (Math.abs(newGreenProgress - prevProgressRef.current.green) > 0.1) {
+        setGreenProgress(newGreenProgress);
+        prevProgressRef.current.green = newGreenProgress;
+      }
+      if (Math.abs(newRedProgress - prevProgressRef.current.red) > 0.1) {
+        setRedProgress(newRedProgress);
+        prevProgressRef.current.red = newRedProgress;
+      }
+      if (Math.abs(newProgress - prevProgressRef.current.yellow) > 0.1) {
+        setProgress(newProgress);
+        prevProgressRef.current.yellow = newProgress;
+      }
+      if (newPeriod !== prevPeriodRef.current) {
+        setCurrentPeriod(newPeriod);
+        prevPeriodRef.current = newPeriod;
+      }
 
-        // Format the time with padStart to ensure two digits
-        const formattedHours = String(hoursLeft).padStart(2, '0');
-        const formattedMinutes = String(minutesLeft).padStart(2, '0');
-        const formattedSeconds = String(secondsLeft).padStart(2, '0');
+      // Calculate remaining time
+      const timeLeft = newPeriod === 'fasting' 
+        ? iftar.getTime() - now.getTime()
+        : nextSyfyr ? nextSyfyr.getTime() - now.getTime() : 0;
 
-        setRemainingTime(`${formattedHours}:${formattedMinutes}:${formattedSeconds}`);
+      const hoursLeft = Math.floor(timeLeft / (1000 * 60 * 60));
+      const minutesLeft = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const secondsLeft = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+      // Format the time with padStart to ensure two digits
+      const formattedTime = `${String(hoursLeft).padStart(2, '0')}:${String(minutesLeft).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
+
+      // Only update remaining time if it changed
+      if (formattedTime !== remainingTime) {
+        setRemainingTime(formattedTime);
       }
     };
 
     updateTimes();
     const timer = setInterval(updateTimes, 1000);
     return () => clearInterval(timer);
-  }, [fajrTime, iftarTime]);
+  }, [fajrTime, iftarTime, remainingTime]); // Reduced dependencies
 
   // Define circle properties for the progress ring.
   const radius = 90;
@@ -241,169 +263,104 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    // Check if intro has been shown in this session
-    const introShownThisSession = sessionStorage.getItem('introShown');
-    
-    if (!introShownThisSession) {
-      // Only show preloader if it hasn't been shown in this session
-      setShowPreloader(true);
-      
-      const handleVideoEnded = () => {
-        if (preloaderRef.current?.parentElement) {
-          preloaderRef.current.parentElement.classList.add('fade-out');
-          setTimeout(() => {
-            setShowPreloader(false);
-            // Mark that intro has been shown in this session
-            sessionStorage.setItem('introShown', 'true');
-          }, 800);
-        }
-      };
-
-      const handleVideoError = (error: any) => {
-        console.error('Video loading error:', error);
-        setShowPreloader(false);
-        sessionStorage.setItem('introShown', 'true');
-      };
-
-      if (preloaderRef.current) {
-        preloaderRef.current.addEventListener('ended', handleVideoEnded);
-        preloaderRef.current.addEventListener('error', handleVideoError);
-      }
-
-      return () => {
-        if (preloaderRef.current) {
-          preloaderRef.current.removeEventListener('ended', handleVideoEnded);
-          preloaderRef.current.removeEventListener('error', handleVideoError);
-        }
-      };
-    } else {
-      // If intro has been shown in this session, don't show preloader
-      setShowPreloader(false);
-    }
-  }, []); // Empty dependency array means this only runs once when component mounts
-
   return (
-    <>
-      {showPreloader && (
-        <div className="preloader-container">
-          <video
-            ref={preloaderRef}
-            className="preloader-video"
-            autoPlay
-            muted
-            playsInline
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            onError={(e) => console.error('Video Error:', e)}
-          >
-            <source src={preloaderVideo} type="video/webm" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      )}
-      
-      <div className="ramadan-countdown" style={{ 
-        visibility: showPreloader ? 'hidden' : 'visible',
-        opacity: showPreloader ? 0 : 1,
-        transition: 'opacity 0.3s ease-in'
-      }}>
-        <AppHeader selectedCity={selectedCity} onCityChange={onCityChange} />
-        <div className="countdown-container">
+    <div className="ramadan-countdown">
+      <AppHeader selectedCity={selectedCity} onCityChange={onCityChange} />
+      <div className="countdown-container">
 
-          <div className="content-wrapper" style={{ position: 'relative', zIndex: 3 }}>
-            <AnimatedBackground />
-            
-            {/* Floating circles */}
-            <div className="floating-circle"></div>
-            <div className="floating-circle"></div>
-            <div className="floating-circle"></div>
-            
-            {/* Clock Display */}
-            <div className="clock-container scale-in">
-              <div className="inner-circle">
-                <div className="inner-content">
-                  <div className="icon-container">
-                    <div className="weather-icon">
-                      {currentPeriod === 'fasting' ? '🌙' : '☀️'}
-                    </div>
+        <div className="content-wrapper" style={{ position: 'relative', zIndex: 3 }}>
+          <AnimatedBackground />
+          
+          {/* Floating circles */}
+          <div className="floating-circle"></div>
+          <div className="floating-circle"></div>
+          <div className="floating-circle"></div>
+          
+          {/* Clock Display */}
+          <div className="clock-container scale-in">
+            <div className="inner-circle">
+              <div className="inner-content">
+                <div className="icon-container">
+                  <div className="weather-icon">
+                    {currentPeriod === 'fasting' ? '🌙' : '☀️'}
                   </div>
-                  <div className="countdown-display">
-                    <div className="time-digits">
-                      <span className="time-digit">
-                        {parseInt(remainingTime.split(':')[0], 10).toString().padStart(2, '0')}
-                      </span>
-                      <span className="time-separator">:</span>
-                      <span className="time-digit">
-                        {parseInt(remainingTime.split(':')[1], 10).toString().padStart(2, '0')}
-                      </span>
-                      <span className="time-separator">:</span>
-                      <span className="time-digit">
-                        {parseInt(remainingTime.split(':')[2], 10).toString().padStart(2, '0')}
-                      </span>
-                    </div>
-                    <div className="period-label">
-                      <span className="period-text">
-                        {currentPeriod === 'fasting' ? t('untilIftar') : t('untilSyfyr')}
-                      </span>
-                    </div>
+                </div>
+                <div className="countdown-display">
+                  <div className="time-digits">
+                    <span className="time-digit">
+                      {parseInt(remainingTime.split(':')[0], 10).toString().padStart(2, '0')}
+                    </span>
+                    <span className="time-separator">:</span>
+                    <span className="time-digit">
+                      {parseInt(remainingTime.split(':')[1], 10).toString().padStart(2, '0')}
+                    </span>
+                    <span className="time-separator">:</span>
+                    <span className="time-digit">
+                      {parseInt(remainingTime.split(':')[2], 10).toString().padStart(2, '0')}
+                    </span>
+                  </div>
+                  <div className="period-label">
+                    <span className="period-text">
+                      {currentPeriod === 'fasting' ? t('untilIftar') : t('untilSyfyr')}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Reminder Section */}
-            <div className="reminder-section slide-up">
-              <div className="times-container">
-                <div className={`time-block ${isTimeForSyfyr() ? 'active' : ''}`}>
-                  <div className="time-header">
-                    <IoMoonOutline className="time-icon" />
-                    <span>{t('syfyr')}</span>
-                    <button 
-                      className={`notification-toggle ${notifications.syfyr ? 'enabled' : ''}`}
-                      onClick={() => toggleNotification('syfyr')}
-                      title={notifications.syfyr ? t('disableNotifications') : t('enableNotifications')}
-                    >
-                      {notifications.syfyr ? 
-                        <IoNotificationsOutline className="notification-icon" /> : 
-                        <IoNotificationsOffOutline className="notification-icon" />
-                      }
-                    </button>
-                  </div>
-                  <div className="time-value">
-                    {`${fajrTime.hours}:${String(fajrTime.minutes).padStart(2, '0')}`}
-                  </div>
-                </div>
-                
-                <div className={`time-block ${isTimeForIftar() ? 'active' : ''}`}>
-                  <div className="time-header">
-                    <IoSunnyOutline className="time-icon" />
-                    <span>{t('iftar')}</span>
-                    <button 
-                      className={`notification-toggle ${notifications.iftar ? 'enabled' : ''}`}
-                      onClick={() => toggleNotification('iftar')}
-                      title={notifications.iftar ? t('disableNotifications') : t('enableNotifications')}
-                    >
-                      {notifications.iftar ? 
-                        <IoNotificationsOutline className="notification-icon" /> : 
-                        <IoNotificationsOffOutline className="notification-icon" />
-                      }
-                    </button>
-                  </div>
-                  <div className="time-value">
-                    {`${iftarTime.hours}:${String(iftarTime.minutes).padStart(2, '0')}`}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Days List */}
-            <RamadanDaysList selectedCity={selectedCity} />
-
-            <BottomNavigation />
           </div>
+
+          {/* Reminder Section */}
+          <div className="reminder-section slide-up">
+            <div className="times-container">
+              <div className={`time-block ${isTimeForSyfyr() ? 'active' : ''}`}>
+                <div className="time-header">
+                  <IoMoonOutline className="time-icon" />
+                  <span>{t('syfyr')}</span>
+                  <button 
+                    className={`notification-toggle ${notifications.syfyr ? 'enabled' : ''}`}
+                    onClick={() => toggleNotification('syfyr')}
+                    title={notifications.syfyr ? t('disableNotifications') : t('enableNotifications')}
+                  >
+                    {notifications.syfyr ? 
+                      <IoNotificationsOutline className="notification-icon" /> : 
+                      <IoNotificationsOffOutline className="notification-icon" />
+                    }
+                  </button>
+                </div>
+                <div className="time-value">
+                  {`${fajrTime.hours}:${String(fajrTime.minutes).padStart(2, '0')}`}
+                </div>
+              </div>
+              
+              <div className={`time-block ${isTimeForIftar() ? 'active' : ''}`}>
+                <div className="time-header">
+                  <IoSunnyOutline className="time-icon" />
+                  <span>{t('iftar')}</span>
+                  <button 
+                    className={`notification-toggle ${notifications.iftar ? 'enabled' : ''}`}
+                    onClick={() => toggleNotification('iftar')}
+                    title={notifications.iftar ? t('disableNotifications') : t('enableNotifications')}
+                  >
+                    {notifications.iftar ? 
+                      <IoNotificationsOutline className="notification-icon" /> : 
+                      <IoNotificationsOffOutline className="notification-icon" />
+                    }
+                  </button>
+                </div>
+                <div className="time-value">
+                  {`${iftarTime.hours}:${String(iftarTime.minutes).padStart(2, '0')}`}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Days List */}
+          <RamadanDaysList selectedCity={selectedCity} />
+
+          <BottomNavigation />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
