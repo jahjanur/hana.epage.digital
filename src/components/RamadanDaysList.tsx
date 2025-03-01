@@ -53,6 +53,11 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
   // Current day for highlighting - using actual current date
   const currentDay = useMemo(() => new Date().getDate(), []);
 
+  // Add refs for tracking previous values
+  const prevCountdownRef = useRef('00:00:00');
+  const prevProgressRef = useRef(0);
+  const prevPeriodRef = useRef<'fasting' | 'eating'>('fasting');
+
   const duas = {
     syfyr: {
       title: t('nijetTitle'),
@@ -156,7 +161,7 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
 
       let timeLeft: number;
       let totalDuration: number;
-      let newPeriod: 'fasting' | 'eating' = currentPeriod;
+      let newPeriod: 'fasting' | 'eating' = prevPeriodRef.current;
 
       if (now >= fajrTime && now <= maghribTime) {
         // During fasting period
@@ -175,16 +180,18 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
       }
 
       // Only update period if it changed
-      if (newPeriod !== currentPeriod) {
+      if (newPeriod !== prevPeriodRef.current) {
         setCurrentPeriod(newPeriod);
+        prevPeriodRef.current = newPeriod;
       }
 
       // Calculate progress percentage
       const progressPercent = ((totalDuration - timeLeft) / totalDuration) * 100;
       
       // Only update progress if it changed significantly (more than 0.1%)
-      if (Math.abs(progressPercent - progress) > 0.1) {
+      if (Math.abs(progressPercent - prevProgressRef.current) > 0.1) {
         setProgress(progressPercent);
+        prevProgressRef.current = progressPercent;
       }
 
       // Format countdown
@@ -195,14 +202,15 @@ const RamadanDaysList: React.FC<RamadanDaysListProps> = ({ selectedCity }) => {
       const newCountdown = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
       
       // Only update countdown if it changed
-      if (newCountdown !== countdown) {
+      if (newCountdown !== prevCountdownRef.current) {
         setCountdown(newCountdown);
+        prevCountdownRef.current = newCountdown;
       }
     };
 
     const timer = setInterval(updateCountdown, 1000);
     return () => clearInterval(timer);
-  }, [visibleDays, currentDay, isIftarTime, currentPeriod, progress, countdown]);
+  }, [visibleDays, currentDay, isIftarTime]);
 
   // Add event listener for PWA install prompt
   useEffect(() => {

@@ -46,10 +46,11 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
   const [completedProgress, setCompletedProgress] = useState<number>(0);
   const [remainingProgress, setRemainingProgress] = useState<number>(0);
 
-  // Add these refs for tracking previous values
-  const prevProgressRef = useRef({ green: 0, red: 0, yellow: 0 });
+  // Add refs for tracking previous values
   const prevTimeRef = useRef('');
+  const prevProgressRef = useRef({ green: 0, red: 0, yellow: 0 });
   const prevPeriodRef = useRef<'fasting' | 'eating' | 'free'>('free');
+  const prevRemainingTimeRef = useRef('');
 
   // Add this new useEffect for scroll behavior
   useEffect(() => {
@@ -184,15 +185,16 @@ const RamadanCountdown: React.FC<RamadanCountdownProps> = ({
       const formattedTime = `${String(hoursLeft).padStart(2, '0')}:${String(minutesLeft).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
 
       // Only update remaining time if it changed
-      if (formattedTime !== remainingTime) {
+      if (formattedTime !== prevRemainingTimeRef.current) {
         setRemainingTime(formattedTime);
+        prevRemainingTimeRef.current = formattedTime;
       }
     };
 
     updateTimes();
     const timer = setInterval(updateTimes, 1000);
     return () => clearInterval(timer);
-  }, [fajrTime, iftarTime, remainingTime]); // Reduced dependencies
+  }, [fajrTime, iftarTime]); // Removed remainingTime from dependencies
 
   // Define circle properties for the progress ring.
   const radius = 90;
